@@ -27,7 +27,10 @@ public class HopkinsCourse {
             else isWhiting = false;
             deptNum = courseParts[1].trim();
             courseNum = courseParts[2].trim();
-        }
+        } else if (courseParts.length == 2) {
+            deptNum = courseParts[0].trim();
+            courseNum = courseParts[1].trim();
+        } else System.out.println("Course title does not have enough parts: " + courseTitle);
         
     }
     
