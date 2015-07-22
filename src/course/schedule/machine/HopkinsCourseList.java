@@ -6,16 +6,24 @@
 package course.schedule.machine;
 
 import java.util.ArrayList;
-
+import scheduleGenerator.DbFiles.ManageTxtFiles;
+import java.util.HashSet;
 /**
  *
  */
 public class HopkinsCourseList {
-    private ArrayList<HopkinsCourse> courseList;
+    private HashSet<HopkinsCourse> courseList;
     
-    public HopkinsCourseList()
+    public HopkinsCourseList(String path)
     {
-        courseList = new ArrayList<HopkinsCourse>();
+        HashSet<String> courses =  ManageTxtFiles.getRequiredCourses(path);
+        courseList = new HashSet<HopkinsCourse>();
+        convertStringtoCourse(courses,courseList);
+    }
+    
+    public void convertStringtoCourse(HashSet<String> courses, HashSet<HopkinsCourse> courseList)
+    {
+        // needs completion
     }
     
     
