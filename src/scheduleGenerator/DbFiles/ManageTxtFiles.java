@@ -13,12 +13,14 @@ import java.awt.Color;
 import java.nio.charset.*;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -36,6 +38,35 @@ public class ManageTxtFiles {
     private final static String helpFolder = "/Users/ryerrabelli/Physics/src/physics/DbFiles/Help/";
     
     private static String r = "1";
+    
+    public static HashSet<String> getRequiredCourses(String category) throws IOException {
+        String standardFilePath = "./src/scheduleGenerator/DbFiles/";
+        String path = standardFilePath + category;
+        FileReader fr;
+        try {
+            fr = new FileReader(path);
+            BufferedReader txtread = new BufferedReader(fr);
+            String Aline;
+            int NumberOfLines = 0;
+            HashSet<String> reqs = new HashSet<String>();
+            boolean started = false;
+            while ((Aline = txtread.readLine()) != null) {
+                NumberOfLines++;
+                if (started) {reqs.add(Aline.trim().toUpperCase());}
+                if (Aline.trim().equalsIgnoreCase("start")) {
+                    started = true;
+                }
+
+            }
+            txtread.close();
+            return reqs;
+        } catch (FileNotFoundException ex) {
+            System.out.println("FILE NOT FOUND: " + path);
+            return new HashSet();
+        }
+    }
+    
+    
     public static Boolean CheckPassword (String Username, char[] Password) throws IOException
     {
         String r; String FullPass = "";
