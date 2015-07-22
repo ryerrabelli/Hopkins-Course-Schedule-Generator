@@ -14,13 +14,14 @@ public class HopkinsCourse {
     private String deptNum = "";
     private String courseNum = "";
     private boolean isWhiting;
-    
+    private ArrayList<HopkinsCourse> preReqs;
     private int credits = 0;
     private String area = ""; 
     
     public HopkinsCourse(String courseTitle, int credits, String area) {
         this.credits = credits;
         this.area = area.toUpperCase().trim();
+        preReqs = new ArrayList<HopkinsCourse>();
         String[] courseParts = courseTitle.split("\\Q.\\E", 3);
         if (courseParts.length == 3) {
             if (courseParts[0].trim().equalsIgnoreCase("EN")) isWhiting = true;
@@ -31,7 +32,13 @@ public class HopkinsCourse {
             deptNum = courseParts[0].trim();
             courseNum = courseParts[1].trim();
         } else System.out.println("Course title does not have enough parts: " + courseTitle);
-        
+      
+    }
+    
+    public boolean addPreReq(HopkinsCourse preReq)
+    {
+        preReqs.add(preReq);
+        return true;
     }
     
     public String getCourseNum()
