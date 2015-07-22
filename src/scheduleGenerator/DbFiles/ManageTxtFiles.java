@@ -39,7 +39,7 @@ public class ManageTxtFiles {
     
     private static String r = "1";
     
-    public static HashSet<String> getRequiredCourses(String category) throws IOException {
+    public static  HashSet<String> getRequiredCourses(String category) throws IOException {
         String standardFilePath = "./src/scheduleGenerator/DbFiles/";
         String path = standardFilePath + category;
         FileReader fr;
