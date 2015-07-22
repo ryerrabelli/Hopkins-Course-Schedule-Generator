@@ -34,4 +34,31 @@ public class HopkinsCourse {
         
     }
     
+    public String getCourseNum()
+    {
+        return courseNum;
+    }
+    
+    public String getDeptNum()
+    {
+        return deptNum;
+    }
+    
+    public int getCredits()
+    {
+        return credits;
+    }
+    
+    public boolean getIsWhiting()
+    { 
+        return isWhiting; 
+    }
+    
+    public String getArea()
+    { return area; }
+    
+    public String toString()
+    {
+    return getDeptNum()+"."+getCourseNum()+ " " + getCredits() + " " + getArea();
+    }
 }
