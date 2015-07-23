@@ -15,14 +15,8 @@ import scheduleGenerator.DbFiles.ManageTxtFiles;
 public class Test {
     public static void main(String[] args) throws IOException
     {
-        HashSet<String> a = ManageTxtFiles.getRequiredCourses("chemBE");
-        System.out.println(a);
         
-        Major b = new Major();
-       HopkinsCourse c = new HopkinsCourse("030.205", 4, "N");
-        HopkinsCourse d = new HopkinsCourse("030.205", 4, "N");
-        b.addCourse(c);
-        b.addCourse(d);
-        System.out.println(b);
+        HopkinsCourseList o = new HopkinsCourseList("chemBE");
+        System.out.println(o);
     }
 }

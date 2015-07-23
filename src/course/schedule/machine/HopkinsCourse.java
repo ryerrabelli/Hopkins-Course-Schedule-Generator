@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package course.schedule.machine;
-
+import java.util.ArrayList;
 /**
  *
  * @author ryerrabelli
@@ -17,8 +17,10 @@ public class HopkinsCourse {
     private ArrayList<HopkinsCourse> preReqs;
     private int credits = 0;
     private String area = ""; 
+    private int section;
+    private String schedule;
     
-    public HopkinsCourse(String courseTitle, int credits, String area) {
+    public HopkinsCourse(String courseTitle, int credits, String area, int section, String schedule) {
         this.credits = credits;
         this.area = area.toUpperCase().trim();
         preReqs = new ArrayList<HopkinsCourse>();
@@ -32,7 +34,8 @@ public class HopkinsCourse {
             deptNum = courseParts[0].trim();
             courseNum = courseParts[1].trim();
         } else System.out.println("Course title does not have enough parts: " + courseTitle);
-      
+      this.section = section;
+      this.schedule = schedule;
     }
     
     public boolean addPreReq(HopkinsCourse preReq)
@@ -64,8 +67,14 @@ public class HopkinsCourse {
     public String getArea()
     { return area; }
     
+    public int getSection()
+    { return section; }
+    
+    public String getSchedule()
+    { return schedule; }
+    @Override
     public String toString()
     {
-    return getDeptNum()+"."+getCourseNum()+ " " + getCredits() + " " + getArea();
+    return getDeptNum()+"."+getCourseNum()+ " " + getCredits() + " " + getArea()+ " " + getSection() + " " + getSchedule();
     }
 }
