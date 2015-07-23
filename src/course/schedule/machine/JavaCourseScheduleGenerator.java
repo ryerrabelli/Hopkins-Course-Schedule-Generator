@@ -6,6 +6,7 @@ package course.schedule.machine;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,19 +26,22 @@ public class JavaCourseScheduleGenerator {
     }
    public static HashSet<HopkinsCourse> generateCourseSchedule() {
             try {
-                ArrayList<String> set1 = new ArrayList<String>(ManageTxtFiles.getRequiredCourses("chemBE"));
-                ArrayList<String> set2 = new ArrayList<String>(ManageTxtFiles.getRequiredCourses("premed"));
+                HashSet<String> set1 = ManageTxtFiles.getRequiredCourses("chemBE");
+                HashSet<String> set2 = ManageTxtFiles.getRequiredCourses("premed");
                 HashSet<String> combined = new HashSet<String>();
                 ArrayList<String> specials = new ArrayList<String>();
-                for (int i = 0; i < set1.size(); i++) {
-                    if (set1.get(i).endsWith("0") || set1.get(i).contains("|") || set1.get(i).toLowerCase().contains("or")) {specials.add(set1.get(i));}
-                    else combined.add(set1.get(i));
+                for (Iterator<String> i = set1.iterator();i.hasNext();) {
+                    String set1str = i.next();
+                    if (set1str.endsWith("0") || set1str.contains("|") || set1str.toLowerCase().contains("or")) {specials.add(set1str);}
+                    else combined.add(set1str);
                 }
-                for (int i = 0; i < set2.size(); i++) {
-                    if (set2.get(i).endsWith("0") || set2.get(i).contains("|")|| set1.get(i).toLowerCase().contains("or")) {
-                        if (!specials.contains(set2.get(i))) specials.add(set2.get(i));
-                    } else combined.add(set2.get(i));
+                for (Iterator<String> i = set2.iterator(); i.hasNext();) {
+                    String set2str = i.next();
+                    if (set2str.endsWith("0") || set2str.contains("|")|| set2str.toLowerCase().contains("or")) {
+                        if (!specials.contains(set2str)) specials.add(set2str);
+                    } else combined.add(set2str);
                 }
+                
                 special:
                 for (Iterator<String> iterator = specials.iterator(); iterator.hasNext();) {
                     String special = iterator.next();
@@ -45,20 +49,17 @@ public class JavaCourseScheduleGenerator {
                         String[] specialparts = special.split("\\||OR|or|Or|oR");
                         boolean contains = false;;
                         for (String specialpart : specialparts) {
-                            if (combined.contains(specialpart.trim())) {
+                            if (combined.contains(specialpart.trim()) || courseMatches(combined, specialpart.trim())) {
+                                contains = true;
                                 iterator.remove();
                                 continue special;
                             }
                         }
                         if (!contains) combined.add(special);
                     } else if (special.endsWith("00")) {
-                        while (special.endsWith("0")) special = special.substring(0, special.length()-1);
-                        special = ".*"+special.substring(0, special.length()-1) + "[" + special.substring(special.length()-1) + "-9].*";
-                        for (String str : combined) {
-                            if (str.matches(special)) {
-                                iterator.remove();
-                                continue special;
-                            }
+                        if (courseMatches(combined, special)) {
+                            iterator.remove();
+                            continue special;
                         }
                     }
                 }
@@ -88,4 +89,15 @@ public class JavaCourseScheduleGenerator {
                 return null;
             }
     }
+   
+   private static boolean courseMatches(Collection<String> courses, String genericCourse) {
+       while (genericCourse.endsWith("0")) {
+           genericCourse = genericCourse.substring(0, genericCourse.length() - 1);
+       }
+       genericCourse = ".*" + genericCourse.substring(0, genericCourse.length() - 1) + "[" + genericCourse.substring(genericCourse.length() - 1) + "-9].*";
+       for (String course : courses) {
+           if (course.matches(genericCourse)) return true;
+       }
+       return false;
+   }
 }
