@@ -24,10 +24,10 @@ public class JavaCourseScheduleGenerator {
     public static void main(String[] args) {
         // TODO code application logic here
     }
-   public static HashSet<HopkinsCourse> generateCourseSchedule() {
+   public static HashSet<HopkinsCourse> generateLeastRequirements(String scheduleType1, String scheduleType2) {
             try {
-                HashSet<String> set1 = ManageTxtFiles.getRequiredCourses("chemBE");
-                HashSet<String> set2 = ManageTxtFiles.getRequiredCourses("premed");
+                HashSet<String> set1 = ManageTxtFiles.getRequiredCourses(scheduleType1);
+                HashSet<String> set2 = ManageTxtFiles.getRequiredCourses(scheduleType2);
                 HashSet<String> combined = new HashSet<String>();
                 ArrayList<String> specials = new ArrayList<String>();
                 for (Iterator<String> i = set1.iterator();i.hasNext();) {
@@ -49,7 +49,7 @@ public class JavaCourseScheduleGenerator {
                         String[] specialparts = special.split("\\||OR|or|Or|oR");
                         boolean contains = false;;
                         for (String specialpart : specialparts) {
-                            if (combined.contains(specialpart.trim()) || courseMatches(combined, specialpart.trim())) {
+                            if (combined.contains(specialpart.trim()) || courseMatches(combined, specialpart.trim())) { //second half of this may take a long time
                                 contains = true;
                                 iterator.remove();
                                 continue special;
@@ -87,6 +87,7 @@ public class JavaCourseScheduleGenerator {
                 return null;
             } catch (IOException ex) {
                 return null;
+                
             }
     }
    
