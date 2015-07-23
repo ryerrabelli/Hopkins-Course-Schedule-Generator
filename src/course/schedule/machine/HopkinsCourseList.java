@@ -22,7 +22,7 @@ public class HopkinsCourseList {
         convertStringtoCourse(courses,courseList);
     }
     
-    public void convertStringtoCourse(HashSet<String> courses, HashSet<HopkinsCourse> courseList)
+    public static void convertStringtoCourse(HashSet<String> courses, HashSet<HopkinsCourse> courseList)
     {
         // needs completion
         for (String str: courses)
