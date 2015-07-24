@@ -1108,9 +1108,9 @@ public  class Functions {
         Object toReturn = null;
         if (str == null) return null;
         if (str.equals(cNoReturn)) return cNoReturn;
-        else if (str.startsWith("[[") && str.endsWith("]]") && freqOfMetaInString(str, "[[") == freqOfMetaInString(str, "]]") && !str.contains("],") && !str.contains(",[")) {
+     /*   else if (str.startsWith("[[") && str.endsWith("]]") && freqOfMetaInString(str, "[[") == freqOfMetaInString(str, "]]") && !str.contains("],") && !str.contains(",[")) {
             toReturn = matrixEval(str);
-        } else if (str.startsWith(openList+"") && str.endsWith(closeList+"") && freqOfMetaInString(str, openList+"") == freqOfMetaInString(str, closeList+"")) {
+        }*/ else if (str.startsWith(openList+"") && str.endsWith(closeList+"") && freqOfMetaInString(str, openList+"") == freqOfMetaInString(str, closeList+"")) {
             toReturn = listEval(str);
    //     } else if (str.startsWith(Vector.openVec) && str.endsWith(Vector.closeVec)) {
      //       toReturn = vectorEval(str);
@@ -1191,7 +1191,8 @@ public  class Functions {
         if (str.startsWith("\"") && str.endsWith("\""))
             return str;//return str.substring(1, str.length()-1);
         else 
-            throw new NumberFormatException("String at stringEval does not start ("+str.startsWith("\"")+") and end ("+str.endsWith("\"")+") with quotes");
+            return str;
+            //WARNING ON JUL 24, I (RAHUL) COMMENTED THIS OUT WITHOUT LOOKING AT THE CONSEQUENCES throw new NumberFormatException("String at stringEval does not start ("+str.startsWith("\"")+") and end ("+str.endsWith("\"")+") with quotes");
     }
     //private static Monomial monomialEval(String str) /*str should start and end with a quotation mark*/ { return monomialEval(str); }
     public static Number[][] matrixEval(String str) { return matrixEval(str); }
@@ -1597,7 +1598,7 @@ public  class Functions {
         return input;
     }
     public static Object conv2ValPEMDAS(String input, int i) {
-        int expLevel = 4, highestLevel = folPEMDAS ? opLevs.size() : 2;
+        int expLevel = 2, highestLevel = folPEMDAS ? opLevs.size() : 2;
         if (input == null || input.equals("null")) return null;
         if (i == 0) throw new IndexOutOfBoundsException("i is 0 in conv2ValPEMDAS");
         if (i == highestLevel) return input;
@@ -1634,8 +1635,6 @@ public  class Functions {
     final public static ArrayList<char[]> opLevs = new ArrayList<char[]>(Arrays.asList(
             new char[] {'+','-','∪','∩','*','×','•','÷','/',remSymb,
                 '^','►','&','∧','∨'},
-            new char[] {'='},
-            new char[] {'+','-','∪','∩','⊂','⊆','⊃','⊇'},
             new char[] {'*','×','•','÷','/',remSymb,'&','∨'},
             new char[] {'^','►','∧'}));
     
@@ -1754,11 +1753,11 @@ public  class Functions {
                     else  if (preOpNumer != null && postOpNumer != null)  toReturn = preOpNumer - postOpNumer;
                     break;
                 case "∧": //and
-                    RequiredCourseSet a = new RequiredCourseSet( preOp,  postOp,0);
+                    RequiredCourseSet a = new RequiredCourseSet(0, preOp,  postOp);
                     toReturn = a;
                     break;
                 case "∨": //or
-                    toReturn = new RequiredCourseSet(preOp,  postOp,1);
+                    toReturn = new RequiredCourseSet(1,preOp,  postOp);
                     break;
                 case "∩": // intersection
                     Set inter = new LinkedHashSet();
