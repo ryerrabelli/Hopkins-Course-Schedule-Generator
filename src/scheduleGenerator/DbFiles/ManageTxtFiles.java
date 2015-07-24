@@ -9,6 +9,8 @@ package scheduleGenerator.DbFiles;
  *
  * @author ryerrabelli
  */
+import course.schedule.machine.*;
+import course.schedule.machine.HopkinsClass.Semester;
 import java.awt.Color;
 import java.nio.charset.*;
 import java.io.BufferedReader;
@@ -39,6 +41,65 @@ public class ManageTxtFiles {
     
     private static String r = "1";
     
+    public static HashSet<HopkinsClass> getAllCourses() throws IOException {
+        String path = "./src/scheduleGenerator/DbFiles/ClassStorage";
+        FileReader fr = new FileReader(path);
+        BufferedReader txtread = new BufferedReader(fr);
+        HashSet<HopkinsClass> toReturn = new HashSet<HopkinsClass>();
+        String currentLine = "";
+        int NumberOfLines = 0;
+        while (!(currentLine = txtread.readLine()).trim().equalsIgnoreCase("start"));
+        
+        while ( (currentLine = txtread.readLine()) != null) {
+            NumberOfLines++;
+            currentLine = currentLine.trim();
+            String[] lineParts = currentLine.split("\t+| {5,}");
+            
+            try {
+                //lineParts[0] school
+                int section = 0;
+                try {
+                if (lineParts[1].contains("("))
+                        section = Integer.parseInt( lineParts[1].substring(lineParts[1].indexOf("(")+1, lineParts[1].length()-1) );
+                } catch (IndexOutOfBoundsException | NumberFormatException ex) { System.out.println("error from getting class storage: part 1 of line " + NumberOfLines); }
+                String courseNum = lineParts[1].substring(0, lineParts[1].indexOf("("));
+                String verbalName = lineParts[2].replace("[+]", "").trim();
+                String area = lineParts[3].trim().toUpperCase();
+                boolean isWritingIntensive = lineParts[4].trim().toUpperCase().equalsIgnoreCase("YES");
+                try {
+                    float creditsWorth = Float.parseFloat( lineParts[8] );
+                    int year = Integer.parseInt(lineParts[9].trim().split(" ",2)[1]);
+                } catch (NumberFormatException NFE) { System.out.println("error from getting class storage: part 8-9 of line " + NumberOfLines); } try {
+                    Semester semester = Semester.valueOf(lineParts[9].trim().toUpperCase());
+                } catch (IllegalArgumentException IAE) { System.out.println("error from getting class storage: part 9 of line " + NumberOfLines); }
+                String location = lineParts[10].trim().toUpperCase();
+                String schedule = lineParts[11].trim().toUpperCase();
+                String instructors = lineParts[12].trim();
+                String status = lineParts[13].trim().toUpperCase();
+            } catch (IndexOutOfBoundsException ex) {
+                System.out.println("error from getting class storage: not enough lineparts on " + NumberOfLines);
+            }
+            
+            if (lineParts.length >= 15) {
+                
+            }
+            
+            RequiredCourseSet prereqs = new RequiredCourseSet(0);
+            RequiredCourseSet coreqs = new RequiredCourseSet(0);
+            
+            txtread.mark(5);
+            String followingLine;
+            while ( (followingLine = txtread.readLine().trim()) != null) {
+                if (followingLine.toLowerCase().startsWith("kri") || followingLine.toLowerCase().startsWith("whi")) {
+                    txtread.reset();
+                    break;
+                }
+            }
+            
+        }
+        return null;
+    }
+    
     public static  HashSet<String> getRequiredCourses(String category) throws IOException {
         String standardFilePath = "./src/scheduleGenerator/DbFiles/";
         String path = standardFilePath + category;
@@ -51,9 +112,10 @@ public class ManageTxtFiles {
             HashSet<String> reqs = new HashSet<String>();
             boolean started = false;
             while ((Aline = txtread.readLine()) != null) {
-                NumberOfLines++;
-                if (started) {reqs.add(Aline.trim().toUpperCase());}
-                if (Aline.trim().equalsIgnoreCase("start")) {
+                if (started) {
+                    NumberOfLines++;
+                    reqs.add(Aline.trim().toUpperCase());
+                } else if (Aline.trim().equalsIgnoreCase("start")) {
                     started = true;
                 }
 
