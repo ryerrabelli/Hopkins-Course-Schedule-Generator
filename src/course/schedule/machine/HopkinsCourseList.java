@@ -13,16 +13,16 @@ import java.io.IOException;
  *
  */
 public class HopkinsCourseList {
-    private HashSet<HopkinsCourse> courseList;
+    private HashSet<HopkinsClass> courseList;
     
     public HopkinsCourseList(String path) throws IOException
     {
         HashSet<String> courses =  ManageTxtFiles.getRequiredCourses(path);
-        courseList = new HashSet<HopkinsCourse>();
-        convertStringtoCourse(courses,courseList);
+        courseList = new HashSet<HopkinsClass>();
+        convertStringtoHopkinsClass(courses,courseList);
     }
     
-    public static void convertStringtoCourse(HashSet<String> courses, HashSet<HopkinsCourse> courseList)
+    public static void convertStringtoHopkinsClass(HashSet<String> courses, HashSet<HopkinsClass> courseList)
     {
         // needs completion
         for (String str: courses)
@@ -38,7 +38,7 @@ public class HopkinsCourseList {
              int section = Integer.parseInt(str.substring(0,str.indexOf(separate)));
              str = str.substring(str.indexOf(separate) + separate.length());
              String schedule = str;
-             HopkinsCourse sample = new HopkinsCourse(courseTitle, credit, area,section,schedule);
+             HopkinsClass sample = new HopkinsClass(new HopkinsCourse(courseTitle, credit, area),section,schedule,HopkinsClass.Semester.FALL, 2015);
              courseList.add(sample);
         }
     }
