@@ -4,26 +4,23 @@
  */
 package course.schedule.machine;
 import java.util.ArrayList;
+import java.util.Set;
 /**
  *
  * @author ryerrabelli
  */
-public class HopkinsCourse {
+public class HopkinsCourse extends GenericCourse {
     //  school.deptNum.courseNum
     //         AS.030.205
-    private String deptNum = "";
-    private String courseNum = "";
-    private boolean isWhiting;
-    private ArrayList<HopkinsCourse> preReqs;
-    private int credits = 0;
-    private String area = ""; 
-    private int section;
-    private String schedule;
+    protected RequiredCourseSet preReqs;
+    protected String area = ""; 
+    protected int section;
+    protected String schedule;
     
-    public HopkinsCourse(String courseTitle, int credits, String area, int section, String schedule) {
+    public HopkinsCourse(String courseTitle, int credits, String area, int section, String schedule){
         this.credits = credits;
         this.area = area.toUpperCase().trim();
-        preReqs = new ArrayList<HopkinsCourse>();
+        preReqs = new RequiredCourseSet(0);
         String[] courseParts = courseTitle.split("\\Q.\\E", 3);
         if (courseParts.length == 3) {
             if (courseParts[0].trim().equalsIgnoreCase("EN")) isWhiting = true;
@@ -33,12 +30,19 @@ public class HopkinsCourse {
         } else if (courseParts.length == 2) {
             deptNum = courseParts[0].trim();
             courseNum = courseParts[1].trim();
+            try {
+                isWhiting = Integer.parseInt(deptNum) >= 500;
+            } catch (NumberFormatException ex) { System.out.println("Error: deptNum is not a number");}
         } else System.out.println("Course title does not have enough parts: " + courseTitle);
       this.section = section;
       this.schedule = schedule;
     }
     
-    public boolean addPreReq(HopkinsCourse preReq)
+    public boolean canTake(Set<HopkinsCourse> coursesTaken) {
+        return preReqs.isFulfilled(coursesTaken);
+    }
+    
+    public boolean addPreReq(Requirable preReq)
     {
         preReqs.add(preReq);
         return true;
