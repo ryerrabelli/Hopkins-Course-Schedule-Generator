@@ -13,10 +13,10 @@ package course.schedule.machine;
 public class HopkinsClass {
     protected HopkinsCourse course;
     private int section, year;
-    private String schedule;
+    private Schedule schedule;
     private Semester semester;
     public enum Semester {INTERSESSION, SPRING, SUMMER, FALL;}
-    public HopkinsClass(HopkinsCourse course, int section, String schedule, Semester semester, int year) {
+    public HopkinsClass(HopkinsCourse course, int section, Schedule schedule, Semester semester, int year) {
         this.course = course;
         this.section = section;
         this.schedule = schedule;
@@ -25,7 +25,7 @@ public class HopkinsClass {
     }
     
     public int getSection() { return section; }
-    public String getSchedule() { return schedule; }   
+    public Schedule getSchedule() { return schedule; }   
     public Semester getSemester() { return semester;    }
     public int getYear() { return year; }
     

@@ -37,7 +37,7 @@ public class HopkinsCourseList {
              str = str.substring(str.indexOf(separate) + separate.length());
              int section = Integer.parseInt(str.substring(0,str.indexOf(separate)));
              str = str.substring(str.indexOf(separate) + separate.length());
-             String schedule = str;
+             Schedule schedule = new Schedule(str);
              HopkinsClass sample = new HopkinsClass(new HopkinsCourse(courseTitle, credit, area),section,schedule,HopkinsClass.Semester.FALL, 2015);
              courseList.add(sample);
         }
