@@ -64,7 +64,7 @@ public  class Functions {
     public static boolean showFirstExp = false;
     public static boolean denominatorUnits = true;
     public static boolean displayForces = true;
-    public static boolean folPEMDAS = false;
+    public static boolean folPEMDAS = true;
             
     public static byte OS = 1; // 0 = windows, 1 = mac, 2 = unix, 3 = solaris, 4 = other
     public static int radix = 10; // not completed yet
@@ -401,7 +401,8 @@ public  class Functions {
         String valStr = toStringOrNull(val).replaceAll("[Ee]-", "E~");
         if (valStr.startsWith("-")) valStr = "~"+valStr.substring(1);
         express = express.replace(var, "("+valStr+")");
-        return (Number) correctEval(toStringOrNull(conv2Val(express)));
+        return (Number) conv2Val(express);
+        //return (Number) correctEval(toStringOrNull(conv2Val(express)));
     }
     private static ArrayList<String> getEquationHands(String equation, int numHands) {
         if (!equation.startsWith("\"") || !equation.endsWith("\"")) throw new NumberFormatException("getEquationHands acts on a string that starts with quotes: " + equation.startsWith("\"") + " and ends with quotes: " + equation.endsWith("\""));
@@ -1042,7 +1043,11 @@ public  class Functions {
         String o_input = input + " not the same";
         //if (true) return input;
         while (!o_input.equals(input)) {
-            o_input = input;            
+            o_input = input;
+            
+            input = input.replaceAll("[oO][rR]", "∨");
+            input = input.replaceAll("[aA][nN][dD]", "∧");
+            
             input = input.replace("⁻", "~");
             input = input.replace("−", "-");
             //input = input.replace("~~", "+");
@@ -1499,45 +1504,22 @@ public  class Functions {
         if (input == null || input.equals("null")) return null;
         if (input.isEmpty()) return "";
         String o_input = input;
-        if (input.endsWith("\\b")) input = input.substring(0, input.length()-2);
-        if (input.startsWith("\"") && input.endsWith("\"") && input.charAt(input.length()-2) != '\\' && freqOfMetaInString(input,"\"") == 2) {
-            return correctEval(input);
-  //      } else if (input.startsWith(Polynomial.openPoly + "") && input.endsWith(Polynomial.closePoly + "")) {
-  //          return correctEval(input);
-        } else if (input.startsWith("'") && input.endsWith("'") && input.charAt(input.length()-2) != '\\' && freqOfMetaInString(input,"'") == 2) {
-            return correctEval(input);
-        } else {
-            if ( input.startsWith("[[") && input.endsWith("]]") && freqOfMetaInString(input,"[") == freqOfMetaInString(input,"]") && indOfCorrespBrack(input.substring(1)) == input.length()-1) {
-               return correctEval(input);
-            } else if (input.startsWith(openList+"") && input.endsWith(closeList+"") && freqOfMetaInString(input,openList+"") == 1 && freqOfMetaInString(input,closeList+"") == 1) {
+
+            if (input.startsWith(openList+"") && input.endsWith(closeList+"") && freqOfMetaInString(input,openList+"") == 1 && freqOfMetaInString(input,closeList+"") == 1) {
                return correctEval(input);
    //         } else if (input.startsWith(Vector.openVec) && input.endsWith(Vector.closeVec)) {
     //            return correctEval(input);
             }
-        }
         
         input = conv2ValPar(input);
-        input = conv2ValSurrounder(input, absSymb, "vertLine");
-        input = fixStartEnd(input, lFloor, rFloor, "floor");
-        input = fixStartEnd(input, lCeil, rCeil, "ceil");
-        
-        if (input.endsWith("\\b")) input = input.substring(0, input.length()-2);
-        if (input.startsWith("\"") && input.endsWith("\"") && input.charAt(input.length()-2) != '\\' && freqOfMetaInString(input,"\"") == 2) {
-            return stringEval(input);
-        } else if (input.startsWith("'") && input.endsWith("'") && input.charAt(input.length()-2) != '\\' && freqOfMetaInString(input,"'") == 2) {
-            return stringEval(input);
-        } else if(input.startsWith("[[") && input.endsWith("]]") && freqOfMetaInString(input,"[") == freqOfMetaInString(input,"]") && indOfCorrespBrack(input.substring(1)) == input.length()-1) {
-            return matrixEval(input);
-        } else if (input.startsWith(openList+"") && input.endsWith(closeList+"") && freqOfMetaInString(input,openList+"") == 1 && freqOfMetaInString(input,closeList+"") == 1 ) {
+        if (input.startsWith(openList+"") && input.endsWith(closeList+"") && freqOfMetaInString(input,openList+"") == 1 && freqOfMetaInString(input,closeList+"") == 1 ) {
             return listEval(input);
         }
         if (o_input.startsWith("+") || input.startsWith("-")) input = 0 + input;
         Object toReturn = conv2ValPEMDAS(input, 1);
-        if (o_input.endsWith("\\b")) {
-            toReturn =  double2Bool2Int( (Number) toReturn);
-        }
         if (toReturn instanceof String) return stringEval ( (String) toReturn );
-        else return correctEval( toStringOrNull(toReturn) );
+        else return toReturn;
+       // else return correctEval( toStringOrNull(toReturn) ); //WARNING ON JUL 24, I (RAHUL) COMMENTED THIS OUT WITHOUT LOOKING AT THE CONSEQUENCES
      }
     
     
@@ -1615,7 +1597,7 @@ public  class Functions {
         return input;
     }
     public static Object conv2ValPEMDAS(String input, int i) {
-        int expLevel = 5, highestLevel = folPEMDAS ? opLevs.size() : 2;
+        int expLevel = 4, highestLevel = folPEMDAS ? opLevs.size() : 2;
         if (input == null || input.equals("null")) return null;
         if (i == 0) throw new IndexOutOfBoundsException("i is 0 in conv2ValPEMDAS");
         if (i == highestLevel) return input;
@@ -1640,8 +1622,8 @@ public  class Functions {
             }    
         }
         Object toRet;
-        toRet = correctEval(toStringOrNull(combined));
-        return toRet;
+      //  toRet = correctEval(toStringOrNull(combined)); //WARNING ON JUL 24, I (RAHUL) COMMENTED THIS OUT WITHOUT LOOKING AT THE CONSEQUENCES
+        return combined;
     }
     public static String getAllOps() {
         String toRet = "";
@@ -1651,12 +1633,11 @@ public  class Functions {
     // change polynomial level for splitting into monomials if you change this list
     final public static ArrayList<char[]> opLevs = new ArrayList<char[]>(Arrays.asList(
             new char[] {'+','-','∪','∩','*','×','•','÷','/',remSymb,
-                '^','►','&','∨','⩵','⩶','=','<','>','≤','≥','≠','∧','∨'},
+                '^','►','&','∧','∨'},
             new char[] {'='},
-            new char[] {'⩵','⩶','<','>','≤','≥','≠'},
             new char[] {'+','-','∪','∩','⊂','⊆','⊃','⊇'},
             new char[] {'*','×','•','÷','/',remSymb,'&','∨'},
-            new char[] {'^','►','∧','∨'}));
+            new char[] {'^','►','∧'}));
     
     //strings should no longer have quotes
     //binary operators here
@@ -1700,8 +1681,8 @@ public  class Functions {
         }
         if (preOpDub != null) preOp = preOpDub;
         if (postOpDub != null) postOp = postOpDub;
-        preOp = correctEval(toStr(preOp));
-        postOp = correctEval(toStr(postOp));
+        //preOp = correctEval(toStr(preOp));
+        //postOp = correctEval(toStr(postOp));
         Double preOpNumer = null,postOpNumer = null;
         if (preOp instanceof Number) preOpNumer = ((Number) (preOp)).doubleValue();
         if (postOp instanceof Number) postOpNumer = ((Number) (postOp)).doubleValue();
@@ -2160,7 +2141,9 @@ public  class Functions {
             } else if (val == null) {
                 if (input.startsWith("\"") && input.endsWith("\"")) val =  stringEval(input);
                // else if(!input.startsWith("[") && input.contains("[") && freqOfMetaInString(input, "[") == freqOfMetaInString(input, "]")) val = Scalar.valueOf(input);
-                else val = correctEval(input);
+                
+                //else val = correctEval(input); //WARNING ON JUL 24, I (RAHUL) COMMENTED THIS OUT WITHOUT LOOKING AT THE CONSEQUENCES
+                else val = input;
             }
             return val;
         } catch (NullPointerException nEx) {
