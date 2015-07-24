@@ -24,6 +24,9 @@ public class JavaCourseScheduleGenerator {
     public static void main(String[] args) {
         // TODO code application logic here
     }
+    
+    public static HashSet<HopkinsCourse> allCourses;
+    
    public static HashSet<HopkinsCourse> generateLeastRequirements(String scheduleType1, String scheduleType2) {
             try {
                 HashSet<String> set1 = ManageTxtFiles.getRequiredCourses(scheduleType1);
@@ -89,6 +92,22 @@ public class JavaCourseScheduleGenerator {
                 return null;
                 
             }
+    }
+   
+   public static RequiredCourseSet getRemainingRequirements(RequiredCourseSet requirements, HashSet<HopkinsCourse> requiredCourses) {
+       RequiredCourseSet remaining = requirements();
+       
+       return null;
+   }
+   
+   //not finished
+    public static int getNumberOfCoursesThatNeed(HopkinsCourse thisCourse) {
+        allCourses.add(thisCourse);
+        for (Iterator<HopkinsCourse> i = allCourses.iterator(); i.hasNext(); ) {
+            HopkinsCourse checkingCourse = i.next();
+            
+        }
+        return 0;
     }
    
    private static boolean courseMatches(Collection<String> courses, String genericCourse) {
