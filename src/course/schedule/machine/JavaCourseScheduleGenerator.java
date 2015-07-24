@@ -95,7 +95,7 @@ public class JavaCourseScheduleGenerator {
     }
    
    public static RequiredCourseSet getRemainingRequirements(RequiredCourseSet requirements, HashSet<HopkinsCourse> requiredCourses) {
-       RequiredCourseSet remaining = requirements();
+       RequiredCourseSet remaining = requirements;
        
        return null;
    }
