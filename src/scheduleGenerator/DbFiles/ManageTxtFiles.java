@@ -48,7 +48,7 @@ public class ManageTxtFiles {
         String path = "./src/scheduleGenerator/DbFiles/ClassStorage";
         FileReader fr = new FileReader(path);
         BufferedReader txtRead = new BufferedReader(fr);
-        HashSet<HopkinsClass> toReturn = new HashSet<HopkinsClass>();
+        HashMap<String, String> precoReqMap = new HashMap<String, String>();
         String currentLine = "";
         int numberOfLines = 1;
         
@@ -108,44 +108,45 @@ public class ManageTxtFiles {
                 
             }
             
-            RequiredCourseSet preReqs;
-            RequiredCourseSet coReqs;
-            
-            txtRead.mark(15);
             String followingLine;
             
-            char[] forwardLook = new char[5];
-            if (txtRead.read(forwardLook, 0, 5) >= 0) {
-                txtRead.reset();
-                String forwardLookStr = new String(forwardLook).toLowerCase();
-                if (!(forwardLookStr.isEmpty() || forwardLookStr.matches("whiti|krieg|//.*|en.*|as.*"))) {     
-                    followingLine = txtRead.readLine();
-                    if(followingLine.toLowerCase().contains("req")) {
-                        if (followingLine.toLowerCase().contains("co")) RequiredCourseSet.stringToRequiredCourseSet(followingLine);
-                        else preReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
-                    } else if (followingLine.contains("=")) {
-
-                    }
-                }
-            }
+            String precoReq = "";
             
             forwardLooker:
-            for (int linesAhead = 0; (followingLine = txtRead.readLine().trim()) != null && linesAhead < 4;linesAhead++) {
+            while (true) {
+                txtRead.mark(5);
+                char[] forwardLook = new char[5];
+                if (txtRead.read(forwardLook, 0, 5) >= 0) {
+                    txtRead.reset();
+                    String forwardLookStr = new String(forwardLook).toLowerCase();
+                    if (forwardLookStr.isEmpty() || forwardLookStr.matches("whiti|krieg|//.*|en.*|as.*")) {
+                        break forwardLooker;
+                    } else {     
+                        precoReq = newLn + txtRead.readLine();
+                    }
+                } else {
+                    txtRead.reset();
+                    break forwardLooker;
+                }
+            }
+          /*  for (int linesAhead = 0; (followingLine = txtRead.readLine().trim()) != null && linesAhead < 4;linesAhead++) {
                 if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
                 if (followingLine.toLowerCase().startsWith("kri") || followingLine.toLowerCase().startsWith("whi")) {
                     break;
                 } else {
                                     System.out.println("linesAhead = " +linesAhead);
                     if(followingLine.toLowerCase().contains("req")) {
-                        if (followingLine.toLowerCase().contains("co")) RequiredCourseSet.stringToRequiredCourseSet(followingLine);
+                        if (followingLine.toLowerCase().contains("co")) coReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
                         else preReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
-                    } else if (followingLine.contains("=")) {
+                    } else if (followingLine.contains("=") || followingLine.contains("cross")) {
 
                     }
                 }
-            }
+            } */
+            
             if (courseNum.matches("[a-zA-Z]{2}\\.[0-9]{3}\\.[0-9]{3,}")) courseNum = courseNum.substring(3);
-            if (schedule.isEmpty()) continue;
+            precoReqMap.put(courseNum, precoReq.substring(newLn.length()));
+            //if (schedule.isEmpty()) continue classReader;
             HopkinsClass thisClass = new HopkinsClass(courseNum, section, new Schedule(schedule), semester, year);
             if (JavaCourseScheduleGenerator.allCourses.containsKey(courseNum)) {
                 JavaCourseScheduleGenerator.allCourses.get(courseNum).addHopkinsClass(section, thisClass);
