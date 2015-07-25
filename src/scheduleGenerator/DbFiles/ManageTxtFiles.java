@@ -111,11 +111,27 @@ public class ManageTxtFiles {
             RequiredCourseSet preReqs;
             RequiredCourseSet coReqs;
             
-         /*   txtRead.mark(1);
+            txtRead.mark(15);
             String followingLine;
-            int t = 0;
+            
+            char[] forwardLook = new char[5];
+            if (txtRead.read(forwardLook, 0, 5) >= 0) {
+                txtRead.reset();
+                String forwardLookStr = new String(forwardLook).toLowerCase();
+                if (!(forwardLookStr.isEmpty() || forwardLookStr.matches("whiti|krieg|//.*|en.*|as.*"))) {     
+                    followingLine = txtRead.readLine();
+                    if(followingLine.toLowerCase().contains("req")) {
+                        if (followingLine.toLowerCase().contains("co")) RequiredCourseSet.stringToRequiredCourseSet(followingLine);
+                        else preReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
+                    } else if (followingLine.contains("=")) {
+
+                    }
+                }
+            }
+            
+            forwardLooker:
             for (int linesAhead = 0; (followingLine = txtRead.readLine().trim()) != null && linesAhead < 4;linesAhead++) {
-                System.out.println(t);
+                if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
                 if (followingLine.toLowerCase().startsWith("kri") || followingLine.toLowerCase().startsWith("whi")) {
                     break;
                 } else {
@@ -128,7 +144,6 @@ public class ManageTxtFiles {
                     }
                 }
             }
-            txtRead.reset(); */
             if (courseNum.matches("[a-zA-Z]{2}\\.[0-9]{3}\\.[0-9]{3,}")) courseNum = courseNum.substring(3);
             if (schedule.isEmpty()) continue;
             HopkinsClass thisClass = new HopkinsClass(courseNum, section, new Schedule(schedule), semester, year);
