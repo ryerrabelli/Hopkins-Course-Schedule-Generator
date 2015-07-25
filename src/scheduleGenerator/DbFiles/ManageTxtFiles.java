@@ -41,23 +41,26 @@ public class ManageTxtFiles {
     
     private static String r = "1";
     
+    //School	Class #	Title	Areas	Writing Intensive	Max Seats	Open Seats	Waitlisted	Credits	Term	Location	Day-Times	Instructor(s)	Status	Select
+    //Krieger School of Arts and Sciences	AS.020.103 (01)	Freshman Seminar: The Human Microbiome [+]	N	No	18	0	0	2.00	Fall 2015	Homewood Campus	T 4:30PM - 6:20PM	T. Feehery	Waitlist Only	
+    
     public static HashSet<HopkinsClass> getAllCourses() throws IOException {
         String path = "./src/scheduleGenerator/DbFiles/ClassStorage";
         FileReader fr = new FileReader(path);
         BufferedReader txtRead = new BufferedReader(fr);
         HashSet<HopkinsClass> toReturn = new HashSet<HopkinsClass>();
         String currentLine = "";
-        int NumberOfLines = 0;
+        int NumberOfLines = 1;
         
         beginningReader:
-        while (!(currentLine = txtRead.readLine()).trim().equalsIgnoreCase("start"));
+        while (!(currentLine = txtRead.readLine()).trim().equalsIgnoreCase("start")) NumberOfLines++;
         
         classReader:
         while ( (currentLine = txtRead.readLine()) != null) {
             NumberOfLines++;
             currentLine = currentLine.trim();
             if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
-            String[] lineParts = currentLine.split("\t+| {5,}");
+            String[] lineParts = currentLine.split("\t| {5,}");
             
             String courseNum;
             String verbalName;
@@ -70,31 +73,32 @@ public class ManageTxtFiles {
             String schedule;
             String instructors;
             String status;
+            int section = 0;
             try {
                 //lineParts[0] school
-                int section = 0;
-                
+                int start = 0;
+                if (lineParts[0].startsWith("AS") || lineParts[0].startsWith("EN")) start--;
                 try {
-                if (lineParts[1].contains("("))
-                        section = Integer.parseInt( lineParts[1].substring(lineParts[1].indexOf("(")+1, lineParts[1].indexOf(")")) );
-                } catch (IndexOutOfBoundsException | NumberFormatException ex) { System.out.println("error from getting class storage: part 1(" +lineParts[1] + ") of line " + NumberOfLines); }
-                courseNum = lineParts[1].substring(0, lineParts[1].indexOf("(")).trim();
+                    if (lineParts[start+1].contains("("))
+                        section = Integer.parseInt( lineParts[start+1].substring(lineParts[start+1].indexOf("(")+1, lineParts[start+1].indexOf(")")) );
+                } catch (IndexOutOfBoundsException | NumberFormatException ex) { System.out.println("error from getting class storage: part 1(" +lineParts[start+1] + ") of line " + NumberOfLines); }
+                courseNum = lineParts[start+1].substring(0, lineParts[start+1].indexOf("(")).trim();
                 if (!courseNum.matches("(AS\\.|EN\\.)?\\d{3}\\.\\d{3}")) System.out.println("error from getting class storage. Illegal course number: part 1 of line " + NumberOfLines);
-                verbalName = lineParts[2].replace("[+]", "").trim();
-                area = lineParts[3].trim().toUpperCase();
-                isWritingIntensive = lineParts[4].trim().toUpperCase().equalsIgnoreCase("YES");
-                String[] term = lineParts[9].trim().split(" ",2);
+                verbalName = lineParts[start+2].replace("[+]", "").trim();
+                area = lineParts[start+3].trim().toUpperCase();
+                isWritingIntensive = lineParts[start+4].trim().toUpperCase().equalsIgnoreCase("YES");
+                String[] term = lineParts[start+9].trim().split(" ",2);
                 try {
-                    creditsWorth = Float.parseFloat( lineParts[8] );
+                    creditsWorth = Float.parseFloat( lineParts[start+8] );
                     year = Integer.parseInt(term[1]);
                 } catch (NumberFormatException NFE) { System.out.println("error from getting class storage: part 8-9 of line " + NumberOfLines); continue classReader; } 
                 try {
                     semester = Semester.valueOf(term[0].toUpperCase());
-                } catch (IllegalArgumentException IAE) { System.out.println("error from getting class storage: part 9(" + lineParts[9] + ") of line " + NumberOfLines); continue classReader; }
-                location = lineParts[10].trim().toUpperCase();
-                schedule = lineParts[11].trim().toUpperCase();
-                instructors = lineParts[12].trim();
-                status = lineParts[13].trim().toUpperCase();
+                } catch (IllegalArgumentException IAE) { System.out.println("error from getting class storage: part 9(" + lineParts[start+9] + ") of line " + NumberOfLines); continue classReader; }
+                location = lineParts[start+10].trim().toUpperCase();
+                schedule = lineParts[start+11].trim().toUpperCase();
+                instructors = lineParts[start+12].trim();
+                status = lineParts[start+13].trim().toUpperCase();
             } catch (IndexOutOfBoundsException ex) {
                 System.out.println("error from getting class storage: not enough lineparts on " + NumberOfLines);
                 continue classReader;
