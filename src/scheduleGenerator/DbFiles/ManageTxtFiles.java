@@ -130,8 +130,9 @@ public class ManageTxtFiles {
             }
             txtRead.reset(); */
             
+            
             if (!JavaCourseScheduleGenerator.allCourses.containsKey(courseNum)) {
-                JavaCourseScheduleGenerator.allCourses.put(courseNum, new HopkinsCourse(verbalName, area, isWritingIntensive, creditsWorth, semester, year));
+                JavaCourseScheduleGenerator.allCourses.put(courseNum, new HopkinsCourse(courseNum, verbalName, area, isWritingIntensive, creditsWorth, semester, year));
             }
         }
         txtRead.close();
