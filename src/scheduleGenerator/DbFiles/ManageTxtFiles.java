@@ -48,36 +48,56 @@ public class ManageTxtFiles {
         HashSet<HopkinsClass> toReturn = new HashSet<HopkinsClass>();
         String currentLine = "";
         int NumberOfLines = 0;
+        
+        beginningReader:
         while (!(currentLine = txtRead.readLine()).trim().equalsIgnoreCase("start"));
         
+        classReader:
         while ( (currentLine = txtRead.readLine()) != null) {
             NumberOfLines++;
             currentLine = currentLine.trim();
+            if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
             String[] lineParts = currentLine.split("\t+| {5,}");
             
+            String courseNum;
+            String verbalName;
+            String area;
+            boolean isWritingIntensive;
+            float creditsWorth;
+            int year;
+            Semester semester;
+            String location;
+            String schedule;
+            String instructors;
+            String status;
             try {
                 //lineParts[0] school
                 int section = 0;
+                
                 try {
                 if (lineParts[1].contains("("))
-                        section = Integer.parseInt( lineParts[1].substring(lineParts[1].indexOf("(")+1, lineParts[1].length()-1) );
-                } catch (IndexOutOfBoundsException | NumberFormatException ex) { System.out.println("error from getting class storage: part 1 of line " + NumberOfLines); }
-                String courseNum = lineParts[1].substring(0, lineParts[1].indexOf("("));
-                String verbalName = lineParts[2].replace("[+]", "").trim();
-                String area = lineParts[3].trim().toUpperCase();
-                boolean isWritingIntensive = lineParts[4].trim().toUpperCase().equalsIgnoreCase("YES");
+                        section = Integer.parseInt( lineParts[1].substring(lineParts[1].indexOf("(")+1, lineParts[1].indexOf(")")) );
+                } catch (IndexOutOfBoundsException | NumberFormatException ex) { System.out.println("error from getting class storage: part 1(" +lineParts[1] + ") of line " + NumberOfLines); }
+                courseNum = lineParts[1].substring(0, lineParts[1].indexOf("(")).trim();
+                if (!courseNum.matches("(AS\\.|EN\\.)?\\d{3}\\.\\d{3}")) System.out.println("error from getting class storage. Illegal course number: part 1 of line " + NumberOfLines);
+                verbalName = lineParts[2].replace("[+]", "").trim();
+                area = lineParts[3].trim().toUpperCase();
+                isWritingIntensive = lineParts[4].trim().toUpperCase().equalsIgnoreCase("YES");
+                String[] term = lineParts[9].trim().split(" ",2);
                 try {
-                    float creditsWorth = Float.parseFloat( lineParts[8] );
-                    int year = Integer.parseInt(lineParts[9].trim().split(" ",2)[1]);
-                } catch (NumberFormatException NFE) { System.out.println("error from getting class storage: part 8-9 of line " + NumberOfLines); } try {
-                    Semester semester = Semester.valueOf(lineParts[9].trim().toUpperCase());
-                } catch (IllegalArgumentException IAE) { System.out.println("error from getting class storage: part 9 of line " + NumberOfLines); }
-                String location = lineParts[10].trim().toUpperCase();
-                String schedule = lineParts[11].trim().toUpperCase();
-                String instructors = lineParts[12].trim();
-                String status = lineParts[13].trim().toUpperCase();
+                    creditsWorth = Float.parseFloat( lineParts[8] );
+                    year = Integer.parseInt(term[1]);
+                } catch (NumberFormatException NFE) { System.out.println("error from getting class storage: part 8-9 of line " + NumberOfLines); continue classReader; } 
+                try {
+                    semester = Semester.valueOf(term[0].toUpperCase());
+                } catch (IllegalArgumentException IAE) { System.out.println("error from getting class storage: part 9(" + lineParts[9] + ") of line " + NumberOfLines); continue classReader; }
+                location = lineParts[10].trim().toUpperCase();
+                schedule = lineParts[11].trim().toUpperCase();
+                instructors = lineParts[12].trim();
+                status = lineParts[13].trim().toUpperCase();
             } catch (IndexOutOfBoundsException ex) {
                 System.out.println("error from getting class storage: not enough lineparts on " + NumberOfLines);
+                continue classReader;
             }
             
             if (lineParts.length >= 15) {
@@ -87,20 +107,28 @@ public class ManageTxtFiles {
             RequiredCourseSet preReqs;
             RequiredCourseSet coReqs;
             
-            txtRead.mark(5);
+         /*   txtRead.mark(1);
             String followingLine;
-            while ( (followingLine = txtRead.readLine().trim()) != null) {
+            int t = 0;
+            for (int linesAhead = 0; (followingLine = txtRead.readLine().trim()) != null && linesAhead < 4;linesAhead++) {
+                System.out.println(t);
                 if (followingLine.toLowerCase().startsWith("kri") || followingLine.toLowerCase().startsWith("whi")) {
-                    txtRead.reset();
                     break;
-                } else if(followingLine.toLowerCase().contains("req")) {
-                    if (followingLine.toLowerCase().contains("co")) RequiredCourseSet.stringToRequiredCourseSet(followingLine);
-                    else preReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
-                } else if (followingLine.contains("=")) {
-                    
+                } else {
+                                    System.out.println("linesAhead = " +linesAhead);
+                    if(followingLine.toLowerCase().contains("req")) {
+                        if (followingLine.toLowerCase().contains("co")) RequiredCourseSet.stringToRequiredCourseSet(followingLine);
+                        else preReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
+                    } else if (followingLine.contains("=")) {
+
+                    }
                 }
             }
+            txtRead.reset(); */
             
+            if (!JavaCourseScheduleGenerator.allCourses.containsKey(courseNum)) {
+                JavaCourseScheduleGenerator.allCourses.put(courseNum, new HopkinsCourse(verbalName, area, isWritingIntensive, creditsWorth, semester, year));
+            }
         }
         txtRead.close();
         fr.close();
