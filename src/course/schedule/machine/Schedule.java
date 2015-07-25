@@ -23,6 +23,13 @@ public class Schedule {
     
     public Schedule(String classTimes)
             {
+                
+                if (classTimes.trim().length()==0)
+                {
+                    
+                }
+                else
+                {
         int changePoint = classTimes.indexOf(" "); // marks point between days and times
         days1AsString = classTimes.substring(0,changePoint);
         days1AsInt = convertDaysToInt(days1AsString);
@@ -43,35 +50,96 @@ public class Schedule {
             times2 = classTimes.substring(changePoint+1);
             hasMultipleTimes = true;
         }
+                }
     }
-    /** public boolean conflicts(Schedule first, Schedule second) // not completed
+    
+    // returns true if there are conflicts
+     public static boolean conflicts(Schedule first, Schedule second) 
     {
+         boolean result = false;
         if (first.getHasMultipleTimes() && second.getHasMultipleTimes())
         {
-            if (checkDays(first.getDays1(),second.getDays1()))
-                return checkTimes(first.getTimes1(), second.getTimes1());
-            else if (checkDays(first.getDays1(),second.getDays2()))
-                return checkTimes(first.getTimes1(), second.getTimes2());
-            else if (checkDays(first.getDays2(),second.getDays1()))
-                return checkTimes(first.getTimes2(), second.getTimes1());
-            else if (checkDays(first.getDays2(),second.getDays2()))
-                return checkTimes(first.getTimes2(), second.getTimes2());
+            if (checkDays(first.getDays1AsString(),second.getDays1AsString()))
+            {
+                result =  checkTimes(first.getTimes1(), second.getTimes1());
+                if (result)
+                    return true;
+            }
+            if (checkDays(first.getDays1AsString(),second.getDays2AsString()))
+            {
+                result = checkTimes(first.getTimes1(), second.getTimes2());
+                if (result)
+                    return true;
+            }
+            if (checkDays(first.getDays2AsString(),second.getDays1AsString()))
+            {
+                result = checkTimes(first.getTimes2(), second.getTimes1());
+                if (result)
+                    return true;
+            }
+            if (checkDays(first.getDays2AsString(),second.getDays2AsString()))
+            {
+                result = checkTimes(first.getTimes2(), second.getTimes2());
+                if (result)
+                    return true;
+            }
         }
         else if (first.getHasMultipleTimes())
         {
+            if (checkDays(first.getDays1AsString(),second.getDays1AsString()))
+            {
+                result =  checkTimes(first.getTimes1(), second.getTimes1());
+                if (result)
+                    return true;
+            }
             
+             if (checkDays(first.getDays2AsString(),second.getDays1AsString()))
+            {
+                result = checkTimes(first.getTimes2(), second.getTimes1());
+                if (result)
+                    return true;
+            }
         }
         else if (second.getHasMultipleTimes())
         {
+             if (checkDays(first.getDays1AsString(),second.getDays1AsString()))
+            {
+                result =  checkTimes(first.getTimes1(), second.getTimes1());
+                if (result)
+                    return true;
+            }
             
+             if (checkDays(first.getDays1AsString(),second.getDays2AsString()))
+            {
+                result = checkTimes(first.getTimes1(), second.getTimes2());
+                if (result)
+                    return true;
+            }
         }
         else
         {
-            
+            if (checkDays(first.getDays1AsString(),second.getDays1AsString()))
+            {
+                result =  checkTimes(first.getTimes1(), second.getTimes1());
+                if (result)
+                    return true;
+            }
         }
-        return false;
+        return result;
     }
-    * */
+     
+     // conflict can also take 3 schedule
+     public static boolean conflicts(Schedule first, Schedule second, Schedule third)
+     {
+         if (conflicts(first,second))
+             return true;
+         if (conflicts(second, third))
+             return true;
+         if (conflicts(first,third))
+             return true;
+         return false;
+     }
+     
    public static ArrayList<Integer> convertDaysToInt(String days)
    {
        ArrayList<Integer> result = new ArrayList<Integer>();
@@ -168,27 +236,33 @@ public class Schedule {
             String fourthpart = times[i].substring(4,5);
             String temp1 = firstpart + secondpart;
             int temp = Integer.parseInt(temp1);
+            if (temp == 12)
+                result[i] = Double.parseDouble(firstpart + secondpart +"." + thirdpart + fourthpart);
+            else
+            {
             String temp0 = temp + 12 + "."+ thirdpart + fourthpart ;
             result[i] = Double.parseDouble(temp0);
-            
+            }
             }
         }
         }
         return result;
     }
    
-    /**
-    public static boolean checkTimes(String time1, String time2) // not completed
+    
+    public static boolean checkTimes(String time1, String time2)
     {
-        double first = convertToMilitaryTime(time1);
-        double second = convertToMilitaryTime(time2);
+        double[] first = convertToMilitaryTime(time1);
+        double[] second = convertToMilitaryTime(time2);
+        if (first[0] <= second[1] && first[0] >= second[0]) 
+            return true;
+        if (second[0] <= first[1] && second[0] >= first[0])
+                return true;
         return false;
     }
-    * 
-    * *
-    * */
+     
     
-    // checkDays can take two String days or two ArrayList<Integer>
+    // checkDays can take two String days or two ArrayList<Integer> 
     public static boolean checkDays(String day1, String day2) 
     {
         ArrayList<Integer> first = convertDaysToInt(day1);
@@ -208,20 +282,14 @@ public class Schedule {
     
     public static void main(String[] args)
     {
-        Schedule a = new Schedule("MW 1:30PM - 2:45PM");
-        Schedule b = new Schedule("T 6:30PM - 8:00PM");
-        //System.out.println(a);
-        //System.out.println(b);
-        String time = "9:30AM - 10:30AM";
-        int firstpart = Integer.parseInt(time.substring(0,1));
-            int secondpart = Integer.parseInt(time.substring(2,3));
-            int thirdpart = Integer.parseInt(time.substring(3,4));
-            double result = firstpart + secondpart/10.0 + thirdpart/100.0;
-            String[] times = time.split(" - ");
-            String one  = "9:30PM - 10:30PM";
-       double[] fun = convertToMilitaryTime(one);
-       for (double l: fun)
-           System.out.println(l);
-                
+        Schedule a = new Schedule("TTh 11:00AM - 12:00PM");
+        Schedule b = new Schedule("TTh 12:00PM - 2:00PM");
+        Schedule c = new Schedule("TTh 3:00PM - 4:00PM");
+        String time1 = "2:00PM - 4:00PM";
+        String time2 = "1:30PM - 2:45PM";
+       
+          System.out.println(conflicts(a,b,c));
+           
+       
     }
 }
