@@ -50,14 +50,14 @@ public class ManageTxtFiles {
         BufferedReader txtRead = new BufferedReader(fr);
         HashSet<HopkinsClass> toReturn = new HashSet<HopkinsClass>();
         String currentLine = "";
-        int NumberOfLines = 1;
+        int numberOfLines = 1;
         
         beginningReader:
-        while (!(currentLine = txtRead.readLine()).trim().equalsIgnoreCase("start")) NumberOfLines++;
+        while (!(currentLine = txtRead.readLine()).trim().equalsIgnoreCase("start")) numberOfLines++;
         
         classReader:
         while ( (currentLine = txtRead.readLine()) != null) {
-            NumberOfLines++;
+            numberOfLines++;
             currentLine = currentLine.trim();
             if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
             String[] lineParts = currentLine.split("\t| {5,}");
@@ -81,9 +81,9 @@ public class ManageTxtFiles {
                 try {
                     if (lineParts[start+1].contains("("))
                         section = Integer.parseInt( lineParts[start+1].substring(lineParts[start+1].indexOf("(")+1, lineParts[start+1].indexOf(")")) );
-                } catch (IndexOutOfBoundsException | NumberFormatException ex) { System.out.println("error from getting class storage: part 1(" +lineParts[start+1] + ") of line " + NumberOfLines); }
+                } catch (IndexOutOfBoundsException | NumberFormatException ex) { System.out.println("error from getting class storage: part 1(" +lineParts[start+1] + ") of line " + numberOfLines); }
                 courseNum = lineParts[start+1].substring(0, lineParts[start+1].indexOf("(")).trim();
-                if (!courseNum.matches("(AS\\.|EN\\.)?\\d{3}\\.\\d{3}")) System.out.println("error from getting class storage. Illegal course number: part 1 of line " + NumberOfLines);
+                if (!courseNum.matches("(AS\\.|EN\\.)?\\d{3}\\.\\d{3}")) System.out.println("error from getting class storage. Illegal course number: part 1 of line " + numberOfLines);
                 verbalName = lineParts[start+2].replace("[+]", "").trim();
                 area = lineParts[start+3].trim().toUpperCase();
                 isWritingIntensive = lineParts[start+4].trim().toUpperCase().equalsIgnoreCase("YES");
@@ -91,16 +91,16 @@ public class ManageTxtFiles {
                 try {
                     creditsWorth = Float.parseFloat( lineParts[start+8] );
                     year = Integer.parseInt(term[1]);
-                } catch (NumberFormatException NFE) { System.out.println("error from getting class storage: part 8-9 of line " + NumberOfLines); continue classReader; } 
+                } catch (NumberFormatException NFE) { System.out.println("error from getting class storage: part 8-9 of line " + numberOfLines); continue classReader; } 
                 try {
                     semester = Semester.valueOf(term[0].toUpperCase());
-                } catch (IllegalArgumentException IAE) { System.out.println("error from getting class storage: part 9(" + lineParts[start+9] + ") of line " + NumberOfLines); continue classReader; }
+                } catch (IllegalArgumentException IAE) { System.out.println("error from getting class storage: part 9(" + lineParts[start+9] + ") of line " + numberOfLines); continue classReader; }
                 location = lineParts[start+10].trim().toUpperCase();
                 schedule = lineParts[start+11].trim().toUpperCase();
                 instructors = lineParts[start+12].trim();
                 status = lineParts[start+13].trim().toUpperCase();
             } catch (IndexOutOfBoundsException ex) {
-                System.out.println("error from getting class storage: not enough lineparts on " + NumberOfLines);
+                System.out.println("error from getting class storage: not enough lineparts on " + numberOfLines);
                 continue classReader;
             }
             
@@ -111,11 +111,27 @@ public class ManageTxtFiles {
             RequiredCourseSet preReqs;
             RequiredCourseSet coReqs;
             
-         /*   txtRead.mark(1);
+            txtRead.mark(15);
             String followingLine;
-            int t = 0;
+            
+            char[] forwardLook = new char[5];
+            if (txtRead.read(forwardLook, 0, 5) >= 0) {
+                txtRead.reset();
+                String forwardLookStr = new String(forwardLook).toLowerCase();
+                if (!(forwardLookStr.isEmpty() || forwardLookStr.matches("whiti|krieg|//.*|en.*|as.*"))) {     
+                    followingLine = txtRead.readLine();
+                    if(followingLine.toLowerCase().contains("req")) {
+                        if (followingLine.toLowerCase().contains("co")) RequiredCourseSet.stringToRequiredCourseSet(followingLine);
+                        else preReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
+                    } else if (followingLine.contains("=")) {
+
+                    }
+                }
+            }
+            
+            forwardLooker:
             for (int linesAhead = 0; (followingLine = txtRead.readLine().trim()) != null && linesAhead < 4;linesAhead++) {
-                System.out.println(t);
+                if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
                 if (followingLine.toLowerCase().startsWith("kri") || followingLine.toLowerCase().startsWith("whi")) {
                     break;
                 } else {
@@ -128,10 +144,15 @@ public class ManageTxtFiles {
                     }
                 }
             }
-            txtRead.reset(); */
-            
-            if (!JavaCourseScheduleGenerator.allCourses.containsKey(courseNum)) {
-                JavaCourseScheduleGenerator.allCourses.put(courseNum, new HopkinsCourse(verbalName, area, isWritingIntensive, creditsWorth, semester, year));
+            if (courseNum.matches("[a-zA-Z]{2}\\.[0-9]{3}\\.[0-9]{3,}")) courseNum = courseNum.substring(3);
+            if (schedule.isEmpty()) continue;
+            HopkinsClass thisClass = new HopkinsClass(courseNum, section, new Schedule(schedule), semester, year);
+            if (JavaCourseScheduleGenerator.allCourses.containsKey(courseNum)) {
+                JavaCourseScheduleGenerator.allCourses.get(courseNum).addHopkinsClass(section, thisClass);
+            } else  {
+                HopkinsCourse toAdd = new HopkinsCourse(courseNum, verbalName, area, isWritingIntensive, creditsWorth, semester, year);
+                toAdd.addHopkinsClass(section, thisClass);
+                JavaCourseScheduleGenerator.allCourses.put(courseNum, toAdd);
             }
         }
         txtRead.close();
