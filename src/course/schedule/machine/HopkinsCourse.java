@@ -12,15 +12,21 @@ import java.util.Set;
 public class HopkinsCourse extends GenericCourse {
     //  school.deptNum.courseNum
     //         AS.030.205
-    protected RequiredCourseSet preReqs;
+    protected RequiredCourseSet preReqs = new RequiredCourseSet(0);
+    protected String verbalName;
+    
+    protected boolean isDesign = false;
+    protected boolean isWritingIntensive = false;
     
     public HopkinsCourse(String courseTitle, int credits, String area, boolean isDesign, boolean isWritingIntensive){
         super(courseTitle, credits, area);
-        preReqs = new RequiredCourseSet(0);
     }
     public HopkinsCourse(String courseTitle, int credits, String area){
         super(courseTitle, credits, area);
-        preReqs = new RequiredCourseSet(0);
+    }
+        
+    public HopkinsCourse (String courseTitle) {
+        super(courseTitle, -1, "");
     }
     
     public boolean canTake(Set<HopkinsCourse> coursesTaken) {
@@ -58,6 +64,6 @@ public class HopkinsCourse extends GenericCourse {
     @Override
     public String toString()
     {
-        return getDeptNum()+"."+getCourseNum()+ " " + getCredits() + " " + getArea();
+        return getDeptNum()+"."+getCourseNum();
     }
 }

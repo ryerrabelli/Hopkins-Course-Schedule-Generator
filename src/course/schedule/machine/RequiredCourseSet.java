@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import scheduleGenerator.DbFiles.Functions;
 
 /**
  *
@@ -25,6 +26,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         this.addAll(reqCourses);
         
     }
+
     public RequiredCourseSet(int numRequired, Object...reqs) {
         this.numRequired = numRequired;
         for (Object req : reqs) {
@@ -64,6 +66,15 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
                 else this.add(innerRequiredCourseSet);
             } else this.add(new HopkinsCourse(req.toString(), 4, "N"));
         }
+    }
+    
+    public static RequiredCourseSet stringToRequiredCourseSet(String input) {
+        input = input.replace("[+]", "");
+        input = input.replaceAll("[oO][rR]", "∨");
+        input = input.replaceAll("[aA][nN][dD]", "∧");
+        input = input.substring(input.indexOf(":")+1);
+        Object b = Functions.conv2Val(input);
+        return new RequiredCourseSet(0,b);
     }
     
     /*public RequiredCourseSet convertToRequiredCourseSet(String input) {

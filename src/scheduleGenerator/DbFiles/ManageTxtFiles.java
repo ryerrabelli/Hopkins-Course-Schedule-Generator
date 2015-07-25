@@ -44,13 +44,13 @@ public class ManageTxtFiles {
     public static HashSet<HopkinsClass> getAllCourses() throws IOException {
         String path = "./src/scheduleGenerator/DbFiles/ClassStorage";
         FileReader fr = new FileReader(path);
-        BufferedReader txtread = new BufferedReader(fr);
+        BufferedReader txtRead = new BufferedReader(fr);
         HashSet<HopkinsClass> toReturn = new HashSet<HopkinsClass>();
         String currentLine = "";
         int NumberOfLines = 0;
-        while (!(currentLine = txtread.readLine()).trim().equalsIgnoreCase("start"));
+        while (!(currentLine = txtRead.readLine()).trim().equalsIgnoreCase("start"));
         
-        while ( (currentLine = txtread.readLine()) != null) {
+        while ( (currentLine = txtRead.readLine()) != null) {
             NumberOfLines++;
             currentLine = currentLine.trim();
             String[] lineParts = currentLine.split("\t+| {5,}");
@@ -84,19 +84,26 @@ public class ManageTxtFiles {
                 
             }
             
-            RequiredCourseSet prereqs = new RequiredCourseSet(0);
-            RequiredCourseSet coreqs = new RequiredCourseSet(0);
+            RequiredCourseSet preReqs;
+            RequiredCourseSet coReqs;
             
-            txtread.mark(5);
+            txtRead.mark(5);
             String followingLine;
-            while ( (followingLine = txtread.readLine().trim()) != null) {
+            while ( (followingLine = txtRead.readLine().trim()) != null) {
                 if (followingLine.toLowerCase().startsWith("kri") || followingLine.toLowerCase().startsWith("whi")) {
-                    txtread.reset();
+                    txtRead.reset();
                     break;
+                } else if(followingLine.toLowerCase().contains("req")) {
+                    if (followingLine.toLowerCase().contains("co")) RequiredCourseSet.stringToRequiredCourseSet(followingLine);
+                    else preReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
+                } else if (followingLine.contains("=")) {
+                    
                 }
             }
             
         }
+        txtRead.close();
+        fr.close();
         return null;
     }
     
@@ -121,6 +128,7 @@ public class ManageTxtFiles {
 
             }
             txtread.close();
+            fr.close();
             return reqs;
         } catch (FileNotFoundException ex) {
             System.out.println("FILE NOT FOUND: " + path);
@@ -353,6 +361,7 @@ public class ManageTxtFiles {
                     }
             }
         }
+        br.close();
         return section;
     }
     
