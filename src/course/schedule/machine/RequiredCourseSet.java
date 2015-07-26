@@ -51,11 +51,13 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
                     String part = strReq.substring(pComma+1, comma).trim();
                     pComma = comma;
                     if (part.contains("[")) {
-                        innerRequiredCourseSet.add(new RequiredCourseSet(1, part));
+                        if (this.getNumRequired() == 1) innerRequiredCourseSet.addAll(new RequiredCourseSet(1, part));
+                        else innerRequiredCourseSet.add(new RequiredCourseSet(1, part));
                     } else if (part.contains("{")) {
-                        innerRequiredCourseSet.add(new RequiredCourseSet(0, part));
+                        if (this.getNumRequired() == 0) innerRequiredCourseSet.addAll(new RequiredCourseSet(0, part)); 
+                        else innerRequiredCourseSet.add(new RequiredCourseSet(0, part));
                     } else {
-                        if (part.endsWith("00")) {
+                        if (part.length() < 3) {
                             innerRequiredCourseSet.add(new GenericCourse(part, 0, ""));
                         } else {
                             HopkinsCourse toAdd = HopkinsCourse.getCourse(part);
@@ -68,9 +70,10 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
                 else if (innerRequiredCourseSet.getNumRequired() == 1 && numRequired == 1) this.addAll(innerRequiredCourseSet);
                 else this.add(innerRequiredCourseSet);
             } else if (HopkinsCourse.getCourse(req.toString()) != null) this.add(HopkinsCourse.getCourse(req.toString()));
+            else if (req.toString().matches("([a-zA-Z]{2}\\.)?[0-9]{3}\\.[0-9]+")) this.add(new GenericCourse(req.toString(), -1f, ""));
             else System.out.println("Could not add to RequiredCourseSet:" + req);
         }
-    }
+    } 
     
     //Not finished, will duplicate input
     public RequiredCourseSet(Collection<Requirable> reqCourseSet) {
@@ -162,6 +165,13 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
     }
     public int getTrueNumRequired() {
         return numRequired > 0 ? numRequired : this.size() + numRequired;
+    }
+    
+    @Override
+    public boolean equals(Object b) {
+        if (b instanceof Requirable) {
+            return true; //need to complete
+        } else return false;
     }
     
     @Override
