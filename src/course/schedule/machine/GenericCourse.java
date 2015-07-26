@@ -53,7 +53,10 @@ public class GenericCourse implements Requirable  {
     private boolean isSatisfiedBy(HopkinsCourse realCourse) {
         try {
             if (deptNum.isEmpty() || !deptNum.matches(realCourse.deptNum)) return false;
-            if (courseNum.length() < 3 || Integer.parseInt(realCourse.courseNum) < Integer.parseInt(courseNum.substring(0,3))) return false;
+            if (courseNum.length() == 3 && !courseNum.equalsIgnoreCase(realCourse.getCourseNum())) return false;
+            if (courseNum.length() < 3) {
+                if (Integer.valueOf(courseNum.charAt(0)) > Integer.valueOf(realCourse.getCourseNum().charAt(0))) return false;
+            }
             if (realCourse.credits < this.credits) return false;
             if (school > 0 && realCourse.school != this.school) return false;
         } catch (NumberFormatException NFE) { 
