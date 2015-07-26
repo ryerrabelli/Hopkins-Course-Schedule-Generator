@@ -90,7 +90,8 @@ public class ManageTxtFiles {
                 isWritingIntensive = lineParts[start+4].trim().toUpperCase().equalsIgnoreCase("YES");
                 String[] term = lineParts[start+9].trim().split(" ",2);
                 try {
-                    creditsWorth = Float.parseFloat( lineParts[start+8] );
+                    if (lineParts[start+8].contains("-")) creditsWorth = Float.parseFloat( lineParts[start+8].substring(0, lineParts[start+8].indexOf("-")) );
+                    else creditsWorth = Float.parseFloat( lineParts[start+8] );
                     year = Integer.parseInt(term[1]);
                 } catch (NumberFormatException NFE) { System.out.println("error from getting class storage: part 8-9 of line " + numberOfLines); continue hopkinsClassReader; } 
                 try {
