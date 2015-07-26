@@ -56,14 +56,14 @@ public class JavaCourseScheduleGenerator {
     public static RequiredCourseSet generateLeastRequirements(RequiredCourseSet category1, RequiredCourseSet category2) {
            // try {
 
-                HashSet<String> combined = new HashSet<String>();
+            /*    RequiredCourseSet combined = new RequiredCourseSet(0);
                 ArrayList<String> specials = new ArrayList<String>();
                 for (Iterator<Requirable> i = category1.iterator();i.hasNext();) {
                     String cat1Str = i.next().toString();
                     if (cat1Str.startsWith("[") && cat1Str.endsWith("]")) cat1Str = cat1Str.substring(1, cat1Str.length()-1);
                     if (cat1Str.startsWith("[") && cat1Str.endsWith("]")) cat1Str = cat1Str.substring(1, cat1Str.length()-1);
                     if (cat1Str.endsWith("0") || cat1Str.contains("|") || cat1Str.toLowerCase().contains("or")) {specials.add(cat1Str);}
-                    else combined.add(cat1Str);
+                    //else combined.add(cat1Str); Need to fix
                 }
                 for (Iterator<Requirable> i = category2.iterator(); i.hasNext();) {
                     String cat2Str = i.next().toString();
@@ -71,7 +71,7 @@ public class JavaCourseScheduleGenerator {
                     if (cat2Str.startsWith("{") && cat2Str.endsWith("}")) cat2Str = cat2Str.substring(1, cat2Str.length()-1).replace(", ", "or");
                     if (cat2Str.endsWith("0") || cat2Str.contains("|")|| cat2Str.toLowerCase().contains("or")) {
                         if (!specials.contains(cat2Str)) specials.add(cat2Str);
-                    } else combined.add(cat2Str);
+                    }// else combined.add(cat2Str); Need to fix
                 }
                 
                 special:
@@ -88,7 +88,7 @@ public class JavaCourseScheduleGenerator {
                             }
                         }
                         if (!contains) combined.add(special);
-                    } else if (special.endsWith("00")) {
+                    } else if (special.length() < 3) {
                         if (courseMatches(combined, special)) {
                             iterator.remove();
                             continue special;
@@ -100,6 +100,8 @@ public class JavaCourseScheduleGenerator {
                 Collections.sort(sortedcombined);
                 System.out.println("combined: " + sortedcombined);
                 System.out.println("	".matches("\\t"));
+                */
+                
                 /*if (set1.size() > set2.size()) {
                     Iterator<String> iter2 = set2.iterator();
                     while (iter2.hasNext()) {
