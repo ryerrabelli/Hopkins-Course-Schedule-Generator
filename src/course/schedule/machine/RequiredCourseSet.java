@@ -46,6 +46,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
                 commas.add(strReq.length());
                 int pComma = -1;
                 RequiredCourseSet innerRequiredCourseSet = new RequiredCourseSet(innerNumRequired);
+                commaLoop:
                 for(int comma: commas) {
                     String part = strReq.substring(pComma+1, comma).trim();
                     pComma = comma;
@@ -57,21 +58,32 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
                         if (part.endsWith("00")) {
                             innerRequiredCourseSet.add(new GenericCourse(part, 0, ""));
                         } else {
-                            innerRequiredCourseSet.add(new HopkinsCourse(part));
+                            HopkinsCourse toAdd = HopkinsCourse.getCourse(part);
+                            if (toAdd == null) continue commaLoop;
+                            innerRequiredCourseSet.add(toAdd);
                         }
                     }
                 }
                 if (innerRequiredCourseSet.getNumRequired() == 0 && numRequired == 0) this.addAll(innerRequiredCourseSet);
                 else if (innerRequiredCourseSet.getNumRequired() == 1 && numRequired == 1) this.addAll(innerRequiredCourseSet);
                 else this.add(innerRequiredCourseSet);
-            } else this.add(new HopkinsCourse(req.toString(), 4, "N"));
+            } else if (HopkinsCourse.getCourse(req.toString()) != null) this.add(HopkinsCourse.getCourse(req.toString()));
+            else System.out.println("Could not add to RequiredCourseSet:" + req);
         }
     }
     
+    //Not finished, will duplicate input
+    public RequiredCourseSet(Collection<Requirable> reqCourseSet) {
+        for (Iterator<Requirable> i = reqCourseSet.iterator(); i.hasNext(); ) {
+            Requirable requirement = i.next();
+            
+        }
+    }
+        
     public static RequiredCourseSet stringToRequiredCourseSet(String input) {
         input = input.replace("[+]", "");
-        input = input.replaceAll("[oO][rR]", "∨");
-        input = input.replaceAll("[aA][nN][dD]", "∧");
+        input = input.replaceAll(" *[oO][rR] *", "∨");
+        input = input.replaceAll(" *[aA][nN][dD] *", "∧");
         input = input.substring(input.indexOf(":")+1);
         Object b = Functions.conv2Val(input);
         return new RequiredCourseSet(0,b);
@@ -118,14 +130,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         
     }*/
     
-    //Not finished, will duplicate
-    public RequiredCourseSet(Collection<Requirable> reqCourseSet) {
-        for (Iterator<Requirable> i = reqCourseSet.iterator(); i.hasNext(); ) {
-            Requirable requirement = i.next();
-            
-        }
-    }
-    
+
     
     public void addReq(GenericCourse course) {
         this.add(course);
@@ -139,7 +144,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
     
     public boolean isFulfilled(Set<HopkinsCourse> coursesTaken) {
         int reqsMet = 0;
-        int reqsNeeded = numRequired <= 0 ? this.size() + numRequired : numRequired; 
+        int reqsNeeded = getTrueNumRequired(); 
         for (Iterator<Requirable> i = this.iterator(); i.hasNext();) {
             Requirable requirement = i.next();
             if (requirement instanceof HopkinsCourse) {
@@ -157,6 +162,9 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
     
     public int getNumRequired() {
         return numRequired;
+    }
+    public int getTrueNumRequired() {
+        return numRequired > 0 ? numRequired : this.size() + numRequired;
     }
     
     @Override

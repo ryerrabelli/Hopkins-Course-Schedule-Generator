@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import scheduleGenerator.DbFiles.ManageTxtFiles;
 
 /**
@@ -25,9 +27,8 @@ public class JavaCourseScheduleGenerator {
         // TODO code application logic here
     }
     
-    public static HashSet<HopkinsCourse> allCourses;
     
-   public static HashSet<HopkinsCourse> generateLeastRequirements(String scheduleType1, String scheduleType2) {
+/*   public static HashSet<HopkinsCourse> generateLeastRequirements(String scheduleType1, String scheduleType2) {
             try {
                 HashSet<String> set1 = ManageTxtFiles.getRequiredCourses(scheduleType1);
                 HashSet<String> set2 = ManageTxtFiles.getRequiredCourses(scheduleType2);
@@ -50,7 +51,7 @@ public class JavaCourseScheduleGenerator {
                     String special = iterator.next();
                     if (special.contains("|") || special.toLowerCase().contains("or")) {
                         String[] specialparts = special.split("\\||OR|or|Or|oR");
-                        boolean contains = false;;
+                        boolean contains = false;
                         for (String specialpart : specialparts) {
                             if (combined.contains(specialpart.trim()) || courseMatches(combined, specialpart.trim())) { //second half of this may take a long time
                                 contains = true;
@@ -86,13 +87,13 @@ public class JavaCourseScheduleGenerator {
                         }
                         //System.out.println(iter.next());
                     }
-                }*/
+                }*//*
                 return null;
             } catch (IOException ex) {
                 return null;
                 
             }
-    }
+    } */
    
    public static RequiredCourseSet getRemainingRequirements(RequiredCourseSet requirements, HashSet<HopkinsCourse> requiredCourses) {
        RequiredCourseSet remaining = requirements;
@@ -101,13 +102,26 @@ public class JavaCourseScheduleGenerator {
    }
    
    //not finished
-    public static int getNumberOfCoursesThatNeed(HopkinsCourse thisCourse) {
+    /*public static int getNumberOfCoursesThatNeed(HopkinsCourse thisCourse) {
         allCourses.add(thisCourse);
         for (Iterator<HopkinsCourse> i = allCourses.iterator(); i.hasNext(); ) {
             HopkinsCourse checkingCourse = i.next();
             
         }
         return 0;
+    }*/
+   
+    public static void addPriorities(Map<HopkinsCourse, Float> toAddTo, RequiredCourseSet preReqs, float factor) {
+        if (preReqs == null || preReqs.isEmpty()) return;
+        float priority = preReqs.getTrueNumRequired() * factor / preReqs.size();
+        for (Requirable preReq : preReqs) {
+            if (preReq instanceof HopkinsCourse) {
+                addPriorities(toAddTo, ((HopkinsCourse) preReq).preReqs, priority);
+                toAddTo.put((HopkinsCourse) preReq, priority);
+            } else if (preReq instanceof RequiredCourseSet) {
+                addPriorities(toAddTo, (RequiredCourseSet) preReq, priority);
+            } // if it is a generic course, don't do anything 
+        }
     }
    
    private static boolean courseMatches(Collection<String> courses, String genericCourse) {

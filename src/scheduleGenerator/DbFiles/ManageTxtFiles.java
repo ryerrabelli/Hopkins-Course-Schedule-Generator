@@ -174,18 +174,7 @@ public class ManageTxtFiles {
         return null;
     }
     
-    private static Map<HopkinsCourse, Float> addPriorities(RequiredCourseSet reqs) {
-        for (Requirable req : reqs) {
-            if (req instanceof HopkinsCourse) {
-               // float priority = 
-            } else if (req instanceof RequiredCourseSet) {
-                
-            }
-        }
-        return null;
-    }
-    
-    public static  HashSet<String> getRequiredCourses(String category) throws IOException {
+    public static  HashSet<Requirable> getRequiredCourses(String category) throws IOException {
         String standardFilePath = "./src/scheduleGenerator/DbFiles/";
         String path = standardFilePath + category;
         FileReader fr;
@@ -194,12 +183,12 @@ public class ManageTxtFiles {
             BufferedReader txtread = new BufferedReader(fr);
             String Aline;
             int NumberOfLines = 0;
-            HashSet<String> reqs = new HashSet<String>();
+            HashSet<Requirable> reqs = new HashSet<Requirable>();
             boolean started = false;
             while ((Aline = txtread.readLine()) != null) {
                 if (started) {
                     NumberOfLines++;
-                    reqs.add(Aline.trim().toUpperCase());
+                    reqs.add(HopkinsCourse.getCourse(Aline));
                 } else if (Aline.trim().equalsIgnoreCase("start")) {
                     started = true;
                 }

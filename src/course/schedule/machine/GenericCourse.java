@@ -11,14 +11,14 @@ package course.schedule.machine;
 public class GenericCourse implements Requirable  {
     protected String deptNum = "";
     protected String courseNum = "";
-    protected int credits = 0;
+    protected float credits = 0;
     protected int school = 0; //0 - not determined 1-krieger 2-whiting 3- Peabody 4-other jhu   5-transfer
     protected Boolean isDesign = null;
     protected Boolean isWritingIntensive = null;
     protected String area = ""; 
     int identificationNum;
     
-    public GenericCourse(String courseTitle, int credits, String area){
+    public GenericCourse(String courseTitle, float credits, String area){
         this.credits = credits;
         this.area = area.toUpperCase().trim();
         String[] courseParts = courseTitle.split("\\Q.\\E", 3);

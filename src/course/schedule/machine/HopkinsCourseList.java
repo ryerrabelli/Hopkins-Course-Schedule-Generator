@@ -17,9 +17,9 @@ public class HopkinsCourseList {
     
     public HopkinsCourseList(String path) throws IOException
     {
-        HashSet<String> courses =  ManageTxtFiles.getRequiredCourses(path);
+        HashSet<Requirable> courses =  ManageTxtFiles.getRequiredCourses(path);
         courseList = new HashSet<HopkinsClass>();
-        convertStringtoHopkinsClass(courses,courseList);
+        //convertStringtoHopkinsClass(courses,courseList);
     }
     
     public static void convertStringtoHopkinsClass(HashSet<String> courses, HashSet<HopkinsClass> courseList)
@@ -32,20 +32,20 @@ public class HopkinsCourseList {
             str = str.substring(str.indexOf(separate) + separate.length());
             //prereqs will need to be handled in a separate way
             int credit = Integer.parseInt(str.substring(0,str.indexOf(separate)));
-             str = str.substring(str.indexOf(separate) + separate.length());
-             String area = str.substring(0,str.indexOf(separate));
-             str = str.substring(str.indexOf(separate) + separate.length());
-             int section = Integer.parseInt(str.substring(0,str.indexOf(separate)));
-             str = str.substring(str.indexOf(separate) + separate.length());
-             Schedule schedule = new Schedule(str);
-             HopkinsClass sample = new HopkinsClass(new HopkinsCourse(courseTitle, credit, area),section,schedule,HopkinsClass.Semester.FALL, 2015);
-             courseList.add(sample);
+            str = str.substring(str.indexOf(separate) + separate.length());
+            String area = str.substring(0,str.indexOf(separate));
+            str = str.substring(str.indexOf(separate) + separate.length());
+            int section = Integer.parseInt(str.substring(0,str.indexOf(separate)));
+            str = str.substring(str.indexOf(separate) + separate.length());
+            Schedule schedule = new Schedule(str);
+            HopkinsClass sample = new HopkinsClass(courseTitle,section,schedule,HopkinsClass.Semester.FALL, 2015);
+            courseList.add(sample);
         }
     }
     
     public String toString()
     {
-    return courseList.toString();
+        return courseList.toString();
     }
     
     
