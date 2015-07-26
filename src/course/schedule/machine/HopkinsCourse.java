@@ -20,10 +20,11 @@ public class HopkinsCourse extends GenericCourse {
     protected HashMap<Integer, HopkinsClass> HopkinsClasses = new HashMap<Integer, HopkinsClass>();
     protected boolean isDesign = false;
     protected boolean isWritingIntensive = false;
+    protected boolean isLab = false;
     protected float priority = 0f;
     protected static HashMap<String, HopkinsCourse> allCourses = new HashMap<String, HopkinsCourse>();
     
-    public HopkinsCourse(String courseTitle, String verbalName, String area, boolean isWritingIntensive, float creditsWorth, Semester semester, int year) {
+    public HopkinsCourse(String courseTitle, String verbalName, String area, boolean isWritingIntensive, boolean isDesign, boolean isLab, float creditsWorth, Semester semester, int year) {
         super(courseTitle, creditsWorth, area);
         
     }
@@ -40,6 +41,19 @@ public class HopkinsCourse extends GenericCourse {
     }*/
     
     public HopkinsClass addHopkinsClass(int section, HopkinsClass hClass) {
+        switch (hClass.getSemester()) {
+            case INTERSESSION:
+                section += 200;
+                break;
+            case SPRING:
+                section += 100;
+                break;
+            case SUMMER:
+                section += 300;
+                break;          
+            case FALL:
+                break;                
+        }
         return HopkinsClasses.put(section, hClass);
     }
     
