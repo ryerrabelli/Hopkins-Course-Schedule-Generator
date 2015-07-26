@@ -162,7 +162,8 @@ public class JavaCourseScheduleGenerator {
         for (Requirable preReq : preReqs) {
             if (preReq instanceof HopkinsCourse) {
                 addPriorities(toAddTo, ((HopkinsCourse) preReq).preReqs, priority);
-                toAddTo.put((HopkinsCourse) preReq, priority);
+                Float previousPriority =  toAddTo.get((HopkinsCourse) preReq);
+                toAddTo.put((HopkinsCourse) preReq, previousPriority == null ? priority : previousPriority + priority);
             } else if (preReq instanceof RequiredCourseSet) {
                 addPriorities(toAddTo, (RequiredCourseSet) preReq, priority);
             } // if it is a generic course, don't do anything 
