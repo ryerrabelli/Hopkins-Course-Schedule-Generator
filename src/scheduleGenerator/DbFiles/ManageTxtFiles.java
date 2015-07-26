@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -48,14 +49,14 @@ public class ManageTxtFiles {
         String path = "./src/scheduleGenerator/DbFiles/ClassStorage";
         FileReader fr = new FileReader(path);
         BufferedReader txtRead = new BufferedReader(fr);
-        HashMap<String, String> precoReqMap = new HashMap<String, String>();
+        HashSet<String> precoReqSet = new HashSet<String>();
         String currentLine = "";
         int numberOfLines = 1;
         
         beginningReader:
         while (!(currentLine = txtRead.readLine()).trim().equalsIgnoreCase("start")) numberOfLines++;
         
-        classReader:
+        hopkinsClassReader:
         while ( (currentLine = txtRead.readLine()) != null) {
             numberOfLines++;
             currentLine = currentLine.trim();
@@ -91,17 +92,17 @@ public class ManageTxtFiles {
                 try {
                     creditsWorth = Float.parseFloat( lineParts[start+8] );
                     year = Integer.parseInt(term[1]);
-                } catch (NumberFormatException NFE) { System.out.println("error from getting class storage: part 8-9 of line " + numberOfLines); continue classReader; } 
+                } catch (NumberFormatException NFE) { System.out.println("error from getting class storage: part 8-9 of line " + numberOfLines); continue hopkinsClassReader; } 
                 try {
                     semester = Semester.valueOf(term[0].toUpperCase());
-                } catch (IllegalArgumentException IAE) { System.out.println("error from getting class storage: part 9(" + lineParts[start+9] + ") of line " + numberOfLines); continue classReader; }
+                } catch (IllegalArgumentException IAE) { System.out.println("error from getting class storage: part 9(" + lineParts[start+9] + ") of line " + numberOfLines); continue hopkinsClassReader; }
                 location = lineParts[start+10].trim().toUpperCase();
                 schedule = lineParts[start+11].trim().toUpperCase();
                 instructors = lineParts[start+12].trim();
                 status = lineParts[start+13].trim().toUpperCase();
             } catch (IndexOutOfBoundsException ex) {
                 System.out.println("error from getting class storage: not enough lineparts on " + numberOfLines);
-                continue classReader;
+                continue hopkinsClassReader;
             }
             
             if (lineParts.length >= 15) {
@@ -129,35 +130,58 @@ public class ManageTxtFiles {
                     break forwardLooker;
                 }
             }
-          /*  for (int linesAhead = 0; (followingLine = txtRead.readLine().trim()) != null && linesAhead < 4;linesAhead++) {
-                if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
-                if (followingLine.toLowerCase().startsWith("kri") || followingLine.toLowerCase().startsWith("whi")) {
-                    break;
-                } else {
-                                    System.out.println("linesAhead = " +linesAhead);
-                    if(followingLine.toLowerCase().contains("req")) {
-                        if (followingLine.toLowerCase().contains("co")) coReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
-                        else preReqs = RequiredCourseSet.stringToRequiredCourseSet(followingLine);
-                    } else if (followingLine.contains("=") || followingLine.contains("cross")) {
-
-                    }
-                }
-            } */
             
             if (courseNum.matches("[a-zA-Z]{2}\\.[0-9]{3}\\.[0-9]{3,}")) courseNum = courseNum.substring(3);
-            precoReqMap.put(courseNum, precoReq.substring(newLn.length()));
-            //if (schedule.isEmpty()) continue classReader;
+            if (!precoReq.isEmpty()) precoReqSet.add(courseNum + precoReq);
             HopkinsClass thisClass = new HopkinsClass(courseNum, section, new Schedule(schedule), semester, year);
-            if (JavaCourseScheduleGenerator.allCourses.containsKey(courseNum)) {
-                JavaCourseScheduleGenerator.allCourses.get(courseNum).addHopkinsClass(section, thisClass);
+            if (HopkinsCourse.doesCourseExist(courseNum)) {
+                HopkinsCourse.getCourse(courseNum).addHopkinsClass(section, thisClass);
             } else  {
                 HopkinsCourse toAdd = new HopkinsCourse(courseNum, verbalName, area, isWritingIntensive, creditsWorth, semester, year);
                 toAdd.addHopkinsClass(section, thisClass);
-                JavaCourseScheduleGenerator.allCourses.put(courseNum, toAdd);
+                HopkinsCourse.putCourse(courseNum, toAdd);
             }
         }
+
+        addingRequirements:
+        for (Iterator<String> it = precoReqSet.iterator(); it.hasNext();) {
+            String[] lines = it.next().split(newLn);
+            HopkinsCourse course = HopkinsCourse.getCourse(lines[0]);
+            RequiredCourseSet coReqs = null, preReqs = null;
+            for (int lineNum = 1; lineNum < lines.length; lineNum++) {
+                String line = lines[lineNum];
+                    if(line.toLowerCase().contains("req")) {
+                        if (line.toLowerCase().contains("co")) coReqs = RequiredCourseSet.stringToRequiredCourseSet(line);
+                        else preReqs = RequiredCourseSet.stringToRequiredCourseSet(line);
+                    } else if (line.contains("=") || line.contains("cross")) {
+
+                    }
+            }
+            if (preReqs != null) {
+                for (Requirable req : preReqs) {
+                    if (req instanceof HopkinsCourse) {
+                        
+                    }
+                }
+                course.addPreReq(preReqs);
+            }
+            if (coReqs != null) course.addCoReq(coReqs);
+            
+        }
+        
         txtRead.close();
         fr.close();
+        return null;
+    }
+    
+    private static Map<HopkinsCourse, Float> addPriorities(RequiredCourseSet reqs) {
+        for (Requirable req : reqs) {
+            if (req instanceof HopkinsCourse) {
+               // float priority = 
+            } else if (req instanceof RequiredCourseSet) {
+                
+            }
+        }
         return null;
     }
     
