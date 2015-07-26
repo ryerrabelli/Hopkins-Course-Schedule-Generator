@@ -67,6 +67,8 @@ public class ManageTxtFiles {
             String verbalName;
             String area;
             boolean isWritingIntensive;
+            boolean isDesign;
+            boolean isLab;
             float creditsWorth;
             int year;
             Semester semester;
@@ -84,7 +86,7 @@ public class ManageTxtFiles {
                         section = Integer.parseInt( lineParts[start+1].substring(lineParts[start+1].indexOf("(")+1, lineParts[start+1].indexOf(")")) );
                 } catch (IndexOutOfBoundsException | NumberFormatException ex) { System.out.println("error from getting class storage: part 1(" +lineParts[start+1] + ") of line " + numberOfLines); }
                 courseNum = lineParts[start+1].substring(0, lineParts[start+1].indexOf("(")).trim();
-                if (!courseNum.matches("(AS\\.|EN\\.)?\\d{3}\\.\\d{3}")) System.out.println("error from getting class storage. Illegal course number: part 1 of line " + numberOfLines);
+                if (!courseNum.matches("(AS\\.|EN\\.)?\\d{3}\\.\\d{1,3}")) System.out.println("error from getting class storage. Illegal course number: part 1 of line " + numberOfLines);
                 verbalName = lineParts[start+2].replace("[+]", "").trim();
                 area = lineParts[start+3].trim().toUpperCase();
                 isWritingIntensive = lineParts[start+4].trim().toUpperCase().equalsIgnoreCase("YES");
@@ -132,13 +134,14 @@ public class ManageTxtFiles {
                 }
             }
             
-            if (courseNum.matches("[a-zA-Z]{2}\\.[0-9]{3}\\.[0-9]{3,}")) courseNum = courseNum.substring(3);
+            if (courseNum.matches("[a-zA-Z]{2}\\.[0-9]{3}\\.[0-9]+")) courseNum = courseNum.substring(3);
             if (!precoReq.isEmpty()) precoReqSet.add(courseNum + precoReq);
             HopkinsClass thisClass = new HopkinsClass(courseNum, section, new Schedule(schedule), semester, year);
             if (HopkinsCourse.doesCourseExist(courseNum)) {
                 HopkinsCourse.getCourse(courseNum).addHopkinsClass(section, thisClass);
             } else  {
-                HopkinsCourse toAdd = new HopkinsCourse(courseNum, verbalName, area, isWritingIntensive, creditsWorth, semester, year);
+                //String courseTitle, String verbalName, String area, boolean isWritingIntensive, boolean isDesign, boolean isLab, float creditsWorth, Semester semester, int year
+                HopkinsCourse toAdd = new HopkinsCourse(courseNum, verbalName, area, isWritingIntensive, false, false, creditsWorth, semester, year);
                 toAdd.addHopkinsClass(section, thisClass);
                 HopkinsCourse.putCourse(courseNum, toAdd);
             }
@@ -189,7 +192,7 @@ public class ManageTxtFiles {
             while ((Aline = txtread.readLine()) != null) {
                 if (started) {
                     NumberOfLines++;
-                    reqs.add(HopkinsCourse.getCourse(Aline));
+                    reqs.add(RequiredCourseSet.stringToRequiredCourseSet(Aline));
                 } else if (Aline.trim().equalsIgnoreCase("start")) {
                     started = true;
                 }
