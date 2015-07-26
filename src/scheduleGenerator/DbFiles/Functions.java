@@ -1503,6 +1503,7 @@ public  class Functions {
     
     public static Object conv2Val(String input) {
         if (input == null || input.equals("null")) return null;
+        input = input.trim();
         if (input.isEmpty()) return "";
         String o_input = input;
 
