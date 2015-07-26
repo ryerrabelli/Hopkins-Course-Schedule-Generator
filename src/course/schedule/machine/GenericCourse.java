@@ -4,6 +4,8 @@
  */
 package course.schedule.machine;
 
+import java.util.Set;
+
 /**
  *
  * @author rahulyerrabelli
@@ -48,7 +50,7 @@ public class GenericCourse implements Requirable  {
         } else System.out.println("Course title does not have enough parts: " + courseTitle);
     }
     
-    public boolean isSatisfiedBy(HopkinsCourse realCourse) {
+    private boolean isSatisfiedBy(HopkinsCourse realCourse) {
         try {
             if (deptNum.isEmpty() || !deptNum.matches(realCourse.deptNum)) return false;
             if (courseNum.length() < 3 || Integer.parseInt(realCourse.courseNum) < Integer.parseInt(courseNum.substring(0,3))) return false;
@@ -59,6 +61,14 @@ public class GenericCourse implements Requirable  {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean isFulfilled(Set<HopkinsCourse> coursesTaken) { // NOTE CURRENTLY DOES NOT WORK WITH MULTIPLE GENERIC IDENTICAL GENERIC COURSES
+        for (HopkinsCourse course : coursesTaken) {
+            if (this.isSatisfiedBy(course)) return true;
+        }
+        return false;
     }
     
 }

@@ -65,8 +65,14 @@ public class HopkinsCourse extends GenericCourse {
         allCourses.put(courseTitle, course);
     }
     
+    
     public boolean canTake(Set<HopkinsCourse> coursesTaken) {
         return preReqs.isFulfilled(coursesTaken);
+    }
+    
+    @Override
+    public boolean isFulfilled(Set<HopkinsCourse> coursesTaken) {
+        return coursesTaken.contains(this);
     }
     
     public boolean addPreReq(Requirable preReq)

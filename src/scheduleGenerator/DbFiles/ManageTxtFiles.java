@@ -174,7 +174,7 @@ public class ManageTxtFiles {
         return null;
     }
     
-    public static  HashSet<Requirable> getRequiredCourses(String category) throws IOException {
+    public static  RequiredCourseSet getRequiredCourses(String category) throws IOException {
         String standardFilePath = "./src/scheduleGenerator/DbFiles/";
         String path = standardFilePath + category;
         FileReader fr;
@@ -183,7 +183,7 @@ public class ManageTxtFiles {
             BufferedReader txtread = new BufferedReader(fr);
             String Aline;
             int NumberOfLines = 0;
-            HashSet<Requirable> reqs = new HashSet<Requirable>();
+            RequiredCourseSet reqs = new RequiredCourseSet(0);
             boolean started = false;
             while ((Aline = txtread.readLine()) != null) {
                 if (started) {
@@ -199,7 +199,7 @@ public class ManageTxtFiles {
             return reqs;
         } catch (FileNotFoundException ex) {
             System.out.println("FILE NOT FOUND: " + path);
-            return new HashSet();
+            return new RequiredCourseSet(0);
         }
     }
     

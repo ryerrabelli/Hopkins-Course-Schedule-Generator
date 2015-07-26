@@ -142,17 +142,14 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         this.add(new RequiredCourseSet(reqCourses, numReq));
     }
     
+    @Override
     public boolean isFulfilled(Set<HopkinsCourse> coursesTaken) {
         int reqsMet = 0;
         int reqsNeeded = getTrueNumRequired(); 
         for (Iterator<Requirable> i = this.iterator(); i.hasNext();) {
             Requirable requirement = i.next();
-            if (requirement instanceof HopkinsCourse) {
-                if (coursesTaken.contains(requirement)) reqsMet++;
-            } else if (requirement instanceof GenericCourse) {
-                for (HopkinsCourse courseTaken : coursesTaken) {
-                    if (((GenericCourse) requirement).isSatisfiedBy(courseTaken) ) reqsMet++;
-                }
+            if (requirement instanceof GenericCourse) { // polymorphism with HopkinsCourse
+                if (((GenericCourse) requirement).isFulfilled(coursesTaken) ) reqsMet++;
             } else if (requirement instanceof RequiredCourseSet) {
                 if ( ((RequiredCourseSet) requirement).isFulfilled(coursesTaken)) reqsMet++;
             } else System.out.println("ERROR: Requirable is not an instance of GenericCourse or RequiredCourseSet: " + requirement);

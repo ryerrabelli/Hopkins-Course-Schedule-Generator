@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import scheduleGenerator.DbFiles.ManageTxtFiles;
 
 /**
@@ -27,23 +29,49 @@ public class JavaCourseScheduleGenerator {
         // TODO code application logic here
     }
     
+    public static ArrayList<HopkinsCourse> generateBestSchedule(Set<HopkinsCourse> coursesTaken, String...categories) {
+        if (categories == null || categories.length ==0) return new ArrayList();
+        try {
+            RequiredCourseSet leastReqs = ManageTxtFiles.getRequiredCourses(categories[0]);
+            for (int i = 1; i < categories.length; i++) {
+                leastReqs = generateLeastRequirements(leastReqs, ManageTxtFiles.getRequiredCourses(categories[i]));
+            }
+            
+            getRemainingRequirements:
+            for (Iterator<Requirable> it = leastReqs.iterator(); it.hasNext();) {
+                Requirable next = it.next();
+                if (next.isFulfilled(coursesTaken)) {
+                    it.remove();
+                }
+            }
+            
+            ArrayList<HopkinsCourse> prioritizedCourses = getPriorities(leastReqs);
+            return prioritizedCourses;
+        } catch (IOException ex) {
+            System.out.println("Categories in generateBestSchedule could not be found: " + categories);
+            return null;
+        }
+    }
     
-/*   public static HashSet<HopkinsCourse> generateLeastRequirements(String scheduleType1, String scheduleType2) {
-            try {
-                HashSet<String> set1 = ManageTxtFiles.getRequiredCourses(scheduleType1);
-                HashSet<String> set2 = ManageTxtFiles.getRequiredCourses(scheduleType2);
+    public static RequiredCourseSet generateLeastRequirements(RequiredCourseSet category1, RequiredCourseSet category2) {
+           // try {
+
                 HashSet<String> combined = new HashSet<String>();
                 ArrayList<String> specials = new ArrayList<String>();
-                for (Iterator<String> i = set1.iterator();i.hasNext();) {
-                    String set1str = i.next();
-                    if (set1str.endsWith("0") || set1str.contains("|") || set1str.toLowerCase().contains("or")) {specials.add(set1str);}
-                    else combined.add(set1str);
+                for (Iterator<Requirable> i = category1.iterator();i.hasNext();) {
+                    String cat1Str = i.next().toString();
+                    if (cat1Str.startsWith("[") && cat1Str.endsWith("]")) cat1Str = cat1Str.substring(1, cat1Str.length()-1);
+                    if (cat1Str.startsWith("[") && cat1Str.endsWith("]")) cat1Str = cat1Str.substring(1, cat1Str.length()-1);
+                    if (cat1Str.endsWith("0") || cat1Str.contains("|") || cat1Str.toLowerCase().contains("or")) {specials.add(cat1Str);}
+                    else combined.add(cat1Str);
                 }
-                for (Iterator<String> i = set2.iterator(); i.hasNext();) {
-                    String set2str = i.next();
-                    if (set2str.endsWith("0") || set2str.contains("|")|| set2str.toLowerCase().contains("or")) {
-                        if (!specials.contains(set2str)) specials.add(set2str);
-                    } else combined.add(set2str);
+                for (Iterator<Requirable> i = category2.iterator(); i.hasNext();) {
+                    String cat2Str = i.next().toString();
+                    if (cat2Str.startsWith("[") && cat2Str.endsWith("]")) cat2Str = cat2Str.substring(1, cat2Str.length()-1).replace(", ", "and");
+                    if (cat2Str.startsWith("{") && cat2Str.endsWith("}")) cat2Str = cat2Str.substring(1, cat2Str.length()-1).replace(", ", "or");
+                    if (cat2Str.endsWith("0") || cat2Str.contains("|")|| cat2Str.toLowerCase().contains("or")) {
+                        if (!specials.contains(cat2Str)) specials.add(cat2Str);
+                    } else combined.add(cat2Str);
                 }
                 
                 special:
@@ -87,19 +115,13 @@ public class JavaCourseScheduleGenerator {
                         }
                         //System.out.println(iter.next());
                     }
-                }*//*
+                }*/
                 return null;
-            } catch (IOException ex) {
+          /*  } catch (IOException ex) {
                 return null;
                 
-            }
-    } */
-   
-   public static RequiredCourseSet getRemainingRequirements(RequiredCourseSet requirements, HashSet<HopkinsCourse> requiredCourses) {
-       RequiredCourseSet remaining = requirements;
-       
-       return null;
-   }
+            } */
+    } 
    
    //not finished
     /*public static int getNumberOfCoursesThatNeed(HopkinsCourse thisCourse) {
@@ -111,7 +133,30 @@ public class JavaCourseScheduleGenerator {
         return 0;
     }*/
    
-    public static void addPriorities(Map<HopkinsCourse, Float> toAddTo, RequiredCourseSet preReqs, float factor) {
+    public static ArrayList<HopkinsCourse> getPriorities(RequiredCourseSet preReqs) {
+        HashMap<HopkinsCourse, Float> priorities = new HashMap<>();
+        addPriorities(priorities, preReqs, 1f);
+        ArrayList<HopkinsCourse> sortedCourses = new ArrayList<>();
+        Iterator<HopkinsCourse> it = priorities.keySet().iterator();
+        sortedCourses.add(it.next());
+        for (;it.hasNext();) {
+            HopkinsCourse currentCourse = it.next();
+            float currentPriority = priorities.get(currentCourse);
+            boolean hasAdded;
+            findSpot:
+            for (int i = 0; i < sortedCourses.size();i++) { // Turn into binary sort later
+                if (priorities.get(sortedCourses.get(i)) < currentPriority) {
+                    sortedCourses.add(i, currentCourse);
+                    break findSpot;
+                } else if ( i == sortedCourses.size()-1) {
+                    sortedCourses.add(currentCourse);
+                    break findSpot;
+                }
+            }
+        }
+        return sortedCourses;
+    }
+   private static void addPriorities(Map<HopkinsCourse, Float> toAddTo, RequiredCourseSet preReqs, float factor) {
         if (preReqs == null || preReqs.isEmpty()) return;
         float priority = preReqs.getTrueNumRequired() * factor / preReqs.size();
         for (Requirable preReq : preReqs) {
