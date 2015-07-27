@@ -123,6 +123,17 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         return toReturn;
     }
     
+    public HashSet<GenericCourse> getSetOfCourses() {
+        HashSet<GenericCourse> courses = new HashSet<>();
+        for (Requirable req : this) {
+            if (req instanceof GenericCourse) courses.add((GenericCourse) req);
+            else if (req instanceof RequiredCourseSet) {
+                courses.addAll(this.getSetOfCourses());
+            }
+        }
+        return courses;
+    }
+    
     /*public RequiredCourseSet stringToRequiredCourseSet(String str) {
         str = str.trim();
         int numReq = 1;
@@ -167,12 +178,12 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         return numRequired > 0 ? numRequired : this.size() + numRequired;
     }
     
-    @Override
+    /*@Override
     public boolean equals(Object b) {
         if (b instanceof Requirable) {
             return true; //need to complete
         } else return false;
-    }
+    } */
     
     @Override
     public String toString() {
