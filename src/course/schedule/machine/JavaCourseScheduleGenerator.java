@@ -53,7 +53,43 @@ public class JavaCourseScheduleGenerator {
         }
     }
     
+    public static HashSet<GenericCourse> getSetOfCourses(RequiredCourseSet reqs) {
+        HashSet<GenericCourse> courses = new HashSet<>();
+        for (Requirable req : reqs) {
+            if (req instanceof GenericCourse) courses.add((GenericCourse) req);
+            else if (req instanceof RequiredCourseSet) {
+                courses.addAll(getSetOfCourses((RequiredCourseSet) req));
+            }
+        }
+        return courses;
+    }
+    
     public static RequiredCourseSet generateLeastRequirements(RequiredCourseSet category1, RequiredCourseSet category2) {
+        HashSet<GenericCourse> inBothCourses = category1.getSetOfCourses();
+        HashSet<GenericCourse> courses2 = category2.getSetOfCourses();
+        inBothCourses.retainAll(courses2);
+        RequiredCourseSet combinedReqs = new RequiredCourseSet(0);
+        for (Requirable req1: category1) {
+            if (!(req1 instanceof RequiredCourseSet)) {
+                combinedReqs.add(req1);
+            }
+        }
+        for (Requirable req2: category2) {
+            if (req2 instanceof HopkinsCourse) {
+                for (Requirable req1 : category1) {
+                    if (req1 instanceof HopkinsCourse && !req1.equals(req2)) continue;
+                    else if (req1 instanceof GenericCourse) {
+                         
+                    }
+                }
+            } else if (req2 instanceof GenericCourse) {
+                
+            }
+        }
+        return null;
+    }
+
+  /*  public static RequiredCourseSet generateLeastRequirements(RequiredCourseSet category1, RequiredCourseSet category2) {
            // try {
 
             /*    RequiredCourseSet combined = new RequiredCourseSet(0);
@@ -118,12 +154,12 @@ public class JavaCourseScheduleGenerator {
                         //System.out.println(iter.next());
                     }
                 }*/
-                return null;
+              //  return null;
           /*  } catch (IOException ex) {
                 return null;
                 
             } */
-    } 
+   // } 
    
    //not finished
     /*public static int getNumberOfCoursesThatNeed(HopkinsCourse thisCourse) {
