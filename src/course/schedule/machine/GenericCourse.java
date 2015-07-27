@@ -50,6 +50,12 @@ public class GenericCourse implements Requirable  {
         } else System.out.println("Course title does not have enough parts: " + courseTitle);
     }
     
+    private boolean isCompatibleWith(GenericCourse otherCourse) {
+        if (!this.deptNum.isEmpty() && !otherCourse.deptNum.isEmpty() && !this.deptNum.equals(otherCourse.deptNum)) return false;
+        if (courseNum.length()>=3  && otherCourse.courseNum.length()>=3 && !this.courseNum.equals(otherCourse.courseNum)) return false;
+        return true;
+    }
+    
     private boolean isSatisfiedBy(HopkinsCourse realCourse) {
         try {
             if (deptNum.isEmpty() || !deptNum.matches(realCourse.deptNum)) return false;
