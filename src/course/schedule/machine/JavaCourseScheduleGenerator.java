@@ -34,7 +34,7 @@ public class JavaCourseScheduleGenerator {
         try {
             RequiredCourseSet leastReqs = ManageTxtFiles.getRequiredCourses(categories[0]);
             for (int i = 1; i < categories.length; i++) {
-                leastReqs = generateLeastRequirements(leastReqs, ManageTxtFiles.getRequiredCourses(categories[i]));
+                leastReqs = generateLeastRequirements(new HashSet(), leastReqs, ManageTxtFiles.getRequiredCourses(categories[i]));
             }
             
             getRemainingRequirements:
@@ -53,38 +53,70 @@ public class JavaCourseScheduleGenerator {
         }
     }
     
-    public static HashSet<GenericCourse> getSetOfCourses(RequiredCourseSet reqs) {
-        HashSet<GenericCourse> courses = new HashSet<>();
+    /*public static HashSet<Course> getSetOfCourses(RequiredCourseSet reqs) {
+        HashSet<Course> courses = new HashSet<>();
         for (Requirable req : reqs) {
-            if (req instanceof GenericCourse) courses.add((GenericCourse) req);
+            if (req instanceof Course) courses.add((Course) req);
             else if (req instanceof RequiredCourseSet) {
                 courses.addAll(getSetOfCourses((RequiredCourseSet) req));
             }
         }
         return courses;
-    }
+    } */
     
-    public static RequiredCourseSet generateLeastRequirements(RequiredCourseSet category1, RequiredCourseSet category2) {
-        HashSet<GenericCourse> inBothCourses = category1.getSetOfCourses();
-        HashSet<GenericCourse> courses2 = category2.getSetOfCourses();
+    
+    public static RequiredCourseSet generateLeastRequirements(HashSet<Course> coursesBeingTaken, RequiredCourseSet category1, RequiredCourseSet category2) {
+        HashSet<Course> inBothCourses = category1.getSetOfCourses();
+        HashSet<Course> courses2 = category2.getSetOfCourses();
         inBothCourses.retainAll(courses2);
         RequiredCourseSet combinedReqs = new RequiredCourseSet(0);
         for (Requirable req1: category1) {
-            if (!(req1 instanceof RequiredCourseSet)) {
-                combinedReqs.add(req1);
+            if (req1 instanceof RequiredCourseSet) {
+                continue;
+            } else if (req1 instanceof GenericCourse) {
+                for (Course crs : coursesBeingTaken) {
+                    
+                }
+            } else if (req1 instanceof HopkinsCourse) {
+                if (!coursesBeingTaken.contains((HopkinsCourse) req1))
+                    combinedReqs.add(req1);
             }
         }
+        
+        add2ndCategoryDefinites:
         for (Requirable req2: category2) {
-            if (req2 instanceof HopkinsCourse) {
+            if (req2 instanceof RequiredCourseSet) {
+                continue add2ndCategoryDefinites;
+
+            } else if (req2 instanceof HopkinsCourse) {
+                if (coursesBeingTaken.contains((HopkinsCourse) req2)) continue add2ndCategoryDefinites;
+                combinedReqs.add(req2);
                 for (Requirable req1 : category1) {
-                    if (req1 instanceof HopkinsCourse && !req1.equals(req2)) continue;
-                    else if (req1 instanceof GenericCourse) {
-                         
-                    }
+                    if (req1 instanceof RequiredCourseSet) {
+                    } if (req1 instanceof HopkinsCourse) {
+                        if (((HopkinsCourse) req2).equals((HopkinsCourse) req1)) continue;
+                        else combinedReqs.add(req2);
+                    } else if (req1 instanceof GenericCourse) {
+                        if (((GenericCourse) req1).isSatisfiedBy((HopkinsCourse) req2)) {
+                            combinedReqs.remove(req1);
+                        } else continue;
+                    } else System.out.println("Error. Requirement1 is not any of three categories: " + req1);
                 }
+
             } else if (req2 instanceof GenericCourse) {
-                
-            }
+                boolean shouldAdd = true;
+                for (Requirable req1 : category1) {
+                    if (req1 instanceof RequiredCourseSet) {
+                        continue;
+                    } else if (req1 instanceof HopkinsCourse) {
+                        if (((GenericCourse) req2).isSatisfiedBy((HopkinsCourse) req1));
+                    } else if (req1 instanceof GenericCourse) { // should combine GenericCourses at the very end
+                        if ( ((GenericCourse) req2).isSubsetOf((GenericCourse) req1)) shouldAdd = false;
+                        else if(((GenericCourse) req1).isSubsetOf((GenericCourse) req2)) combinedReqs.remove((GenericCourse) req1);
+                    } else System.out.println("Error. Requirement1 is not any of three categories: " + req1);
+                }
+                if (shouldAdd) combinedReqs.add(req2);
+            } else System.out.println("Error. In add2ndCategoryDefinites loop, requirement2 is not any of three categories: " + req2);
         }
         return null;
     }
