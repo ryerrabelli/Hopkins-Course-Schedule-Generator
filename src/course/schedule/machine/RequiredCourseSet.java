@@ -70,6 +70,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
                 else if (innerRequiredCourseSet.getNumRequired() == 1 && numRequired == 1) this.addAll(innerRequiredCourseSet);
                 else this.add(innerRequiredCourseSet);
             } else if (HopkinsCourse.getCourse(req.toString()) != null) this.add(HopkinsCourse.getCourse(req.toString()));
+            else if (req.toString().matches("([a-zA-Z]{2}\\.)?[0-9]{3}\\.[0-9]{3,}")) this.add(HopkinsCourse.getCourse(req.toString()));
             else if (req.toString().matches("([a-zA-Z]{2}\\.)?[0-9]{3}\\.[0-9]+")) this.add(new GenericCourse(req.toString(), -1f, ""));
             else System.out.println("Could not add to RequiredCourseSet:" + req);
         }
@@ -123,10 +124,10 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         return toReturn;
     }
     
-    public HashSet<GenericCourse> getSetOfCourses() {
-        HashSet<GenericCourse> courses = new HashSet<>();
+    public HashSet<Course> getSetOfCourses() {
+        HashSet<Course> courses = new HashSet<>();
         for (Requirable req : this) {
-            if (req instanceof GenericCourse) courses.add((GenericCourse) req);
+            if (req instanceof Course) courses.add((Course) req);
             else if (req instanceof RequiredCourseSet) {
                 courses.addAll(this.getSetOfCourses());
             }
@@ -146,7 +147,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
     
 
     
-    public void addReq(GenericCourse course) {
+    public void addReq(Course course) {
         this.add(course);
     }
     public void addReq(RequiredCourseSet reqCourses) {
@@ -162,8 +163,8 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         int reqsNeeded = getTrueNumRequired(); 
         for (Iterator<Requirable> i = this.iterator(); i.hasNext();) {
             Requirable requirement = i.next();
-            if (requirement instanceof GenericCourse) { // polymorphism with HopkinsCourse
-                if (((GenericCourse) requirement).isFulfilled(coursesTaken) ) reqsMet++;
+            if (requirement instanceof Course) { // polymorphism with HopkinsCourse
+                if (((Course) requirement).isFulfilled(coursesTaken) ) reqsMet++;
             } else if (requirement instanceof RequiredCourseSet) {
                 if ( ((RequiredCourseSet) requirement).isFulfilled(coursesTaken)) reqsMet++;
             } else System.out.println("ERROR: Requirable is not an instance of GenericCourse or RequiredCourseSet: " + requirement);
