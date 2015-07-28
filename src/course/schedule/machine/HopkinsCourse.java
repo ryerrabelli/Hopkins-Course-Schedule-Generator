@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @author ryerrabelli
  */
-public class HopkinsCourse extends GenericCourse {
+public class HopkinsCourse extends Course {
     //  school.deptNum.courseNum
     //         AS.030.205
     protected RequiredCourseSet preReqs = new RequiredCourseSet(0);
@@ -26,6 +26,7 @@ public class HopkinsCourse extends GenericCourse {
     
     public HopkinsCourse(String courseTitle, String verbalName, String area, boolean isWritingIntensive, boolean isDesign, boolean isLab, float creditsWorth, Semester semester, int year) {
         super(courseTitle, creditsWorth, area);
+        // MUST FINISH LATER
         
     }
     
