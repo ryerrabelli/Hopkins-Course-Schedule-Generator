@@ -379,19 +379,24 @@ public class Schedule {
         //size5 = topFive.get(4).HopkinsClasses.size();
         for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
         {
+            HopkinsClass first = it1.next();
               for (Iterator<HopkinsClass> it2 = topFive.get(1).HopkinsClasses.values().iterator(); it2.hasNext();)
               {
+                  HopkinsClass second = it2.next();
                     for (Iterator<HopkinsClass> it3 = topFive.get(2).HopkinsClasses.values().iterator(); it3.hasNext();)
                     {
+                        HopkinsClass third = it3.next();
                           for (Iterator<HopkinsClass> it4 = topFive.get(3).HopkinsClasses.values().iterator(); it4.hasNext();)
                           {
+                              HopkinsClass fourth = it4.next();
                                 for (Iterator<HopkinsClass> it5 = topFive.get(4).HopkinsClasses.values().iterator(); it5.hasNext();)
                                 {
-                                    HopkinsClass first = it1.next();
-                                    HopkinsClass second = it2.next();
-                                    HopkinsClass third = it3.next();
-                                    HopkinsClass fourth = it4.next();
+                                    //System.out.println(it1.hasNext());
                                     HopkinsClass fifth = it5.next();
+                                    
+                                    
+                                    
+                                    
                                     
                                     Schedule one, two, three, four, five;
                                     possibleSchedule.set(0,first.getSchedule());
@@ -399,7 +404,11 @@ public class Schedule {
                                     possibleSchedule.set(2,third.getSchedule());
                                     possibleSchedule.set(3,fourth.getSchedule());
                                     possibleSchedule.set(4,fifth.getSchedule());
-                                    
+                                    schedule.set(0,first);
+                                    schedule.set(1,second);
+                                    schedule.set(2,third);
+                                    schedule.set(3,fourth);
+                                    schedule.set(4,fifth);
                                     
                                     conflicts = conflicts(possibleSchedule);
                                     if (!conflicts)
