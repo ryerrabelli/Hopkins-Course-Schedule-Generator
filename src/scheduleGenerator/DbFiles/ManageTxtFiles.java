@@ -180,6 +180,10 @@ public class ManageTxtFiles {
     
     public static  RequiredCourseSet getRequiredCourses(String category) throws IOException {
         String standardFilePath = "./src/scheduleGenerator/DbFiles/";
+        category = category.toLowerCase();
+        category = category.replace(".", "/");
+        category = category.replace(" ", "_");
+        category = category.replace("or/", "ors/");
         String path = standardFilePath + category;
         FileReader fr;
         try {
