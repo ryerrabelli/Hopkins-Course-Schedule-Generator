@@ -80,7 +80,6 @@ public class HopkinsCourse extends Course {
         allCourses.put(courseTitle, course);
     }
     
-    
     public boolean canTake(Set<HopkinsCourse> coursesTaken) {
         return preReqs.isFulfilled(coursesTaken);
     }

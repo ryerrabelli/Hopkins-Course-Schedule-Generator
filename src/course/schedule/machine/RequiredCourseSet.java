@@ -35,7 +35,10 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
             else if (req instanceof RequiredCourseSet) {
                 if (numRequired == 0 && ((RequiredCourseSet) req).getNumRequired() == 0) this.addAll((RequiredCourseSet) req);
                 else if (numRequired == 1 && ((RequiredCourseSet) req).getNumRequired() == 1) this.addAll((RequiredCourseSet) req);
-                else this.add((RequiredCourseSet) req);
+                else if (numRequired == -1) {
+                    this.numRequired = ((RequiredCourseSet) req).getNumRequired();
+                    this.addAll((RequiredCourseSet) req);
+                } else this.add((RequiredCourseSet) req);
             } else if (req instanceof String && (((String) req).contains("[") || ((String) req).contains("{"))) {
                 String strReq = (String) req;
                 strReq = strReq.trim();
@@ -92,6 +95,16 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         Object b = Functions.conv2Val(input);
         return new RequiredCourseSet(0,b);
     }
+        public static Requirable stringToRequirable(String input) {
+        input = input.replace("[+]", "");
+        input = input.replaceAll(" *[oO][rR] *", "∨");
+        input = input.replaceAll(" *[aA][nN][dD] *", "∧");
+        input = input.substring(input.indexOf(":")+1);
+        Object b = Functions.conv2Val(input);
+        if (input.contains("[") || input.contains("{") || input.contains(",") || input.contains("∨") || input.contains("∧")) return new RequiredCourseSet(-1,b);
+        else if (input.matches("(AS\\.|EN\\.)?\\d{3}\\.\\d{3}")) return HopkinsCourse.getCourse(input);
+        else return new GenericCourse(input, -1, "");
+    }
     
     /*public RequiredCourseSet convertToRequiredCourseSet(String input) {
         ArrayList allParts = new ArrayList();
@@ -129,7 +142,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         for (Requirable req : this) {
             if (req instanceof Course) courses.add((Course) req);
             else if (req instanceof RequiredCourseSet) {
-                courses.addAll(this.getSetOfCourses());
+                courses.addAll(((RequiredCourseSet) req).getSetOfCourses());
             }
         }
         return courses;

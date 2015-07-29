@@ -190,9 +190,10 @@ public class ManageTxtFiles {
             RequiredCourseSet reqs = new RequiredCourseSet(0);
             boolean started = false;
             while ((Aline = txtread.readLine()) != null) {
+                if (Aline.isEmpty() || Aline.startsWith("//")) continue;
                 if (started) {
                     NumberOfLines++;
-                    reqs.add(RequiredCourseSet.stringToRequiredCourseSet(Aline));
+                    reqs.add(RequiredCourseSet.stringToRequirable(Aline));
                 } else if (Aline.trim().equalsIgnoreCase("start")) {
                     started = true;
                 }
