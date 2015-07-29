@@ -394,11 +394,11 @@ public class Schedule {
                                     HopkinsClass fifth = it5.next();
                                     
                                     Schedule one, two, three, four, five;
-                                    possibleSchedule.add(first.getSchedule());
-                                    possibleSchedule.add(second.getSchedule());
-                                    possibleSchedule.add(third.getSchedule());
-                                    possibleSchedule.add(fourth.getSchedule());
-                                    possibleSchedule.add(fifth.getSchedule());
+                                    possibleSchedule.set(0,first.getSchedule());
+                                    possibleSchedule.set(1,second.getSchedule());
+                                    possibleSchedule.set(2,third.getSchedule());
+                                    possibleSchedule.set(3,fourth.getSchedule());
+                                    possibleSchedule.set(4,fifth.getSchedule());
                                     
                                     
                                     conflicts = conflicts(possibleSchedule);
