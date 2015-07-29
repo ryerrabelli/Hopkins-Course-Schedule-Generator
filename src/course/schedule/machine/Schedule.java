@@ -354,9 +354,10 @@ public class Schedule {
             schedule.add(null);
             possibleSchedule.add(null);
         }
-        while (conflicts)  
+        myLoop:
+         while (conflicts)  
         {
-            System.out.println(tracker);
+            //System.out.println(tracker);
          ArrayList<HopkinsCourse> topFive = new ArrayList<HopkinsCourse>();
          int size1, size2, size3, size4, size5;
         for (int i = tracker; i < tracker+5; i++)
@@ -370,22 +371,40 @@ public class Schedule {
             else
                 return null;
         }   
-        size1 = topFive.get(0).HopkinsClasses.size();
+        // size1 = topFive.get(0).HopkinsClasses.size();
         //System.out.println("Test: " + size1);
-        size2 = topFive.get(1).HopkinsClasses.size();
-        size3 = topFive.get(2).HopkinsClasses.size();
-        size4 = topFive.get(3).HopkinsClasses.size();
-        size5 = topFive.get(4).HopkinsClasses.size();
-        for (int a = 1; a <= size1; a++)
+        //size2 = topFive.get(1).HopkinsClasses.size();
+        //size3 = topFive.get(2).HopkinsClasses.size();
+        //size4 = topFive.get(3).HopkinsClasses.size();
+        //size5 = topFive.get(4).HopkinsClasses.size();
+        for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
         {
-              for (int b = 1; b <=size2; b++)
+              for (Iterator<HopkinsClass> it2 = topFive.get(1).HopkinsClasses.values().iterator(); it2.hasNext();)
               {
-                    for (int c = 1; c <= size3; c++)
+                    for (Iterator<HopkinsClass> it3 = topFive.get(2).HopkinsClasses.values().iterator(); it3.hasNext();)
                     {
-                          for (int d = 1; d <= size4; d++)
+                          for (Iterator<HopkinsClass> it4 = topFive.get(3).HopkinsClasses.values().iterator(); it4.hasNext();)
                           {
-                                for (int e = 1; e <= size5; e++)
+                                for (Iterator<HopkinsClass> it5 = topFive.get(4).HopkinsClasses.values().iterator(); it5.hasNext();)
                                 {
+                                    HopkinsClass first = it1.next();
+                                    HopkinsClass second = it2.next();
+                                    HopkinsClass third = it3.next();
+                                    HopkinsClass fourth = it4.next();
+                                    HopkinsClass fifth = it5.next();
+                                    
+                                    Schedule one, two, three, four, five;
+                                    possibleSchedule.add(first.getSchedule());
+                                    possibleSchedule.add(second.getSchedule());
+                                    possibleSchedule.add(third.getSchedule());
+                                    possibleSchedule.add(fourth.getSchedule());
+                                    possibleSchedule.add(fifth.getSchedule());
+                                    
+                                    
+                                    conflicts = conflicts(possibleSchedule);
+                                    if (!conflicts)
+                                        break myLoop;
+                                    /**
                                     if (topFive.get(0).HopkinsClasses.get(a).getSection() < 100)
                                     schedule.set(0,topFive.get(0).HopkinsClasses.get(a));
                                   //System.out.println(topFive.get(0).HopkinsClasses.get(a).getSchedule());
@@ -409,10 +428,10 @@ public class Schedule {
                                         possibleSchedule.set(i,schedule.get(i).getSchedule());
                                         
                                     }
-                                    conflicts = conflicts(possibleSchedule);
+                                    **/
+                                    
                                      //System.out.println(conflicts);
-                                    if (!conflicts)
-                                        break;
+                                    
                                     
                                 }
         }
@@ -449,39 +468,23 @@ public class Schedule {
         }
         // conflicts = conflicts(possibleSchedule);
         return true;
-    }
+    }**/
     public static void main(String[] args)
     {
-        ArrayList<HopkinsCourse> courses = new ArrayList<HopkinsCourse>();
         
-       
-        
-       /** HopkinsClass.Semester semester = HopkinsClass.Semester.FALL;
-         HopkinsCourse first = new HopkinsCourse("020.103","Freshman Seminar: The Human Microbiome","N",false,2,semester,2015); 
-         HopkinsCourse second = new HopkinsCourse("300.102","Chem","Q",false,4,semester,2015); 
-         HopkinsCourse third = new HopkinsCourse("300.103","Chem","Q",false,4,semester,2015); 
-         HopkinsCourse fourth = new HopkinsCourse("300.104","Chem","Q",false,4,semester,2015); 
-         HopkinsCourse fifth = new HopkinsCourse("300.105","Chem","Q",false,4,semester,2015); 
-         HopkinsCourse sixth = new HopkinsCourse("300.106","Chem","Q",false,4,semester,2015); 
-         courses.add(first);
-          courses.add(second);
-           courses.add(third);
-            courses.add(fourth);
-             courses.add(fifth);
-              courses.add(sixth);
-              matchTimes(courses);
         Schedule a = new Schedule("TTh 11:00AM - 12:00PM");
         Schedule b = new Schedule("TTh 12:15PM - 2:00PM");
         Schedule c = new Schedule("TTh 3:00PM - 4:00PM");
-        Schedule d = new Schedule("M 1:30PM - 4:20PM");
-        Schedule e = new Schedule("W 1:30PM - 2:20PM");
-       ArrayList<Schedule> schedule = new ArrayList<Schedule>();
-       schedule.add(a);
-       schedule.add(b);
-       schedule.add(c);
-       schedule.add(d);
-       schedule.add(e);
-        **/
+        Schedule d = new Schedule("Tth 4:30PM - 5:20PM");
+        Schedule e = new Schedule("Tth 8:30PM - 10:20PM");
+        ArrayList<Schedule> schedule = new ArrayList<Schedule>();
+        schedule.add(a);
+        schedule.add(b);
+        schedule.add(c);
+        schedule.add(d);
+        schedule.add(e);
+        System.out.println(conflicts(schedule));
+    }
        
           
            
