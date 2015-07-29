@@ -60,10 +60,10 @@ public class HopkinsCourse extends Course {
     }
     
     public static void createNewTag(String tagName, HashSet<HopkinsCourse> tagElements) {
-        tagMap.put(tagName, tagElements);
+        tagMap.put(tagName.toLowerCase(), tagElements);
     }
     public static HashSet<HopkinsCourse> getCoursesWithTag(String tagName) {
-        HashSet<HopkinsCourse> toReturn = tagMap.get(tagName);
+        HashSet<HopkinsCourse> toReturn = tagMap.get(tagName.toLowerCase());
         return toReturn == null ? new HashSet<HopkinsCourse>() : toReturn;
     }
     
