@@ -32,7 +32,13 @@ public class JavaCourseScheduleGenerator {
     public static ArrayList<HopkinsCourse> generateBestSchedule(Set<HopkinsCourse> coursesTaken, String...categories) {
         if (categories == null || categories.length ==0) return new ArrayList();
         try {
+            RequiredCourseSet reqs = ManageTxtFiles.getRequiredCourses(categories[0]);
+            for (int i = 1; i < categories.length; i++) {
+                reqs.addAll(ManageTxtFiles.getRequiredCourses(categories[i]));
+            }
+            
             RequiredCourseSet leastReqs = ManageTxtFiles.getRequiredCourses(categories[0]);
+            HashSet<HashSet<Course>> allPossibilites = getAllCoursePossibilities(new HashSet(), reqs);
             for (int i = 1; i < categories.length; i++) {
                 leastReqs = generateLeastRequirements(new HashSet(), leastReqs, ManageTxtFiles.getRequiredCourses(categories[i]));
             }
@@ -64,6 +70,73 @@ public class JavaCourseScheduleGenerator {
         return courses;
     } */
     
+    public static HashSet<HashSet<Course>> getAllCoursePossibilities(HashSet<Course> alreadyPossibility, RequiredCourseSet category1) {
+        HashSet<HashSet<Course>> allPossibilities = new HashSet<>();
+        //RequiredCourseSet category1 = new RequiredCourseSet(0);
+        //for (RequiredCourseSet cat : categories) category1.addAll(cat);
+        allPossibilities.add(alreadyPossibility);
+        if (category1.getNumRequired() == 0) {
+            for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
+                Requirable req1 = cat1It.next();
+                if (req1 instanceof Course) alreadyPossibility.add((Course) req1);
+                else if (req1 instanceof RequiredCourseSet) {
+                    continue;
+                }
+            }
+            for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
+                Requirable req1 = cat1It.next();
+                if (req1 instanceof Course) continue;
+                else if (req1 instanceof RequiredCourseSet) {
+                    if (((RequiredCourseSet) req1).getNumRequired() == 1) {
+                     //   for (Iterator<Requirable> optIt = ((RequiredCourseSet) req1).iterator(); optIt.hasNext();) {
+                        HashSet<HashSet<Course>> newPossibilities = new HashSet<>();
+                        HashSet<HashSet<Course>> toRemove = new HashSet<>();
+                        for (Iterator<HashSet<Course>> allPossibIt = allPossibilities.iterator(); allPossibIt.hasNext();) {
+                                HashSet<Course> inSetPossib = allPossibIt.next();
+                                HashSet<HashSet<Course>> innerAllPossibilities = getAllCoursePossibilities(alreadyPossibility, (RequiredCourseSet) req1);
+                                for(HashSet<Course> hsc : innerAllPossibilities) {
+                                    HashSet<Course> newVersion = new HashSet<Course>(inSetPossib);
+                                     newVersion.addAll(hsc);
+                                    newPossibilities.add(newVersion);
+                                }
+                                //System.out.println("before: " + allPossibilities);
+                                //allPossibIt.remove();
+                                //toRemove.add(inSetPossib);
+                                //System.out.println("after: " +allPossibilities);
+                        }
+
+                        /*for (HashSet<Course> hsc : toRemove) {
+                            for (Iterator it = allPossibilities.iterator();it.hasNext();) {
+                                if (it.next().equals(hsc)) {
+                                    System.out.println("Yes it equals");
+                                    it.remove();
+                                }
+                            }
+                        } */
+                        allPossibilities = newPossibilities;
+                       //     Requirable option = optIt.next();
+                         //       HashSet<Course> onePossib = new HashSet<Course>(alreadyPossibility);
+                           //     onePossib.addAll(option);
+                             //   allPossibilities.add(onePossib);
+                        }
+                   // }
+                }
+            }
+        } else if (category1.getNumRequired() == 1) {
+            allPossibilities.remove(alreadyPossibility);
+            for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
+                Requirable req1 = cat1It.next();
+                if (req1 instanceof Course) {
+                    HashSet<Course> newPossib = new HashSet<>(alreadyPossibility);
+                    newPossib.add((Course) req1);
+                    allPossibilities.add(newPossib);
+                } else if (req1 instanceof RequiredCourseSet) {
+                    continue;
+                }
+            }
+        }
+        return allPossibilities;
+    }
     
     public static RequiredCourseSet generateLeastRequirements(HashSet<Course> coursesBeingTaken, RequiredCourseSet category1, RequiredCourseSet category2) {
         HashSet<Course> inBothCourses = category1.getSetOfCourses();
@@ -74,9 +147,17 @@ public class JavaCourseScheduleGenerator {
             if (req1 instanceof RequiredCourseSet) {
                 continue;
             } else if (req1 instanceof GenericCourse) {
-                for (Course crs : coursesBeingTaken) {
-                    
+                boolean shouldAdd = true;
+                for (Iterator<Course> coursesBeingTakenIt = coursesBeingTaken.iterator();coursesBeingTakenIt.hasNext();) {
+                    Course courseBeingTaken = coursesBeingTakenIt.next();
+                    if (courseBeingTaken instanceof HopkinsCourse) { if (((GenericCourse) req1).isSatisfiedBy((HopkinsCourse) courseBeingTaken)) shouldAdd = false;;
+                    } else if (courseBeingTaken instanceof GenericCourse) {
+                        if ( ((GenericCourse) req1).isSubsetOf((GenericCourse) courseBeingTaken) ) shouldAdd = false ;
+                        else if (((GenericCourse) courseBeingTaken).isSubsetOf((GenericCourse) req1)) coursesBeingTakenIt.remove();
+                        else shouldAdd = false;;
+                    } else System.out.println("Error. courseBeingTaken is not any of the two categories: " + courseBeingTaken);
                 }
+                if (shouldAdd) combinedReqs.add(req1);
             } else if (req1 instanceof HopkinsCourse) {
                 if (!coursesBeingTaken.contains((HopkinsCourse) req1))
                     combinedReqs.add(req1);
@@ -90,21 +171,30 @@ public class JavaCourseScheduleGenerator {
 
             } else if (req2 instanceof HopkinsCourse) {
                 if (coursesBeingTaken.contains((HopkinsCourse) req2)) continue add2ndCategoryDefinites;
-                combinedReqs.add(req2);
+                boolean shouldAdd = true;
                 for (Requirable req1 : category1) {
                     if (req1 instanceof RequiredCourseSet) {
                     } if (req1 instanceof HopkinsCourse) {
-                        if (((HopkinsCourse) req2).equals((HopkinsCourse) req1)) continue;
-                        else combinedReqs.add(req2);
+                        if (((HopkinsCourse) req2).equals((HopkinsCourse) req1))
+                            shouldAdd = false;
                     } else if (req1 instanceof GenericCourse) {
                         if (((GenericCourse) req1).isSatisfiedBy((HopkinsCourse) req2)) {
                             combinedReqs.remove(req1);
                         } else continue;
                     } else System.out.println("Error. Requirement1 is not any of three categories: " + req1);
                 }
-
+                if (shouldAdd) combinedReqs.add(req2);
             } else if (req2 instanceof GenericCourse) {
                 boolean shouldAdd = true;
+                for (Iterator<Course> coursesBeingTakenIt = coursesBeingTaken.iterator();coursesBeingTakenIt.hasNext();) {
+                    Course courseBeingTaken = coursesBeingTakenIt.next();
+                    if (courseBeingTaken instanceof HopkinsCourse) { if (((GenericCourse) req2).isSatisfiedBy((HopkinsCourse) courseBeingTaken)) shouldAdd = false;;
+                    } else if (courseBeingTaken instanceof GenericCourse) {
+                        if ( ((GenericCourse) req2).isSubsetOf((GenericCourse) courseBeingTaken) ) shouldAdd = false ;
+                        else if (((GenericCourse) courseBeingTaken).isSubsetOf((GenericCourse) req2)) coursesBeingTakenIt.remove();
+                        else shouldAdd = false;
+                    } else System.out.println("Error. courseBeingTaken is not any of the two categories: " + courseBeingTaken);
+                }
                 for (Requirable req1 : category1) {
                     if (req1 instanceof RequiredCourseSet) {
                         continue;
@@ -118,7 +208,7 @@ public class JavaCourseScheduleGenerator {
                 if (shouldAdd) combinedReqs.add(req2);
             } else System.out.println("Error. In add2ndCategoryDefinites loop, requirement2 is not any of three categories: " + req2);
         }
-        return null;
+        return combinedReqs;
     }
 
   /*  public static RequiredCourseSet generateLeastRequirements(RequiredCourseSet category1, RequiredCourseSet category2) {
