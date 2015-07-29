@@ -8,12 +8,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 import scheduleGenerator.DbFiles.ManageTxtFiles;
 
 /**
@@ -32,13 +35,40 @@ public class JavaCourseScheduleGenerator {
     public static ArrayList<HopkinsCourse> generateBestSchedule(Set<HopkinsCourse> coursesTaken, String...categories) {
         if (categories == null || categories.length ==0) return new ArrayList();
         try {
+            //Option 1
             RequiredCourseSet reqs = ManageTxtFiles.getRequiredCourses(categories[0]);
             for (int i = 1; i < categories.length; i++) {
                 reqs.addAll(ManageTxtFiles.getRequiredCourses(categories[i]));
             }
             
+            HashSet<HashSet<Course>> allPossibilities = getAllCoursePossibilities(new HashSet(), reqs);
+            
+           TreeSet<HashSet<Course>> subTakenPossibilities = new TreeSet<>(new Comparator() {
+           //   Note: this comparator imposes orderings that are inconsistent with equals.
+                @Override
+                public int compare(Object o1, Object o2) {
+                    int sizeDif = ((Collection) o1).size() - ((Collection) o2).size();
+                    if (sizeDif != 0) return sizeDif;
+                    else return o1.hashCode() - o2.hashCode();
+                }
+            });
+            //HashSet<HashSet<Course>> subTakenPossibilities = new HashSet<>(); 
+            subtractCompletedCourses:
+            for (Iterator<HashSet<Course>> possibIt = allPossibilities.iterator(); possibIt.hasNext();) {
+                HashSet<Course> possibility = possibIt.next();
+                HashSet<Course> subTakenPossib = new HashSet<>();
+                for (Iterator<Course> it = possibility.iterator(); it.hasNext();) {
+                    Course next = it.next();
+                    if (!next.isFulfilled(coursesTaken)) {
+                        subTakenPossib.add(next);
+                    }
+                }
+               // subTakenPossibilities.first().equals(subTakenPossib);
+                subTakenPossibilities.add(subTakenPossib);
+            }
+            return getPriorities(subTakenPossibilities.first());
+        /*    //Option 2
             RequiredCourseSet leastReqs = ManageTxtFiles.getRequiredCourses(categories[0]);
-            HashSet<HashSet<Course>> allPossibilites = getAllCoursePossibilities(new HashSet(), reqs);
             for (int i = 1; i < categories.length; i++) {
                 leastReqs = generateLeastRequirements(new HashSet(), leastReqs, ManageTxtFiles.getRequiredCourses(categories[i]));
             }
@@ -52,7 +82,7 @@ public class JavaCourseScheduleGenerator {
             }
             
             ArrayList<HopkinsCourse> prioritizedCourses = getPriorities(leastReqs);
-            return prioritizedCourses;
+            return prioritizedCourses; */
         } catch (IOException ex) {
             System.out.println("Categories in generateBestSchedule could not be found: " + categories);
             return null;
@@ -293,6 +323,44 @@ public class JavaCourseScheduleGenerator {
         return 0;
     }*/
    
+    public static ArrayList<HopkinsCourse> getPriorities(Collection<Course> preReqs) {
+        HashMap<HopkinsCourse, Float> priorities = new HashMap<>();
+        addPriorities(priorities, preReqs, 1f);
+        ArrayList<HopkinsCourse> sortedCourses = new ArrayList<>();
+        
+        Iterator<HopkinsCourse> it = priorities.keySet().iterator();
+        sortedCourses.add(it.next());
+        for (;it.hasNext();) {
+            HopkinsCourse currentCourse = it.next();
+            float currentPriority = priorities.get(currentCourse);
+            boolean hasAdded;
+            findSpot:
+            for (int i = 0; i < sortedCourses.size();i++) { // Turn into binary sort later
+                if (priorities.get(sortedCourses.get(i)) < currentPriority) {
+                    sortedCourses.add(i, currentCourse);
+                    break findSpot;
+                } else if ( i == sortedCourses.size()-1) {
+                    sortedCourses.add(currentCourse);
+                    break findSpot;
+                }
+            }
+        }
+        return sortedCourses;
+    }
+   private static void addPriorities(Map<HopkinsCourse, Float> toAddTo, Collection<Course> preReqs, float factor) {
+        if (preReqs == null || preReqs.isEmpty()) return;
+       // float priority = preReqs.getTrueNumRequired() * factor / preReqs.size();
+        for (Course preReq : preReqs) {
+            if (preReq instanceof HopkinsCourse) {
+                addPriorities(toAddTo, ((HopkinsCourse) preReq).preReqs, 1f);
+                Float previousPriority =  toAddTo.get((HopkinsCourse) preReq);
+                toAddTo.put((HopkinsCourse) preReq, previousPriority == null ? 1f : previousPriority + 1f);
+            } else if (preReq instanceof GenericCourse) {
+                
+            } // if it is a generic course, don't do anything 
+        }
+    }
+    
     public static ArrayList<HopkinsCourse> getPriorities(RequiredCourseSet preReqs) {
         HashMap<HopkinsCourse, Float> priorities = new HashMap<>();
         addPriorities(priorities, preReqs, 1f);
