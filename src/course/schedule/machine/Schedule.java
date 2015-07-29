@@ -362,35 +362,47 @@ public class Schedule {
         for (int i = tracker; i < tracker+5; i++)
         {
             if (tracker <= priorityCourses.size())
+            {
+
            topFive.add(priorityCourses.get(i));  
-            //System.out.println(priorityCourses.get(i));
+           // System.out.println(priorityCourses.get(i));
+            }
             else
                 return null;
         }   
         size1 = topFive.get(0).HopkinsClasses.size();
-        System.out.println("Test: " + size1);
+        //System.out.println("Test: " + size1);
         size2 = topFive.get(1).HopkinsClasses.size();
         size3 = topFive.get(2).HopkinsClasses.size();
         size4 = topFive.get(3).HopkinsClasses.size();
         size5 = topFive.get(4).HopkinsClasses.size();
         for (int a = 1; a <= size1; a++)
+        {
               for (int b = 1; b <=size2; b++)
+              {
                     for (int c = 1; c <= size3; c++)
+                    {
                           for (int d = 1; d <= size4; d++)
+                          {
                                 for (int e = 1; e <= size5; e++)
                                 {
-                                    
+                                    if (topFive.get(0).HopkinsClasses.get(a).getSection() < 100)
                                     schedule.set(0,topFive.get(0).HopkinsClasses.get(a));
-                                  // System.out.println(topFive.get(0).HopkinsClasses.get(a).getSchedule());
+                                  //System.out.println(topFive.get(0).HopkinsClasses.get(a).getSchedule());
+                                    if (topFive.get(1).HopkinsClasses.get(b).getSection() < 100)
                                     schedule.set(1,topFive.get(1).HopkinsClasses.get(b));
-                                 // System.out.println(topFive.get(1).HopkinsClasses.get(a).getSchedule());
+                                  //System.out.println(topFive.get(1).HopkinsClasses.get(a).getSchedule());
+                                    if (topFive.get(2).HopkinsClasses.get(c).getSection() < 100)
                                     schedule.set(2,topFive.get(2).HopkinsClasses.get(c));
                                   //System.out.println(topFive.get(3).HopkinsClasses.get(a).getSchedule());
+                                    if (topFive.get(3).HopkinsClasses.get(d).getSection() < 100)
                                     schedule.set(3,topFive.get(3).HopkinsClasses.get(d));
-                                //System.out.println(topFive.get(3).HopkinsClasses.get(a).getSchedule());
+                                    
+                                //.out.println(topFive.get(3).HopkinsClasses);
+                                    if (topFive.get(4).HopkinsClasses.get(e).getSection() < 100)
                                     schedule.set(4,topFive.get(4).HopkinsClasses.get(e));
                                    
-                                    //System.out.println(topFive.get(4).HopkinsClasses.get(a).getSchedule());
+                                  // System.out.println(topFive.get(4).HopkinsClasses.get(a).getSchedule());
                                     for (int i = 0; i < 5; i++)
                                     {
                                         if (schedule.get(i) != null)
@@ -398,8 +410,16 @@ public class Schedule {
                                         
                                     }
                                     conflicts = conflicts(possibleSchedule);
+                                     //System.out.println(conflicts);
+                                    if (!conflicts)
+                                        break;
                                     
                                 }
+        }
+        }
+    }
+}
+          
        tracker++;
         //}
             
