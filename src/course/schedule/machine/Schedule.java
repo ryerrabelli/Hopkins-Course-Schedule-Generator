@@ -265,16 +265,16 @@ public class Schedule {
             if (times[i].substring(0,4).matches("\\d:\\d\\d"))
             {
             String firstpart = times[i].substring(0,1);
-            String secondpart = time.substring(2,3);
-            String thirdpart = time.substring(3,4);
+            String secondpart = times[i].substring(2,3);
+            String thirdpart = times[i].substring(3,4);
             result[i] = Double.parseDouble(firstpart + "." + secondpart + thirdpart);
             }
             else if (times[i].substring(0,5).matches("\\d\\d:\\d\\d"))
             {
                  String firstpart = times[i].substring(0,1);
-            String secondpart = time.substring(1,2);
-            String thirdpart = time.substring(3,4);
-            String fourthpart = time.substring(4,5);
+            String secondpart = times[i].substring(1,2);
+            String thirdpart = times[i].substring(3,4);
+            String fourthpart = times[i].substring(4,5);
             result[i] = Double.parseDouble(firstpart + secondpart +"." + thirdpart + fourthpart);
             
             }
