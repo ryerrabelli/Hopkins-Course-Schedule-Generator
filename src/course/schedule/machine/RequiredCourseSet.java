@@ -61,7 +61,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
                         else innerRequiredCourseSet.add(new RequiredCourseSet(0, part));
                     } else {
                         if (part.length() < 3) {
-                            innerRequiredCourseSet.add(new GenericCourse(part, 0, ""));
+                            innerRequiredCourseSet.add(new GenericCourse(part));
                         } else {
                             HopkinsCourse toAdd = HopkinsCourse.getCourse(part);
                             if (toAdd == null) continue commaLoop;
@@ -74,7 +74,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
                 else this.add(innerRequiredCourseSet);
             } else if (HopkinsCourse.getCourse(req.toString()) != null) this.add(HopkinsCourse.getCourse(req.toString()));
             else if (req.toString().matches("([a-zA-Z]{2}\\.)?[0-9]{3}\\.[0-9]{3,}")) this.add(HopkinsCourse.getCourse(req.toString()));
-            else if (req.toString().matches("([a-zA-Z]{2}\\.)?[0-9]{3}\\.[0-9]+")) this.add(new GenericCourse(req.toString(), -1f, ""));
+            else if (req.toString().matches("([a-zA-Z]{2}\\.)?[0-9]{3}\\.[0-9]+")) this.add(new GenericCourse(req.toString()));
             else System.out.println("Could not add to RequiredCourseSet:" + req);
         }
     } 
@@ -103,7 +103,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         Object b = Functions.conv2Val(input);
         if (input.contains("[") || input.contains("{") || input.contains(",") || input.contains("∨") || input.contains("∧")) return new RequiredCourseSet(-1,b);
         else if (input.matches("(AS\\.|EN\\.)?\\d{3}\\.\\d{3}")) return HopkinsCourse.getCourse(input);
-        else return new GenericCourse(input, -1, "");
+        else return new GenericCourse(input);
     }
     
     /*public RequiredCourseSet convertToRequiredCourseSet(String input) {
