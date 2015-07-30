@@ -47,9 +47,35 @@ public class JavaCourseScheduleGenerator {
            //   Note: this comparator imposes orderings that are inconsistent with equals.
                 @Override
                 public int compare(Object o1, Object o2) {
-                    int sizeDif = ((Collection) o1).size() - ((Collection) o2).size();
-                    if (sizeDif != 0) return sizeDif;
-                    else return o1.hashCode() - o2.hashCode();
+                    HashSet<Course> set1 = (HashSet<Course>) o1;
+                    HashSet<Course> set2 = (HashSet<Course>) o2;
+                    float set1Num = 0;
+                    for (Course crs1 : set1) {
+                        try {
+                            int toAdd = Integer.parseInt(crs1.courseNum);
+                            if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
+                            if (crs1.credits > 0.2) toAdd *= crs1.credits;
+                            set1Num += toAdd * crs1.credits;
+                        } catch (NumberFormatException nfe) {
+                            
+                        }
+                    }
+                    float set2Num = 0;
+                    for (Course crs2 : set2) {
+                        try {
+                            int toAdd = Integer.parseInt(crs2.courseNum);
+                            if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
+                            if (crs2.credits > 0.2) toAdd *= crs2.credits; 
+                            set2Num += toAdd;
+                        } catch (NumberFormatException nfe) {
+                            
+                        }
+                    }
+                    int sign = (int) Math.signum(set1Num - set2Num);
+                    if (sign != 0) return sign;
+                    //int sizeDif = ((Collection) o1).size() - ((Collection) o2).size();
+                    //if (sizeDif != 0) return sizeDif;
+                    return o1.hashCode() - o2.hashCode();
                 }
             });
             //HashSet<HashSet<Course>> subTakenPossibilities = new HashSet<>(); 
@@ -110,17 +136,18 @@ public class JavaCourseScheduleGenerator {
                 Requirable req1 = cat1It.next();
                 if (req1 instanceof Course) alreadyPossibility.add((Course) req1);
                 else if (req1 instanceof RequiredCourseSet) {
-                    continue;
+                    //testing
+                    
+                    //continue;
                 }
             }
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
                 if (req1 instanceof Course) continue;
                 else if (req1 instanceof RequiredCourseSet) {
-                    if (((RequiredCourseSet) req1).getNumRequired() == 1) {
+                    if (((RequiredCourseSet) req1).getNumRequired() == 1 || ((RequiredCourseSet) req1).getNumRequired() == 0) {
                      //   for (Iterator<Requirable> optIt = ((RequiredCourseSet) req1).iterator(); optIt.hasNext();) {
                         HashSet<HashSet<Course>> newPossibilities = new HashSet<>();
-                        HashSet<HashSet<Course>> toRemove = new HashSet<>();
                         for (Iterator<HashSet<Course>> allPossibIt = allPossibilities.iterator(); allPossibIt.hasNext();) {
                                 HashSet<Course> inSetPossib = allPossibIt.next();
                                 HashSet<HashSet<Course>> innerAllPossibilities = getAllCoursePossibilities(alreadyPossibility, (RequiredCourseSet) req1);
@@ -148,22 +175,47 @@ public class JavaCourseScheduleGenerator {
                          //       HashSet<Course> onePossib = new HashSet<Course>(alreadyPossibility);
                            //     onePossib.addAll(option);
                              //   allPossibilities.add(onePossib);
-                        }
+                        }/* else if ( ((RequiredCourseSet) req1).getNumRequired() == 0) {
+                            HashSet<HashSet<Course>> newPossibilities = new HashSet<>();
+                            for (Iterator<HashSet<Course>> allPossibIt = allPossibilities.iterator(); allPossibIt.hasNext();) {
+                                HashSet<Course> inSetPossib = allPossibIt.next();
+                                HashSet<HashSet<Course>> innerAllPossibilities = getAllCoursePossibilities(alreadyPossibility, (RequiredCourseSet) req1);
+                                newPossib.add(null);
+                                for(HashSet<Course> hsc : innerAllPossibilities) {
+                                    HashSet<Course> newVersion = new HashSet<Course>(inSetPossib);
+                                     newVersion.addAll(hsc);
+                                    newPossibilities.add(newVersion);
+                                }
+                            }
+                        }*/
                    // }
                 }
             }
         } else if (category1.getNumRequired() == 1) {
-            allPossibilities.remove(alreadyPossibility);
+            HashSet<HashSet<Course>> newPossibilities = new HashSet<>();
+            //allPossibilities.remove(alreadyPossibility);
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
                 if (req1 instanceof Course) {
                     HashSet<Course> newPossib = new HashSet<>(alreadyPossibility);
                     newPossib.add((Course) req1);
-                    allPossibilities.add(newPossib);
+                    newPossibilities.add(newPossib);
                 } else if (req1 instanceof RequiredCourseSet) {
                     continue;
                 }
             }
+            for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
+                Requirable req1 = cat1It.next();
+                if (req1 instanceof Course) continue;
+                else if (req1 instanceof RequiredCourseSet) {
+                    for(HashSet<Course> hsc : getAllCoursePossibilities(alreadyPossibility, (RequiredCourseSet) req1)) {
+                        HashSet<Course> newPossib = new HashSet<>(alreadyPossibility);
+                        newPossib.addAll(hsc);
+                        newPossibilities.add(newPossib);
+                    }
+                }
+            }
+            allPossibilities = newPossibilities;
         }
         return allPossibilities;
     }
@@ -324,6 +376,7 @@ public class JavaCourseScheduleGenerator {
     }*/
    
     public static ArrayList<HopkinsCourse> getPriorities(Collection<Course> preReqs) {
+        // Generic Courses must be added before this step
         HashMap<HopkinsCourse, Float> priorities = new HashMap<>();
         addPriorities(priorities, preReqs, 1f);
         ArrayList<HopkinsCourse> sortedCourses = new ArrayList<>();
@@ -352,15 +405,27 @@ public class JavaCourseScheduleGenerator {
        // float priority = preReqs.getTrueNumRequired() * factor / preReqs.size();
         for (Course preReq : preReqs) {
             if (preReq instanceof HopkinsCourse) {
-                addPriorities(toAddTo, ((HopkinsCourse) preReq).preReqs, 1f);
+                addPriorities(toAddTo, ((HopkinsCourse) preReq).preReqs, factor);
                 Float previousPriority =  toAddTo.get((HopkinsCourse) preReq);
-                toAddTo.put((HopkinsCourse) preReq, previousPriority == null ? 1f : previousPriority + 1f);
-            } else if (preReq instanceof GenericCourse) {
-                
-            } // if it is a generic course, don't do anything 
+                toAddTo.put((HopkinsCourse) preReq, previousPriority == null ? factor - 0.001f*((Course) preReq).getLevel() : previousPriority + factor - 0.001f*((Course) preReq).getLevel());
+            }
+        }
+        for (Course preReq : preReqs) {
+            if (preReq instanceof GenericCourse) {
+                boolean added = false;
+                for (HopkinsCourse sample : ((GenericCourse) preReq).getPossibleHopkinsCourses()) {
+                    if (toAddTo.get(sample) == null) {
+                        toAddTo.put(sample, factor - 0.001f*((Course) preReq).getLevel());
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added)
+                    System.out.println("Error not of courses to create distinctive list");
+            }
         }
     }
-    
+    /*
     public static ArrayList<HopkinsCourse> getPriorities(RequiredCourseSet preReqs) {
         HashMap<HopkinsCourse, Float> priorities = new HashMap<>();
         addPriorities(priorities, preReqs, 1f);
@@ -383,7 +448,7 @@ public class JavaCourseScheduleGenerator {
             }
         }
         return sortedCourses;
-    }
+    }*/
    private static void addPriorities(Map<HopkinsCourse, Float> toAddTo, RequiredCourseSet preReqs, float factor) {
         if (preReqs == null || preReqs.isEmpty()) return;
         float priority = preReqs.getTrueNumRequired() * factor / preReqs.size();
@@ -391,10 +456,24 @@ public class JavaCourseScheduleGenerator {
             if (preReq instanceof HopkinsCourse) {
                 addPriorities(toAddTo, ((HopkinsCourse) preReq).preReqs, priority);
                 Float previousPriority =  toAddTo.get((HopkinsCourse) preReq);
-                toAddTo.put((HopkinsCourse) preReq, previousPriority == null ? priority : previousPriority + priority);
+                toAddTo.put((HopkinsCourse) preReq, previousPriority == null ? priority - 0.001f*((Course) preReq).getLevel(): previousPriority + priority  - 0.001f*((Course) preReq).getLevel());
             } else if (preReq instanceof RequiredCourseSet) {
                 addPriorities(toAddTo, (RequiredCourseSet) preReq, priority);
-            } // if it is a generic course, don't do anything 
+            }
+        }
+        for (Requirable preReq : preReqs) {
+            if (preReq instanceof GenericCourse) {
+                boolean added = false;
+                for (HopkinsCourse sample : ((GenericCourse) preReq).getPossibleHopkinsCourses()) {
+                    if (toAddTo.get(sample) == null) {
+                        toAddTo.put(sample, factor - 0.001f*((Course) preReq).getLevel());
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added) 
+                    System.out.println("Error not of courses to create distinctive list");
+            }
         }
     }
    
