@@ -27,7 +27,7 @@ public class HopkinsCourse extends Course {
     protected static HashMap<String, HashSet<HopkinsCourse>> tagMap = new HashMap<String, HashSet<HopkinsCourse>>();
     
     public HopkinsCourse(String courseTitle, String verbalName, String area, boolean isWritingIntensive, boolean isDesign, boolean isLab, float creditsWorth, Semester semester, int year) {
-        this.credits = credits;
+        this.credits = creditsWorth;
         this.area = area.toUpperCase().trim();
         String[] courseParts = courseTitle.split("\\Q.\\E", 3);
         if (courseParts.length == 3) {
@@ -101,6 +101,11 @@ public class HopkinsCourse extends Course {
             courseTitle = courseTitle.substring(3);
         }
         return allCourses.get(courseTitle);
+    }
+    public static HashSet<HopkinsCourse> getCourses(String ... courseTitles) {
+        HashSet<HopkinsCourse> toReturn = new HashSet<>();
+        for (String courseTitle : courseTitles) toReturn.add(getCourse(courseTitle));
+        return toReturn;
     }
     public static boolean doesCourseExist(String courseTitle) {
         courseTitle = courseTitle.trim().toUpperCase();
