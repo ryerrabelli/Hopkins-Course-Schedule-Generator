@@ -4,12 +4,15 @@
  */
 package course.schedule.machine;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import scheduleGenerator.DbFiles.Functions;
+import scheduleGenerator.DbFiles.ManageTxtFiles;
 
 /**
  *
@@ -18,14 +21,17 @@ import scheduleGenerator.DbFiles.Functions;
 public class RequiredCourseSet extends HashSet<Requirable>  implements Requirable {
     protected int numRequired = 0; //0 means all courses are required, negative number means counting from the total num of reqs
     
+    public static HashMap<String, RequiredCourseSet> categoryRequiredCourseSets = new HashMap<>();
+    
     public RequiredCourseSet(int numRequired) {
         this.numRequired = numRequired;
     }
     public RequiredCourseSet(HashSet<Requirable> reqCourses, int numRequired) {
         this.numRequired = numRequired;
-        this.addAll(reqCourses);
-        
+        this.addAll(reqCourses);        
     }
+
+    
 
     public RequiredCourseSet(int numRequired, Object...reqs) {
         this.numRequired = numRequired;
@@ -83,7 +89,6 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
     public RequiredCourseSet(Collection<Requirable> reqCourseSet) {
         for (Iterator<Requirable> i = reqCourseSet.iterator(); i.hasNext(); ) {
             Requirable requirement = i.next();
-            
         }
     }
         
@@ -95,7 +100,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         Object b = Functions.conv2Val(input);
         return new RequiredCourseSet(0,b);
     }
-        public static Requirable stringToRequirable(String input) {
+    public static Requirable stringToRequirable(String input) {
         input = input.replace("[+]", "");
         input = input.replaceAll(" *[oO][rR] *", "∨");
         input = input.replaceAll(" *[aA][nN][dD] *", "∧");
@@ -119,6 +124,126 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
             allParts.add(input.substring(secInd+1));
         }
     }*/
+        public static HopkinsCourse getCourse(String input) {return HopkinsCourse.getCourse(input); }
+        public static void addCat(String title, RequiredCourseSet rcs ) {categoryRequiredCourseSets.put("groups/" + title.toLowerCase().trim().replace(" ", "_"), rcs); }
+        public static void addMaj(String title, RequiredCourseSet rcs ) {categoryRequiredCourseSets.put("majors/" + title.toLowerCase().trim().replace(" ", "_"), rcs); }
+    
+    public static void createCategoryRequiredCourseLists() throws IOException {
+        ManageTxtFiles.getAllCourses();
+
+        // Premed
+        RequiredCourseSet premedRCS = new RequiredCourseSet(new HashSet<Requirable>(HopkinsCourse.getCourses("030.101","030.105","171.101","173.111","171.102","173.112","030.102","030.106","030.205","030.206","030.225")),0);
+        premedRCS.add(new GenericCourse("020.1<credits=3>"));
+        premedRCS.add(new GenericCourse("020.1<credits=3>"));
+        categoryRequiredCourseSets.put("premed", premedRCS);
+
+        //calc physics
+        RequiredCourseSet calcPhys = new RequiredCourseSet(0);
+        calcPhys.add(HopkinsCourse.getCourse("110.108"));
+        calcPhys.add(HopkinsCourse.getCourse("110.109"));
+        categoryRequiredCourseSets.put("groups/calc phys", calcPhys);
+
+        //calc bio
+        RequiredCourseSet calcBio = new RequiredCourseSet(0);
+        calcBio.add(HopkinsCourse.getCourse("110.106"));
+        calcBio.add(HopkinsCourse.getCourse("110.107"));
+        categoryRequiredCourseSets.put("groups/calc bio", calcBio);
+
+        //calc intro
+        RequiredCourseSet introCalc = new RequiredCourseSet(1);
+        introCalc.add(calcBio);
+        introCalc.add(calcPhys);
+        introCalc.add(HopkinsCourse.getCourse("110.113"));
+        addCat("intro calc", introCalc);
+
+        //calc 3
+        RequiredCourseSet calc3 = new RequiredCourseSet(1);
+        calc3.add(HopkinsCourse.getCourse("110.202"));
+        calc3.add(getCourse("110.211"));
+        addCat("calc 3", calc3);
+
+        // physics biological science majors
+        RequiredCourseSet physicsBio = new RequiredCourseSet(0);
+        physicsBio.add(getCourse("171.103"));
+        physicsBio.add(getCourse("171.104"));
+        addCat("physics bio", physicsBio);
+
+        // physics physical science majors
+        RequiredCourseSet physicsPhys = new RequiredCourseSet(0);
+        physicsPhys.add(getCourse("171.101"));
+        physicsPhys.add(getCourse("171.102"));
+        addCat("physics phys", physicsPhys);
+
+        // physics biological science majors with lab
+        RequiredCourseSet physicsBioLab = new RequiredCourseSet(0, physicsBio);
+        physicsBioLab.add(getCourse("173.111"));
+        physicsBioLab.add(getCourse("173.112"));
+        addCat("physics bio lab", physicsBioLab);
+
+        // physics physical science majors with lab
+        RequiredCourseSet physicsPhysLab = new RequiredCourseSet(0, physicsPhys);
+        physicsPhysLab.add(getCourse("173.111"));
+        physicsPhysLab.add(getCourse("173.112"));
+        addCat("physics phys lab", physicsPhysLab);
+
+        // intro chem with lab
+        RequiredCourseSet chemLab = new RequiredCourseSet(0);
+        chemLab.add(getCourse("030.101"));
+        chemLab.add(getCourse("030.102"));
+        chemLab.add(getCourse("030.105"));
+        chemLab.add(getCourse("030.106"));
+        addCat("chem lab", chemLab);
+
+        // BME major without track
+        RequiredCourseSet BMEmajor =new RequiredCourseSet(0);
+        BMEmajor.addAll(physicsPhysLab);
+        BMEmajor.addAll(chemLab);
+        BMEmajor.add(getCourse("030.205"));
+        BMEmajor.addAll(calcPhys);
+        BMEmajor.add(calc3);
+        RequiredCourseSet LADEplus = new RequiredCourseSet(1);
+        LADEplus.add(getCourse("550.291"));
+        LADEplus.add(new GenericCourse("110.3<credits=4>"));
+        RequiredCourseSet linAlgDifEq = new RequiredCourseSet(0); 
+        linAlgDifEq.add(getCourse("110.201"));
+        linAlgDifEq.add(getCourse("110.302"));
+        RequiredCourseSet linAlgDifEq2 = new RequiredCourseSet(1);
+        linAlgDifEq2.add(LADEplus);
+        linAlgDifEq2.add(linAlgDifEq);
+        BMEmajor.add(linAlgDifEq2);
+        BMEmajor.add(new GenericCourse("550.3<credits=3>"));
+        BMEmajor.add(new GenericCourse("000.1<tag=programming, credits=3>"));
+        BMEmajor.add(getCourse("580.111"));
+        BMEmajor.add(getCourse("580.202"));
+        BMEmajor.add(getCourse("580.221"));
+        BMEmajor.add(getCourse("580.222"));
+        BMEmajor.add(getCourse("580.223"));
+        BMEmajor.add(getCourse("580.321"));
+
+        BMEmajor.add(getCourse("580.421"));
+        BMEmajor.add(getCourse("580.422"));
+        BMEmajor.add(getCourse("580.423"));
+        BMEmajor.add(getCourse("580.424"));
+        BMEmajor.add(getCourse("580.429"));
+        addMaj("bme", BMEmajor);
+
+        //Math minor
+        RequiredCourseSet mathMinorRCS = new RequiredCourseSet(0);
+        mathMinorRCS.add(introCalc);
+        mathMinorRCS.add(new GenericCourse("110.2<credits=4>"));
+        mathMinorRCS.add(new GenericCourse("110.3<credits=4>"));
+        mathMinorRCS.add(new GenericCourse("110.3<credits=4>"));
+        mathMinorRCS.add(new RequiredCourseSet(1, new GenericCourse("110.3<credits=4>"), new GenericCourse("550.3<credits=4>")));
+        categoryRequiredCourseSets.put("minors/math", mathMinorRCS);
+
+        //Math major
+        RequiredCourseSet mathMajor = new RequiredCourseSet(0);
+        mathMajor.add(calcPhys);
+
+
+        categoryRequiredCourseSets.put("minors/math", mathMajor);
+    }
+        
     public static ArrayList<Integer> indOfCorresp(String input, char[] openings, char[] closings, char searchFor) {
         ArrayList<Integer> toReturn = new ArrayList<Integer>();
         int correctLevel = 0; int[] changingLevels = new int[openings.length];
