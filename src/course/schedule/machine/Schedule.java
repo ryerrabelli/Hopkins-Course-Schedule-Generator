@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.Collection;
+import course.schedule.machine.HopkinsClass.Semester;
 /**
  * This is a schedule object. It holds the weekly course times for a HopkinsClass.
  * @author benka
@@ -342,7 +343,61 @@ public class Schedule {
         return false;
     }
     
-    public static ArrayList<HopkinsClass> matchTimes( ArrayList<HopkinsCourse> priorityCourses)
+    // returns true if the course has a class in the right semester, else returns false
+    public static boolean hasSemester(HopkinsCourse course, Semester semester)
+    {
+        HashMap<Integer, HopkinsClass> a = course.HopkinsClasses;
+        for (Iterator<HopkinsClass> it1 = a.values().iterator(); it1.hasNext();)
+        {
+            if (it1.next().getSemester().equals(semester))
+                return true;
+        }
+        return false;
+            
+    }
+    
+    // returns an array that finds the combination of courses that are wihin 1.5 credits of desired credit amount
+    public static ArrayList<HopkinsCourse> desiredCreditChecker(ArrayList<HopkinsCourse> priorityCourse, ArrayList<HopkinsCourse> course, double desiredCredits, int tracker, Semester currentSemester)
+    {
+        if (hasSemester(priorityCourse.get(tracker),currentSemester))
+            course.add(priorityCourse.get(tracker));
+        double sumOfCredits = 0;
+        for (HopkinsCourse a : course)
+            sumOfCredits += a.getCredits();
+        if (Math.abs(sumOfCredits - desiredCredits) <= 1.5 )
+        {
+            return course;
+        }
+        if (sumOfCredits < desiredCredits)
+        {
+            tracker++;
+            return desiredCreditChecker(priorityCourse,course,desiredCredits,tracker, currentSemester);
+        }
+        if (sumOfCredits > desiredCredits )
+            {
+                course.remove(course.size()-1);
+                tracker++;
+            return desiredCreditChecker(priorityCourse,course,desiredCredits,tracker, currentSemester);
+            }
+        return null;
+    }        
+    
+    
+    public static HashMap<Integer,HopkinsClass> removeWrongSemesters(HashMap<Integer,HopkinsClass> classes, Semester semester)
+    {
+         
+        for (Iterator<HopkinsClass> it = classes.values().iterator(); it.hasNext();)
+        {
+            if(!(it.next().getSemester().equals(semester)))
+            {
+                classes.remove(it.next());
+            }
+        }
+        return classes;
+    }
+    
+    
+    public static ArrayList<HopkinsClass> matchTimes( ArrayList<HopkinsCourse> priorityCourses, double desiredCredits, Semester currentSemester)
     {
         //try{
         ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
@@ -357,20 +412,31 @@ public class Schedule {
         myLoop:
          while (conflicts)  
         {
-            //System.out.println(tracker);
-         ArrayList<HopkinsCourse> topFive = new ArrayList<HopkinsCourse>();
-         int size1, size2, size3, size4, size5;
-        for (int i = tracker; i < tracker+5; i++)
-        {
-            if (tracker <= priorityCourses.size())
+            ArrayList<HopkinsCourse> course = new ArrayList<HopkinsCourse>();
+            ArrayList<HopkinsCourse> topFive = desiredCreditChecker(priorityCourses,course, desiredCredits,tracker, currentSemester);
+            for (int i = 0; i < topFive.size(); i++)
             {
-
-           topFive.add(priorityCourses.get(i));  
-           // System.out.println(priorityCourses.get(i));
+                topFive.get(i).HopkinsClasses = removeWrongSemesters(topFive.get(i).HopkinsClasses, currentSemester);
             }
-            else
-                return null;
-        }   
+                
+            //System.out.println(tracker);
+         //ArrayList<HopkinsCourse> topFive = new ArrayList<HopkinsCourse>();
+         //int size1, size2, size3, size4, size5;
+         //double sumOfCredits = 0;
+        //int i = tracker;
+        //while (!desiredCreditChecker(topFive, desiredCredits))
+        //{
+          //  if (tracker <= priorityCourses.size())
+            //{
+            //HopkinsCourse addition = priorityCourses.get(i);
+            //sumOfCredits += addition.getCredits();
+            //if (sumOfCredits <= 18.5)
+           //topFive.add(addition);  
+           // System.out.println(priorityCourses.get(i));
+            //}
+            //else
+                //return null;
+       // }   
         // size1 = topFive.get(0).HopkinsClasses.size();
         //System.out.println("Test: " + size1);
         //size2 = topFive.get(1).HopkinsClasses.size();
@@ -379,6 +445,7 @@ public class Schedule {
         //size5 = topFive.get(4).HopkinsClasses.size();
         for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
         {
+            
             HopkinsClass first = it1.next();
               for (Iterator<HopkinsClass> it2 = topFive.get(1).HopkinsClasses.values().iterator(); it2.hasNext();)
               {
