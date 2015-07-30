@@ -37,7 +37,7 @@ Krieger School of Arts and Sciences	AS.030.105 (03)	Introductory Chemistry Lab I
 Krieger School of Arts and Sciences	AS.030.105 (04)	Introductory Chemistry Lab I [+]	N	No	100	0	4	1.00	Fall 2015	Homewood Campus	Th 1:30PM - 4:20PM	L. Pasternack	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.105 (05)	Introductory Chemistry Lab I [+]	N	No	100	0	2	1.00	Fall 2015	Homewood Campus	F 1:30PM - 4:20PM	L. Pasternack	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.105 (06)	Introductory Chemistry Lab I [+]	N	No	100	0	3	1.00	Fall 2015	Homewood Campus	Th 9:00AM - 11:50AM	L. Pasternack	Waitlist Only	
-req: AS.030.102[+] OR AS.030.103[+] OR EN.510.101[+] OR AS.030.204[+] 
+Recommended Course Background: AS.030.102[+] OR AS.030.103[+] OR EN.510.101[+] OR AS.030.204[+] 
 Krieger School of Arts and Sciences	AS.030.205 (01)	Organic Chemistry I [+]	N	No	300	61	0	4.00	Fall 2015	Homewood Campus	MWF 9:00AM - 9:50AM, Th 9:00AM - 10:20AM	J. Tovar	Open	
 Krieger School of Arts and Sciences	AS.030.205 (02)	Organic Chemistry I [+]	N	No	300	151	0	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, Th 9:00AM - 10:20AM	C. Townsend	Open	
 Krieger School of Arts and Sciences	AS.030.205 (03)	Organic Chemistry I [+]	N	No	204	0	2	4.00	Fall 2015	Homewood Campus	MWF 9:00AM - 9:50AM, Th 9:00AM - 10:20AM	C. Falzone	Closed	
@@ -1345,8 +1345,10 @@ Krieger School of Arts and Sciences	AS.020.113 (01) Registration Restrictions	Fr
 Krieger School of Arts and Sciences	AS.020.136 (01)	Phage Hunting II [+]	N	No	24	10	0	2.00	Spring 2015	Homewood Campus	MW 2:30PM - 5:00PM	E. Fisher, J. Schildbach	Open	
 Krieger School of Arts and Sciences	AS.020.136 (02)	Phage Hunting II [+]	N	No	24	5	0	2.00	Spring 2015	Homewood Campus	TTh 1:00PM - 3:30PM	E. Fisher, J. Schildbach	Open	
 Krieger School of Arts and Sciences	AS.020.152 (01)	General Biology II [+]	N	No	200	13	0	4.00	Spring 2015	Homewood Campus	MWF 12:00PM - 12:50PM, T 12:00PM - 12:50PM	R. McCarty, R. Pearlman, C. Roberson, R. Shingles	Open	
+Recommended Course Background: AS.020.151
 Krieger School of Arts and Sciences	AS.020.152 (02)	General Biology II [+]	N	No	200	89	0	4.00	Spring 2015	Homewood Campus	TTh 12:00PM - 1:20PM	R. McCarty, R. Pearlman, C. Roberson, R. Shingles	Open	
 Krieger School of Arts and Sciences	AS.020.154 (01)	General Biology Lab II [+]	N	No	66	21	0	1.00	Spring 2015	Homewood Campus	M 1:30PM - 4:20PM	R. Pearlman	Open	
+coreq: AS.020.152
 Krieger School of Arts and Sciences	AS.020.154 (02)	General Biology Lab II [+]	N	No	72	9	0	1.00	Spring 2015	Homewood Campus	T 1:30PM - 4:20PM	R. Pearlman	Open	
 Krieger School of Arts and Sciences	AS.020.154 (03)	General Biology Lab II [+]	N	No	44	19	0	1.00	Spring 2015	Homewood Campus	W 1:30PM - 4:20PM	R. Pearlman	Open	
 Krieger School of Arts and Sciences	AS.020.154 (04)	General Biology Lab II [+]	N	No	66	6	0	1.00	Spring 2015	Homewood Campus	Th 1:30PM - 4:20PM	R. Pearlman	Open	
@@ -1700,12 +1702,15 @@ Krieger School of Arts and Sciences	AS.171.411 (01)	Light and Optics [+]	EN	No	2
 Krieger School of Arts and Sciences	AS.171.416 (01)	Numerical Methods for Physicists [+]	NQ	No	10	8	N/A	4.00	Spring 2015	Homewood Campus	TTh 9:00AM - 10:15AM	C. Norman	Open	
 Krieger School of Arts and Sciences	AS.171.472 (01)	Introduction to Plasma Physics & Atomic Processes in Hot Plasmas [+]	N	No	20	20	0	3.00	Spring 2015	Homewood Campus	WF 1:30PM - 2:45PM	M. Finkenthal	Open	
 Krieger School of Arts and Sciences	AS.173.111 (01)	General Physics Laboratory I [+]	N	No	24	3	0	1.00	Spring 2015	Homewood Campus	T 1:30PM - 4:20PM	M. Swartz	Open	
+Corequisite: AS.171.101 or AS.171.103 or AS.171.105
 Krieger School of Arts and Sciences	AS.173.111 (02)	General Physics Laboratory I [+]	N	No	24	2	0	1.00	Spring 2015	Homewood Campus	W 1:30PM - 4:20PM	M. Swartz	Open	
 Krieger School of Arts and Sciences	AS.173.111 (03)	General Physics Laboratory I [+]	N	No	24	2	0	1.00	Spring 2015	Homewood Campus	Th 1:30PM - 4:20PM	M. Swartz	Open	
 Krieger School of Arts and Sciences	AS.173.111 (04)	General Physics Laboratory I [+]	N	No	24	2	0	1.00	Spring 2015	Homewood Campus	T 6:00PM - 8:50PM	M. Swartz	Open	
 Krieger School of Arts and Sciences	AS.173.111 (05)	General Physics Laboratory I [+]	N	No	24	5	0	1.00	Spring 2015	Homewood Campus	W 6:00PM - 8:50PM	M. Swartz	Open	
 Krieger School of Arts and Sciences	AS.173.111 (06)	General Physics Laboratory I [+]	N	No	24	2	0	1.00	Spring 2015	Homewood Campus	M 6:00PM - 8:50PM	M. Swartz	Open	
 Krieger School of Arts and Sciences	AS.173.112 (01)	General Physics Laboratory II [+]	N	No	24	3	0	1.00	Spring 2015	Homewood Campus	M 1:30PM - 4:20PM	M. Swartz	Open	
+Recommended Course Background: AS.173.111
+Corequisite: AS.171.102 or AS.171.104 or AS.171.106 
 Krieger School of Arts and Sciences	AS.173.112 (02)	General Physics Laboratory II [+]	N	No	24	5	0	1.00	Spring 2015	Homewood Campus	M 1:30PM - 4:20PM	M. Swartz	Open	
 Krieger School of Arts and Sciences	AS.173.112 (03)	General Physics Laboratory II [+]	N	No	24	1	0	1.00	Spring 2015	Homewood Campus	M 1:30PM - 4:20PM	M. Swartz	Open	
 Krieger School of Arts and Sciences	AS.173.112 (04)	General Physics Laboratory II [+]	N	No	24	1	0	1.00	Spring 2015	Homewood Campus	T 1:30PM - 4:20PM	M. Swartz	Open	
