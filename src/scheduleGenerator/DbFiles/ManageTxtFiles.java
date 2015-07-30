@@ -45,7 +45,7 @@ public class ManageTxtFiles {
     //School	Class #	Title	Areas	Writing Intensive	Max Seats	Open Seats	Waitlisted	Credits	Term	Location	Day-Times	Instructor(s)	Status	Select
     //Krieger School of Arts and Sciences	AS.020.103 (01)	Freshman Seminar: The Human Microbiome [+]	N	No	18	0	0	2.00	Fall 2015	Homewood Campus	T 4:30PM - 6:20PM	T. Feehery	Waitlist Only	
     
-    public static HashSet<HopkinsClass> getAllCourses() throws IOException {
+    public static void getAllCourses() throws IOException {
         String path = "./src/scheduleGenerator/DbFiles/ClassStorage";
         FileReader fr = new FileReader(path);
         BufferedReader txtRead = new BufferedReader(fr);
@@ -62,6 +62,7 @@ public class ManageTxtFiles {
             currentLine = currentLine.trim();
             if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
             String[] lineParts = currentLine.split("\t| {5,}");
+            
             
             String courseNum;
             String verbalName;
@@ -107,7 +108,7 @@ public class ManageTxtFiles {
                 System.out.println("error from getting class storage: not enough lineparts on " + numberOfLines);
                 continue hopkinsClassReader;
             }
-            
+        
             if (lineParts.length >= 15) {
                 
             }
@@ -146,6 +147,8 @@ public class ManageTxtFiles {
                 HopkinsCourse.putCourse(courseNum, toAdd);
             }
         }
+        txtRead.close();
+        fr.close();
 
         addingRequirements:
         for (Iterator<String> it = precoReqSet.iterator(); it.hasNext();) {
@@ -154,8 +157,8 @@ public class ManageTxtFiles {
             RequiredCourseSet coReqs = null, preReqs = null;
             for (int lineNum = 1; lineNum < lines.length; lineNum++) {
                 String line = lines[lineNum];
-                    if(line.toLowerCase().contains("req")) {
-                        if (line.toLowerCase().contains("co")) coReqs = RequiredCourseSet.stringToRequiredCourseSet(line);
+                    if(line.toLowerCase().contains("req") || line.toLowerCase().contains("rec")) {
+                        if (line.toLowerCase().contains("core")) coReqs = RequiredCourseSet.stringToRequiredCourseSet(line);
                         else preReqs = RequiredCourseSet.stringToRequiredCourseSet(line);
                     } else if (line.contains("=") || line.contains("cross")) {
 
@@ -173,9 +176,37 @@ public class ManageTxtFiles {
             
         }
         
-        txtRead.close();
-        fr.close();
-        return null;
+        addTags();
+    }
+    private static void addTags() throws IOException {
+        String path = "./src/scheduleGenerator/DbFiles/TagStorage";
+        FileReader fr = new FileReader(path);
+        BufferedReader txtRead = new BufferedReader(fr);
+        HashSet<String> precoReqSet = new HashSet<String>();
+        String currentLine = "";
+        int numberOfLines = 1;
+        
+        beginningReader:
+        while (!(currentLine = txtRead.readLine()).trim().equalsIgnoreCase("start")) numberOfLines++;
+        
+        tagReader:
+        while ((currentLine = txtRead.readLine()) != null) {
+            numberOfLines++;
+            currentLine = currentLine.trim();
+            if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
+            numberOfLines++;
+            currentLine = currentLine.trim();
+            if (currentLine.isEmpty() || currentLine.startsWith("//")) continue;
+            String[] lineParts = currentLine.split("=", 2);
+            String tagName = lineParts[0].toLowerCase().trim();
+            HashSet<HopkinsCourse> taggedCourses = new HashSet<>();
+            for (String course : lineParts[1].split(",")) {
+                HopkinsCourse toAdd = HopkinsCourse.getCourse(course);
+                if (toAdd == null) System.out.println("Error tagged course is null");
+                else taggedCourses.add(toAdd);
+            }
+            HopkinsCourse.createNewTag(tagName, taggedCourses);
+        }
     }
     
     public static  RequiredCourseSet getRequiredCourses(String category) throws IOException {
@@ -184,6 +215,10 @@ public class ManageTxtFiles {
         category = category.replace(".", "/");
         category = category.replace(" ", "_");
         category = category.replace("or/", "ors/");
+        
+        RequiredCourseSet fromMap = RequiredCourseSet.categoryRequiredCourseSets.get(category);
+        if (fromMap != null) return fromMap;
+        
         String path = standardFilePath + category;
         FileReader fr;
         try {
