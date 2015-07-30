@@ -17,5 +17,8 @@ public abstract class Course implements Requirable {
     protected Boolean isWritingIntensive = null;
     protected String area = ""; 
     
-
+    public int getLevel() {
+        if (courseNum.isEmpty()) return 100;
+        else return (Integer.parseInt(courseNum.substring(0,1))) * 100;
+    }
 }
