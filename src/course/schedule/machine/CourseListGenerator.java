@@ -79,14 +79,16 @@ public class CourseListGenerator {
                 }
             });
             //HashSet<HashSet<Course>> subTakenPossibilities = new HashSet<>(); 
-            subtractCompletedCourses:
+            subtractCompletedAndCantTakeCourses:
             for (Iterator<HashSet<Course>> possibIt = allPossibilities.iterator(); possibIt.hasNext();) {
                 HashSet<Course> possibility = possibIt.next();
                 HashSet<Course> subTakenPossib = new HashSet<>();
                 for (Iterator<Course> it = possibility.iterator(); it.hasNext();) {
                     Course next = it.next();
                     if (!next.isFulfilled(coursesTaken)) {
-                        subTakenPossib.add(next);
+                        if (next instanceof HopkinsCourse) {
+                            if (((HopkinsCourse) next).canTake(coursesTaken)) subTakenPossib.add(next);
+                        } else subTakenPossib.add(next);
                     }
                 }
                // subTakenPossibilities.first().equals(subTakenPossib);
@@ -126,15 +128,36 @@ public class CourseListGenerator {
         return courses;
     } */
     
-    public static HashSet<HashSet<Course>> getAllCoursePossibilities(HashSet<Course> alreadyPossibility, RequiredCourseSet category1) {
+    /*public static RequiredCourseSet optimizeAdd(RequiredCourseSet[] categories) {
+        if (categories.length == 0) return new RequiredCourseSet(0);
+        RequiredCourseSet toReturn = categories[0];
+        for (RequiredCourseSet topMost : categories) {
+            if (topMost.getTrueNumRequired() != topMost.size()) continue;
+            for (Requirable inner : topMost) {
+                if (inner instanceof GenericCourse) {
+                    for (Requirable toReturnReq : toReturn) {
+                        if (toReturn Req instanceof )
+                    }
+                }   
+            }
+        }
+    }*/
+    
+    public static HashSet<HashSet<Course>> getAllCoursePossibilities(final HashSet<Course> N_alreadyPossibility, RequiredCourseSet category1) {
         HashSet<HashSet<Course>> allPossibilities = new HashSet<>();
+        HashSet<Course> alreadyPossibility = (HashSet<Course>) N_alreadyPossibility.clone();
         //RequiredCourseSet category1 = new RequiredCourseSet(0);
         //for (RequiredCourseSet cat : categories) category1.addAll(cat);
         allPossibilities.add(alreadyPossibility);
         if (category1.getNumRequired() == 0) {
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
-                if (req1 instanceof Course) alreadyPossibility.add((Course) req1);
+                category1.getNumRequired();
+       //         if (req1 instanceof Course && ((Course) req1).deptNum.equals("110"))
+       //             System.out.println("Here");
+                
+                if (req1 instanceof Course) 
+                    alreadyPossibility.add((Course) req1);
                 else if (req1 instanceof RequiredCourseSet) {
                     //testing
                     
@@ -143,6 +166,8 @@ public class CourseListGenerator {
             }
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
+          //                      if (req1 instanceof Course && ((Course) req1).deptNum.equals("110"))
+             //       System.out.println("Here");
                 if (req1 instanceof Course) continue;
                 else if (req1 instanceof RequiredCourseSet) {
                     if (((RequiredCourseSet) req1).getNumRequired() == 1 || ((RequiredCourseSet) req1).getNumRequired() == 0) {
@@ -175,7 +200,7 @@ public class CourseListGenerator {
                          //       HashSet<Course> onePossib = new HashSet<Course>(alreadyPossibility);
                            //     onePossib.addAll(option);
                              //   allPossibilities.add(onePossib);
-                        }/* else if ( ((RequiredCourseSet) req1).getNumRequired() == 0) {
+                    }/* else if ( ((RequiredCourseSet) req1).getNumRequired() == 0) {
                             HashSet<HashSet<Course>> newPossibilities = new HashSet<>();
                             for (Iterator<HashSet<Course>> allPossibIt = allPossibilities.iterator(); allPossibIt.hasNext();) {
                                 HashSet<Course> inSetPossib = allPossibIt.next();
@@ -196,6 +221,8 @@ public class CourseListGenerator {
             //allPossibilities.remove(alreadyPossibility);
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
+             //                   if (req1 instanceof Course && ((Course) req1).deptNum.equals("110"))
+               //     System.out.println("Here");
                 if (req1 instanceof Course) {
                     HashSet<Course> newPossib = new HashSet<>(alreadyPossibility);
                     newPossib.add((Course) req1);
@@ -206,8 +233,21 @@ public class CourseListGenerator {
             }
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
+                
+              //  if (req1 instanceof Course && ((Course) req1).deptNum.equals("110"))
+                //    System.out.println("Here");
                 if (req1 instanceof Course) continue;
                 else if (req1 instanceof RequiredCourseSet) {
+                    for (Requirable req : (RequiredCourseSet) req1) {
+                        
+                    }
+                    ((RequiredCourseSet) req1).getNumRequired();
+                    // [030.105, 171.103, 110.106, 110.108, 171.101, 173.112, 030.101, 030.225, 020.373, 020.306, 020.316, 020.363, 020.315, 020.305, 020.303]
+                    // [030.105, 171.101, 173.112, 030.101, 110.106, 020.316, 020.303, 020.340, 020.363, 020.305, 020.306, 020.315]
+                    
+                    //[030.101, 173.112, 171.101, 030.105, 110.108, 020.306, 020.303, 020.316, 020.315, 020.305, 020.363, 020.373] 12
+                    //[030.101, 173.112, 171.101, 030.105, 110.106, 020.306, 020.303, 020.316, 020.315, 020.305, 020.363, 030.225, 020.340] 13
+                    
                     for(HashSet<Course> hsc : getAllCoursePossibilities(alreadyPossibility, (RequiredCourseSet) req1)) {
                         HashSet<Course> newPossib = new HashSet<>(alreadyPossibility);
                         newPossib.addAll(hsc);
@@ -220,6 +260,15 @@ public class CourseListGenerator {
         return allPossibilities;
     }
     
+    
+    /*
+     * Old:
+     * [171.101, 030.105, 171.103, 030.101, 110.108, 110.106, 173.112, 020.315, 020.340, 020.363, 020.316, 020.306, 020.305, 020.303]
+     * [171.103, 110.106, 173.112, 030.105, 110.108, 171.101, 030.101, 020.363, 020.315, 020.305, 020.306, 020.340, 020.316, 020.303]
+     * 
+     * New:
+     * [030.105, 030.101, 030.225, 020.363, 020.373, 020.303, 020.305, 020.316, 020.306, 020.315]
+     */
     public static RequiredCourseSet generateLeastRequirements(HashSet<Course> coursesBeingTaken, RequiredCourseSet category1, RequiredCourseSet category2) {
         HashSet<Course> inBothCourses = category1.getSetOfCourses();
         HashSet<Course> courses2 = category2.getSetOfCourses();
