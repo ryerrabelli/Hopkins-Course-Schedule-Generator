@@ -145,9 +145,20 @@ public class Schedule {
          return false;
      }
      
+     
      public static boolean conflicts(ArrayList<Schedule> listOfSchedules)
-     {
-         Schedule first, second,  third,  fourth, fifth;
+     { 
+         for (int i = 0; i < listOfSchedules.size(); i++)
+         {
+             for (int j = i+1; j < listOfSchedules.size(); j++)
+             {
+                 
+                 if (conflicts(listOfSchedules.get(i),listOfSchedules.get(j)))
+                     return true;
+             }
+         }
+         return false;
+        /** Schedule first, second,  third,  fourth, fifth;
          first = listOfSchedules.get(0);
          second = listOfSchedules.get(1);
          third = listOfSchedules.get(2);
@@ -156,11 +167,11 @@ public class Schedule {
          //ArrayList<Object> result = new ArrayList<Object>();
          if (conflicts(first,second))
          {
-             /**result.set(0,true);
+             result.set(0,true);
              ArrayList<Integer> con = new ArrayList<Integer>();
              con.add(0);
              con.add(1);
-             result.add(con);**/
+             result.add(con);
              return true;
          }
          if (conflicts(first,third))
@@ -201,6 +212,7 @@ public class Schedule {
          }
         
          return false;
+         **/
      }
      
    public static ArrayList<Integer> convertDaysToInt(String days)
@@ -375,6 +387,7 @@ public class Schedule {
         }
         if (sumOfCredits > desiredCredits )
             {
+                
                 course.remove(course.size()-1);
                 tracker++;
             return desiredCreditChecker(priorityCourse,course,desiredCredits,tracker, currentSemester);
@@ -385,65 +398,69 @@ public class Schedule {
     
     public static HashMap<Integer,HopkinsClass> removeWrongSemesters(HashMap<Integer,HopkinsClass> classes, Semester semester)
     {
-         
+         HashMap<Integer,HopkinsClass> b = new HashMap<Integer,HopkinsClass>();
         for (Iterator<HopkinsClass> it = classes.values().iterator(); it.hasNext();)
         {
-            if(!(it.next().getSemester().equals(semester)))
+            HopkinsClass a = it.next();
+            if (a.getSemester().equals(semester))
             {
-                classes.remove(it.next());
+                b.put(a.getSection(),a);
+            }
+            else if(!(a.getSemester().equals(semester)))
+            {
+                classes.remove(a);
             }
         }
-        return classes;
+        //System.out.println(b);
+        return b;
     }
     
-    
-    public static ArrayList<HopkinsClass> matchTimes( ArrayList<HopkinsCourse> priorityCourses, double desiredCredits, Semester currentSemester)
+    /**public static ArrayList<HopkinsClass> matchTimesRecursively(ArrayList<HopkinsCourse> topCourses, ArrayList<HopkinsClass> result, Semester currentSemester, int tracker, int size, int times)
     {
-        //try{
-        ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
+        //System.out.println(result);
+        HopkinsCourse currentCourse = topCourses.get(tracker);
+        removeWrongSemesters(currentCourse.HopkinsClasses, currentSemester);
+        Iterator<HopkinsClass> it = currentCourse.HopkinsClasses.values().iterator();
+        HopkinsClass current = null;
+        for (int i = 0; i < times; i++)
+        {
+            current = it.next();
+            System.out.println(current);
+        }
+        result.add(current);
+        boolean test = classConflicts(result);
+        if (!classConflicts(result))
+        {
+            tracker++;
+        }
+        else
+        {
+            //System.out.println(currentCourse.HopkinsClasses);
+            //currentCourse.HopkinsClasses.remove(current);
+            //System.out.println(currentCourse.HopkinsClasses);
+           // System.out.println();
+            times++;
+        }
+        if (result.size() < size)
+            return matchTimesRecursively(topCourses, result, currentSemester,tracker, size,1);
+        if (result.size() == size)
+            return result;
+        
+        return null;
+    }**/
+    
+    
+    public static ArrayList<HopkinsClass> matchTimesLoop9 (ArrayList<HopkinsCourse> topFive)
+    {
+         ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
          ArrayList<Schedule> possibleSchedule = new ArrayList<Schedule>();
-        boolean conflicts = true;
-        int tracker = 0;
-        for(int i = 0; i < 5; i++)
+       for(int i = 0; i < 9; i++)
         {
             schedule.add(null);
             possibleSchedule.add(null);
         }
-        myLoop:
-         while (conflicts)  
-        {
-            ArrayList<HopkinsCourse> course = new ArrayList<HopkinsCourse>();
-            ArrayList<HopkinsCourse> topFive = desiredCreditChecker(priorityCourses,course, desiredCredits,tracker, currentSemester);
-            for (int i = 0; i < topFive.size(); i++)
-            {
-                topFive.get(i).HopkinsClasses = removeWrongSemesters(topFive.get(i).HopkinsClasses, currentSemester);
-            }
-                
-            //System.out.println(tracker);
-         //ArrayList<HopkinsCourse> topFive = new ArrayList<HopkinsCourse>();
-         //int size1, size2, size3, size4, size5;
-         //double sumOfCredits = 0;
-        //int i = tracker;
-        //while (!desiredCreditChecker(topFive, desiredCredits))
-        //{
-          //  if (tracker <= priorityCourses.size())
-            //{
-            //HopkinsCourse addition = priorityCourses.get(i);
-            //sumOfCredits += addition.getCredits();
-            //if (sumOfCredits <= 18.5)
-           //topFive.add(addition);  
-           // System.out.println(priorityCourses.get(i));
-            //}
-            //else
-                //return null;
-       // }   
-        // size1 = topFive.get(0).HopkinsClasses.size();
-        //System.out.println("Test: " + size1);
-        //size2 = topFive.get(1).HopkinsClasses.size();
-        //size3 = topFive.get(2).HopkinsClasses.size();
-        //size4 = topFive.get(3).HopkinsClasses.size();
-        //size5 = topFive.get(4).HopkinsClasses.size();
-        for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
+       myLoop:
+       for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
         {
             
             HopkinsClass first = it1.next();
@@ -458,13 +475,305 @@ public class Schedule {
                               HopkinsClass fourth = it4.next();
                                 for (Iterator<HopkinsClass> it5 = topFive.get(4).HopkinsClasses.values().iterator(); it5.hasNext();)
                                 {
-                                    //System.out.println(it1.hasNext());
                                     HopkinsClass fifth = it5.next();
+                                        for (Iterator<HopkinsClass> it6 = topFive.get(5).HopkinsClasses.values().iterator(); it6.hasNext();) 
+                                        {
+                                            HopkinsClass sixth = it6.next();
+                                            for (Iterator<HopkinsClass> it7 = topFive.get(6).HopkinsClasses.values().iterator(); it7.hasNext();) 
+                                            {
+                                                HopkinsClass seventh= it7.next();
+                                                for (Iterator<HopkinsClass> it8 = topFive.get(7).HopkinsClasses.values().iterator(); it8.hasNext();)
+                                                {
+                                                    HopkinsClass eigth = it8.next();
+                                                    for (Iterator<HopkinsClass> it9 = topFive.get(8).HopkinsClasses.values().iterator(); it9.hasNext();)
+                                                        {
+                                                        HopkinsClass ninth = it9.next();
                                     
                                     
                                     
                                     
+                                    Schedule one, two, three, four, five,six,seven,eight,nine;
+                                    possibleSchedule.set(0,first.getSchedule());
+                                    possibleSchedule.set(1,second.getSchedule());
+                                    possibleSchedule.set(2,third.getSchedule());
+                                    possibleSchedule.set(3,fourth.getSchedule());
+                                    possibleSchedule.set(4,fifth.getSchedule());
+                                    possibleSchedule.set(5,sixth.getSchedule());
+                                    possibleSchedule.set(6,seventh.getSchedule());
+                                    possibleSchedule.set(7,eigth.getSchedule());
+                                    possibleSchedule.set(8,ninth.getSchedule());
+                                    schedule.set(0,first);
+                                    schedule.set(1,second);
+                                    schedule.set(2,third);
+                                    schedule.set(3,fourth);
+                                    schedule.set(4,fifth);
+                                    schedule.set(5,sixth);
+                                    schedule.set(6,seventh);
+                                    schedule.set(7,eigth);
+                                    schedule.set(8,ninth);
                                     
+                                  if (!conflicts(possibleSchedule))
+                                    {
+                                        break myLoop;
+                                    }
+                                    
+                                 
+                                    
+                                    
+                                }
+        }
+        }
+    }
+}
+                    }
+              }
+        }
+        }
+       return schedule;
+    }
+    
+    
+    public static ArrayList<HopkinsClass> matchTimesLoop8 (ArrayList<HopkinsCourse> topFive)
+    {
+         ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
+         ArrayList<Schedule> possibleSchedule = new ArrayList<Schedule>();
+       for(int i = 0; i < 8; i++)
+        {
+            schedule.add(null);
+            possibleSchedule.add(null);
+        }
+       for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
+        {
+            
+            HopkinsClass first = it1.next();
+              for (Iterator<HopkinsClass> it2 = topFive.get(1).HopkinsClasses.values().iterator(); it2.hasNext();)
+              {
+                  HopkinsClass second = it2.next();
+                    for (Iterator<HopkinsClass> it3 = topFive.get(2).HopkinsClasses.values().iterator(); it3.hasNext();)
+                    {
+                        HopkinsClass third = it3.next();
+                          for (Iterator<HopkinsClass> it4 = topFive.get(3).HopkinsClasses.values().iterator(); it4.hasNext();)
+                          {
+                              HopkinsClass fourth = it4.next();
+                                for (Iterator<HopkinsClass> it5 = topFive.get(4).HopkinsClasses.values().iterator(); it5.hasNext();)
+                                {
+                                    HopkinsClass fifth = it5.next();
+                                        for (Iterator<HopkinsClass> it6 = topFive.get(5).HopkinsClasses.values().iterator(); it6.hasNext();) 
+                                        {
+                                            HopkinsClass sixth = it6.next();
+                                            for (Iterator<HopkinsClass> it7 = topFive.get(6).HopkinsClasses.values().iterator(); it7.hasNext();) 
+                                            {
+                                                HopkinsClass seventh= it7.next();
+                                                for (Iterator<HopkinsClass> it8 = topFive.get(7).HopkinsClasses.values().iterator(); it8.hasNext();)
+                                                {
+                                                    HopkinsClass eigth = it8.next();
+                                                   
+                                    
+                                    
+                                    
+                                    
+                                    Schedule one, two, three, four, five,six,seven,eight;
+                                    possibleSchedule.set(0,first.getSchedule());
+                                    possibleSchedule.set(1,second.getSchedule());
+                                    possibleSchedule.set(2,third.getSchedule());
+                                    possibleSchedule.set(3,fourth.getSchedule());
+                                    possibleSchedule.set(4,fifth.getSchedule());
+                                    possibleSchedule.set(5,sixth.getSchedule());
+                                    possibleSchedule.set(6,seventh.getSchedule());
+                                    possibleSchedule.set(7,eigth.getSchedule());
+                                    schedule.set(0,first);
+                                    schedule.set(1,second);
+                                    schedule.set(2,third);
+                                    schedule.set(3,fourth);
+                                    schedule.set(4,fifth);
+                                    schedule.set(5,sixth);
+                                    schedule.set(6,seventh);
+                                    schedule.set(7,eigth);
+                                    
+                                    if (conflicts(possibleSchedule))
+                                            {
+                                                
+                                            }
+                                    else
+                                    {
+                                        return schedule;
+                                    }
+                                    
+                                 
+                                    
+                                    
+                                }
+        }
+        }
+    }
+}
+                    
+              }
+        }
+        }
+       return null;
+    }
+    
+    
+     public static ArrayList<HopkinsClass> matchTimesLoop7 (ArrayList<HopkinsCourse> topFive)
+    {
+         ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
+         ArrayList<Schedule> possibleSchedule = new ArrayList<Schedule>();
+       for(int i = 0; i < 7; i++)
+        {
+            schedule.add(null);
+            possibleSchedule.add(null);
+        }
+       myLoop:
+       for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
+        {
+            HopkinsClass first = it1.next();
+              for (Iterator<HopkinsClass> it2 = topFive.get(1).HopkinsClasses.values().iterator(); it2.hasNext();)
+              {
+                  HopkinsClass second = it2.next();
+                    for (Iterator<HopkinsClass> it3 = topFive.get(2).HopkinsClasses.values().iterator(); it3.hasNext();)
+                    {
+                        HopkinsClass third = it3.next();
+                          for (Iterator<HopkinsClass> it4 = topFive.get(3).HopkinsClasses.values().iterator(); it4.hasNext();)
+                          {
+                              HopkinsClass fourth = it4.next();
+                                for (Iterator<HopkinsClass> it5 = topFive.get(4).HopkinsClasses.values().iterator(); it5.hasNext();)
+                                {
+                                    HopkinsClass fifth = it5.next();
+                                        for (Iterator<HopkinsClass> it6 = topFive.get(5).HopkinsClasses.values().iterator(); it6.hasNext();) 
+                                        {
+                                            HopkinsClass sixth = it6.next();
+                                            for (Iterator<HopkinsClass> it7 = topFive.get(6).HopkinsClasses.values().iterator(); it7.hasNext();) 
+                                            {
+                                                HopkinsClass seventh= it7.next();
+                                   
+                                    Schedule one, two, three, four, five,six,seven;
+                                    possibleSchedule.set(0,first.getSchedule());
+                                    possibleSchedule.set(1,second.getSchedule());
+                                    possibleSchedule.set(2,third.getSchedule());
+                                    possibleSchedule.set(3,fourth.getSchedule());
+                                    possibleSchedule.set(4,fifth.getSchedule());
+                                    possibleSchedule.set(5,sixth.getSchedule());
+                                    possibleSchedule.set(6,seventh.getSchedule());
+                                    
+                                    schedule.set(0,first);
+                                    schedule.set(1,second);
+                                    schedule.set(2,third);
+                                    schedule.set(3,fourth);
+                                    schedule.set(4,fifth);
+                                    schedule.set(5,sixth);
+                                    schedule.set(6,seventh);
+                                    
+                                    if (!conflicts(possibleSchedule))
+                                            {
+                                        break myLoop;
+                                    }
+                                    
+                                 
+                                    
+                                    
+                                }
+        }
+        }
+    }
+}     
+        }
+        }
+       return null;
+    }
+    
+     
+     public static ArrayList<HopkinsClass> matchTimesLoop6 (ArrayList<HopkinsCourse> topFive)
+    {
+         ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
+         ArrayList<Schedule> possibleSchedule = new ArrayList<Schedule>();
+       for(int i = 0; i < 6; i++)
+        {
+            schedule.add(null);
+            possibleSchedule.add(null);
+        }
+       for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
+        {
+            
+            HopkinsClass first = it1.next();
+              for (Iterator<HopkinsClass> it2 = topFive.get(1).HopkinsClasses.values().iterator(); it2.hasNext();)
+              {
+                  HopkinsClass second = it2.next();
+                    for (Iterator<HopkinsClass> it3 = topFive.get(2).HopkinsClasses.values().iterator(); it3.hasNext();)
+                    {
+                        HopkinsClass third = it3.next();
+                          for (Iterator<HopkinsClass> it4 = topFive.get(3).HopkinsClasses.values().iterator(); it4.hasNext();)
+                          {
+                              HopkinsClass fourth = it4.next();
+                                for (Iterator<HopkinsClass> it5 = topFive.get(4).HopkinsClasses.values().iterator(); it5.hasNext();)
+                                {
+                                    HopkinsClass fifth = it5.next();
+                                        for (Iterator<HopkinsClass> it6 = topFive.get(5).HopkinsClasses.values().iterator(); it6.hasNext();) 
+                                        {
+                                            HopkinsClass sixth = it6.next();
+                                            
+                                             
+                                    Schedule one, two, three, four, five,six;
+                                    possibleSchedule.set(0,first.getSchedule());
+                                    possibleSchedule.set(1,second.getSchedule());
+                                    possibleSchedule.set(2,third.getSchedule());
+                                    possibleSchedule.set(3,fourth.getSchedule());
+                                    possibleSchedule.set(4,fifth.getSchedule());
+                                    possibleSchedule.set(5,sixth.getSchedule());
+                                    schedule.set(0,first);
+                                    schedule.set(1,second);
+                                    schedule.set(2,third);
+                                    schedule.set(3,fourth);
+                                    schedule.set(4,fifth);
+                                    schedule.set(5,sixth);
+                                    
+                                    if (conflicts(possibleSchedule))
+                                            {
+                                                
+                                            }
+                                    else
+                                    {
+                                        return schedule;
+                                    }
+                                    
+                                 
+                                    
+                                    
+                                }
+        }
+        }
+    }
+}
+        }
+       return null;
+    }
+     
+     public static ArrayList<HopkinsClass> matchTimesLoop5 (ArrayList<HopkinsCourse> topFive)
+    {
+         ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
+         ArrayList<Schedule> possibleSchedule = new ArrayList<Schedule>();
+       for(int i = 0; i < 5; i++)
+        {
+            schedule.add(null);
+            possibleSchedule.add(null);
+        }
+       for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
+        {
+            
+            HopkinsClass first = it1.next();
+              for (Iterator<HopkinsClass> it2 = topFive.get(1).HopkinsClasses.values().iterator(); it2.hasNext();)
+              {
+                  HopkinsClass second = it2.next();
+                    for (Iterator<HopkinsClass> it3 = topFive.get(2).HopkinsClasses.values().iterator(); it3.hasNext();)
+                    {
+                        HopkinsClass third = it3.next();
+                          for (Iterator<HopkinsClass> it4 = topFive.get(3).HopkinsClasses.values().iterator(); it4.hasNext();)
+                          {
+                              HopkinsClass fourth = it4.next();
+                                for (Iterator<HopkinsClass> it5 = topFive.get(4).HopkinsClasses.values().iterator(); it5.hasNext();)
+                                {
+                                    HopkinsClass fifth = it5.next();
+                                       
                                     Schedule one, two, three, four, five;
                                     possibleSchedule.set(0,first.getSchedule());
                                     possibleSchedule.set(1,second.getSchedule());
@@ -477,55 +786,179 @@ public class Schedule {
                                     schedule.set(3,fourth);
                                     schedule.set(4,fifth);
                                     
-                                    conflicts = conflicts(possibleSchedule);
-                                    if (!conflicts)
-                                        break myLoop;
-                                    /**
-                                    if (topFive.get(0).HopkinsClasses.get(a).getSection() < 100)
-                                    schedule.set(0,topFive.get(0).HopkinsClasses.get(a));
-                                  //System.out.println(topFive.get(0).HopkinsClasses.get(a).getSchedule());
-                                    if (topFive.get(1).HopkinsClasses.get(b).getSection() < 100)
-                                    schedule.set(1,topFive.get(1).HopkinsClasses.get(b));
-                                  //System.out.println(topFive.get(1).HopkinsClasses.get(a).getSchedule());
-                                    if (topFive.get(2).HopkinsClasses.get(c).getSection() < 100)
-                                    schedule.set(2,topFive.get(2).HopkinsClasses.get(c));
-                                  //System.out.println(topFive.get(3).HopkinsClasses.get(a).getSchedule());
-                                    if (topFive.get(3).HopkinsClasses.get(d).getSection() < 100)
-                                    schedule.set(3,topFive.get(3).HopkinsClasses.get(d));
-                                    
-                                //.out.println(topFive.get(3).HopkinsClasses);
-                                    if (topFive.get(4).HopkinsClasses.get(e).getSection() < 100)
-                                    schedule.set(4,topFive.get(4).HopkinsClasses.get(e));
-                                   
-                                  // System.out.println(topFive.get(4).HopkinsClasses.get(a).getSchedule());
-                                    for (int i = 0; i < 5; i++)
+                                    if (conflicts(possibleSchedule))
+                                            {
+                                                
+                                            }
+                                    else
                                     {
-                                        if (schedule.get(i) != null)
-                                        possibleSchedule.set(i,schedule.get(i).getSchedule());
-                                        
+                                        return schedule;
                                     }
-                                    **/
-                                    
-                                     //System.out.println(conflicts);
-                                    
                                     
                                 }
         }
         }
     }
 }
-          
-       tracker++;
-        //}
-            
-               
-              
-        }
-       // catch(Error e){
-         //   return null;
-        //}
-          return schedule;
+       return null;
     }
+     
+    public static ArrayList<HopkinsClass> matchTimesLoop4 (ArrayList<HopkinsCourse> topFive)
+    {
+         ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
+         ArrayList<Schedule> possibleSchedule = new ArrayList<Schedule>();
+       for(int i = 0; i < 4; i++)
+        {
+            schedule.add(null);
+            possibleSchedule.add(null);
+        }
+       for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
+        {
+            
+            HopkinsClass first = it1.next();
+              for (Iterator<HopkinsClass> it2 = topFive.get(1).HopkinsClasses.values().iterator(); it2.hasNext();)
+              {
+                  HopkinsClass second = it2.next();
+                    for (Iterator<HopkinsClass> it3 = topFive.get(2).HopkinsClasses.values().iterator(); it3.hasNext();)
+                    {
+                        HopkinsClass third = it3.next();
+                          for (Iterator<HopkinsClass> it4 = topFive.get(3).HopkinsClasses.values().iterator(); it4.hasNext();)
+                          {
+                              HopkinsClass fourth = it4.next();
+                                    
+                                    Schedule one, two, three, four;
+                                    possibleSchedule.set(0,first.getSchedule());
+                                    possibleSchedule.set(1,second.getSchedule());
+                                    possibleSchedule.set(2,third.getSchedule());
+                                    possibleSchedule.set(3,fourth.getSchedule());
+                                    schedule.set(0,first);
+                                    schedule.set(1,second);
+                                    schedule.set(2,third);
+                                    schedule.set(3,fourth);
+                                    
+                                    if (conflicts(possibleSchedule))
+                                            {
+                                                
+                                            }
+                                    else
+                                    {
+                                        return schedule;
+                                    }
+                                     
+                                }
+        }
+        }
+    }
+       return null;
+    }
+    
+     public static ArrayList<HopkinsClass> matchTimesLoop3 (ArrayList<HopkinsCourse> topFive)
+    {
+         ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
+         ArrayList<Schedule> possibleSchedule = new ArrayList<Schedule>();
+       for(int i = 0; i < 3; i++)
+        {
+            schedule.add(null);
+            possibleSchedule.add(null);
+        }
+       for (Iterator<HopkinsClass> it1 = topFive.get(0).HopkinsClasses.values().iterator(); it1.hasNext();)
+        {
+            
+            HopkinsClass first = it1.next();
+              for (Iterator<HopkinsClass> it2 = topFive.get(1).HopkinsClasses.values().iterator(); it2.hasNext();)
+              {
+                  HopkinsClass second = it2.next();
+                    for (Iterator<HopkinsClass> it3 = topFive.get(2).HopkinsClasses.values().iterator(); it3.hasNext();)
+                    {
+                        HopkinsClass third = it3.next();
+                         
+                                    
+                                    Schedule one, two, three;
+                                    possibleSchedule.set(0,first.getSchedule());
+                                    possibleSchedule.set(1,second.getSchedule());
+                                    possibleSchedule.set(2,third.getSchedule());
+                                    schedule.set(0,first);
+                                    schedule.set(1,second);
+                                    schedule.set(2,third);
+                                    
+                                    if (conflicts(possibleSchedule))
+                                            {
+                                               
+                                            }
+                                    else
+                                    {
+                                        return schedule;
+                                    }
+                                     
+                                }
+        }
+        }
+       return null;
+    }
+     
+  
+     
+    public static ArrayList<HopkinsClass> matchTimes( ArrayList<HopkinsCourse> priorityCourses, double desiredCredits, Semester currentSemester)
+    {
+       
+        ArrayList<HopkinsCourse> course = new ArrayList<HopkinsCourse>();
+      // int size = desiredCreditChecker(priorityCourses,course, desiredCredits,tracker, currentSemester).size();
+        boolean conflicts = true;
+        int tracker = 0;
+         ArrayList<HopkinsClass> schedule = new ArrayList<HopkinsClass>();
+         myLoop:
+         while (conflicts)  
+        {
+           
+            ArrayList<HopkinsCourse> topFive = desiredCreditChecker(priorityCourses,course, desiredCredits,tracker, currentSemester);
+            int size = topFive.size();
+            for (int i = 0; i < size; i++)
+            {
+                //System.out.println(topFive.get(i).HopkinsClasses);
+                //HashMap<Integer, HopkinsClass> a = removeWrongSemesters(topFive.get(i).HopkinsClasses, currentSemester);
+                topFive.get(i).HopkinsClasses = removeWrongSemesters(topFive.get(i).HopkinsClasses, currentSemester);
+                 //System.out.println(topFive.get(i).HopkinsClasses);
+                  //System.out.println();
+            }
+            if (size == 9)
+                schedule = matchTimesLoop9(topFive);
+            else if (size == 8)
+                schedule = matchTimesLoop8(topFive);
+            else if (size == 7)
+            {
+               //System.out.println(size == 7);
+              schedule = matchTimesLoop7(topFive);
+              //System.out.println(matchTimesLoop7(topFive));
+              
+            }
+            else if (size == 6)
+                schedule = matchTimesLoop6(topFive);
+            else if (size == 5)
+                schedule = matchTimesLoop5(topFive);
+            else if (size == 4)
+                schedule = matchTimesLoop4(topFive);
+            else if (size == 3)
+                schedule = matchTimesLoop3(topFive);
+           
+            tracker++;
+            boolean containsNull = false;
+                                AnotherLoop:
+                                for (HopkinsClass a: schedule)
+                                {
+                                    if (a == null)
+                                    {
+                                        containsNull = true;
+                                        break AnotherLoop;
+                                    }
+                                }
+                                if (!(containsNull))
+                                        break myLoop;
+        }
+      return schedule;
+          
+    }
+          
+    
     
     
     /**public static boolean matchFiveClasses(ArrayList<HopkinsCourse> topFive)
@@ -545,12 +978,13 @@ public class Schedule {
         // conflicts = conflicts(possibleSchedule);
         return true;
     }**/
+                                  
     public static void main(String[] args)
     {
         
         Schedule a = new Schedule("TTh 11:00AM - 12:00PM");
         Schedule b = new Schedule("TTh 12:15PM - 2:00PM");
-        Schedule c = new Schedule("TTh 3:00PM - 4:00PM");
+        Schedule c = new Schedule("TTh 3:00PM - 4:20PM");
         Schedule d = new Schedule("Tth 4:30PM - 5:20PM");
         Schedule e = new Schedule("Tth 8:30PM - 10:20PM");
         ArrayList<Schedule> schedule = new ArrayList<Schedule>();
