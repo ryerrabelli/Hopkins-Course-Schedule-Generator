@@ -18,7 +18,7 @@ import scheduleGenerator.DbFiles.ManageTxtFiles;
  *
  * @author ryerrabelli
  */
-public class RequiredCourseSet extends HashSet<Requirable>  implements Requirable {
+public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirable {
     protected int numRequired = 0; //0 means all courses are required, negative number means counting from the total num of reqs
     
     public static HashMap<String, RequiredCourseSet> categoryRequiredCourseSets = new HashMap<>();
@@ -30,8 +30,14 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         this.numRequired = numRequired;
         this.addAll(reqCourses);        
     }
-
     
+    public RequiredCourseSet(RequiredCourseSet reqCourseSet) {
+        this.numRequired = reqCourseSet.numRequired;
+        for (Iterator<Requirable> i = reqCourseSet.iterator(); i.hasNext(); ) {
+            Requirable requirement = i.next();
+            this.add(requirement);
+        }
+    }
 
     public RequiredCourseSet(int numRequired, Object...reqs) {
         this.numRequired = numRequired;
@@ -84,13 +90,6 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
             else System.out.println("Could not add to RequiredCourseSet:" + req);
         }
     } 
-    
-    //Not finished, will duplicate input
-    public RequiredCourseSet(Collection<Requirable> reqCourseSet) {
-        for (Iterator<Requirable> i = reqCourseSet.iterator(); i.hasNext(); ) {
-            Requirable requirement = i.next();
-        }
-    }
         
     public static RequiredCourseSet stringToRequiredCourseSet(String input) {
         input = input.replace("[+]", "");
@@ -149,10 +148,13 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         calcBio.add(HopkinsCourse.getCourse("110.107"));
         categoryRequiredCourseSets.put("groups/calc bio", calcBio);
 
+        //calc 2 courses
+        RequiredCourseSet calc2Courses = new RequiredCourseSet(1);
+        calc2Courses.add(calcBio);
+        calc2Courses.add(calcPhys);
+        
         //calc intro
-        RequiredCourseSet introCalc = new RequiredCourseSet(1);
-        introCalc.add(calcBio);
-        introCalc.add(calcPhys);
+        RequiredCourseSet introCalc = new RequiredCourseSet(calc2Courses);
         introCalc.add(HopkinsCourse.getCourse("110.113"));
         addCat("intro calc", introCalc);
 
@@ -173,31 +175,53 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         physicsPhys.add(getCourse("171.101"));
         physicsPhys.add(getCourse("171.102"));
         addCat("physics phys", physicsPhys);
-
+        
+        // physics
+        RequiredCourseSet physics = new RequiredCourseSet(1);
+        physics.add(physicsBio.duplicate());
+        physics.add(physicsPhys.duplicate());
+        addCat("physics", physics);
+        
         // physics biological science majors with lab
         RequiredCourseSet physicsBioLab = new RequiredCourseSet(0, physicsBio);
         physicsBioLab.add(getCourse("173.111"));
         physicsBioLab.add(getCourse("173.112"));
-        addCat("physics bio lab", physicsBioLab);
+        addCat("physics bio with lab", physicsBioLab);
 
         // physics physical science majors with lab
         RequiredCourseSet physicsPhysLab = new RequiredCourseSet(0, physicsPhys);
         physicsPhysLab.add(getCourse("173.111"));
         physicsPhysLab.add(getCourse("173.112"));
-        addCat("physics phys lab", physicsPhysLab);
+        addCat("physics phys with lab", physicsPhysLab);
 
+        // physics Lab
+        RequiredCourseSet physicsLab = new RequiredCourseSet(1);
+        physicsLab.add(physicsBioLab.duplicate());
+        physicsLab.add(physicsPhysLab.duplicate());
+        addCat("physics with lab", physics);
+        
         // intro chem with lab
+        RequiredCourseSet chemLabOrAP = new RequiredCourseSet(1);
         RequiredCourseSet chemLab = new RequiredCourseSet(0);
         chemLab.add(getCourse("030.101"));
         chemLab.add(getCourse("030.102"));
         chemLab.add(getCourse("030.105"));
         chemLab.add(getCourse("030.106"));
-        addCat("chem lab", chemLab);
-
+        chemLabOrAP.add(chemLab);
+        chemLabOrAP.add(getCourse("030.103"));
+        addCat("chem with lab", chemLabOrAP);
+        
+        // orgo
+        RequiredCourseSet orgoLab = new RequiredCourseSet(1);
+        orgoLab.add(getCourse("030.205"));
+        orgoLab.add(new RequiredCourseSet(1, getCourse("030.225"), getCourse("030.227")));
+        orgoLab.add(getCourse("030.206"));
+        addCat("orgo with lab", orgoLab);
+        
         // BME major without track
         RequiredCourseSet BMEmajor =new RequiredCourseSet(0);
         BMEmajor.addAll(physicsPhysLab);
-        BMEmajor.addAll(chemLab);
+        BMEmajor.addAll(chemLabOrAP);
         BMEmajor.add(getCourse("030.205"));
         BMEmajor.addAll(calcPhys);
         BMEmajor.add(calc3);
@@ -227,6 +251,30 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         BMEmajor.add(getCourse("580.429"));
         addMaj("bme", BMEmajor);
 
+        // Molecular and Cellular Bio major
+        RequiredCourseSet molCelBiomajor = new RequiredCourseSet(0);
+        molCelBiomajor.add(calc2Courses.duplicate());
+        molCelBiomajor.add(chemLab);
+        molCelBiomajor.add(orgoLab);
+        molCelBiomajor.add(getCourse("020.305"));
+        molCelBiomajor.add(getCourse("020.315"));
+        molCelBiomajor.add(getCourse("020.306"));
+        molCelBiomajor.add(getCourse("020.316"));
+        molCelBiomajor.add(getCourse("020.303"));
+        molCelBiomajor.add(getCourse("020.363"));
+        molCelBiomajor.add(new RequiredCourseSet(1,getCourse("020.340"), getCourse("020.373")));
+        molCelBiomajor.add(physicsLab);
+        addMaj("molcelbio", molCelBiomajor);
+        
+        //premed
+        RequiredCourseSet premed = new RequiredCourseSet(0);
+        premed.add(introCalc);
+        premed.add(chemLab);
+        premed.add(orgoLab);
+        premed.add(physicsLab);
+        premed.add(new RequiredCourseSet(1, getCourse("220.105"), getCourse("060.113"), getCourse("060.114"))); //English requirement
+        addCat("premed", molCelBiomajor);
+        
         //Math minor
         RequiredCourseSet mathMinorRCS = new RequiredCourseSet(0);
         mathMinorRCS.add(introCalc);
@@ -240,9 +288,9 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         RequiredCourseSet mathMajor = new RequiredCourseSet(0);
         mathMajor.add(calcPhys);
 
-
         categoryRequiredCourseSets.put("minors/math", mathMajor);
     }
+    
         
     public static ArrayList<Integer> indOfCorresp(String input, char[] openings, char[] closings, char searchFor) {
         ArrayList<Integer> toReturn = new ArrayList<Integer>();
@@ -260,6 +308,10 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
             if (canCheck && input.charAt(i)==searchFor) toReturn.add(i);
         }
         return toReturn;
+    }
+    
+    public RequiredCourseSet duplicate() {
+        return new RequiredCourseSet(this);
     }
     
     public HashSet<Course> getSetOfCourses() {
