@@ -126,7 +126,8 @@ public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirab
         public static HopkinsCourse getCourse(String input) {return HopkinsCourse.getCourse(input); }
         public static void addCat(String title, RequiredCourseSet rcs ) {categoryRequiredCourseSets.put("groups/" + title.toLowerCase().trim().replace(" ", "_"), rcs); }
         public static void addMaj(String title, RequiredCourseSet rcs ) {categoryRequiredCourseSets.put("majors/" + title.toLowerCase().trim().replace(" ", "_"), rcs); }
-    
+        public static void addMin(String title, RequiredCourseSet rcs ) {categoryRequiredCourseSets.put("minors/" + title.toLowerCase().trim().replace(" ", "_"), rcs); }
+        
     public static void createCategoryRequiredCourseLists() throws IOException {
         ManageTxtFiles.getAllCourses();
 
@@ -219,37 +220,37 @@ public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirab
         addCat("orgo with lab", orgoLab);
         
         // BME major without track
-        RequiredCourseSet BMEmajor =new RequiredCourseSet(0);
-        BMEmajor.addAll(physicsPhysLab);
-        BMEmajor.addAll(chemLabOrAP);
-        BMEmajor.add(getCourse("030.205"));
-        BMEmajor.addAll(calcPhys);
-        BMEmajor.add(calc3);
-        RequiredCourseSet LADEplus = new RequiredCourseSet(1);
-        LADEplus.add(getCourse("550.291"));
-        LADEplus.add(new GenericCourse("110.3<credits=4>"));
+        RequiredCourseSet BMEMajor =new RequiredCourseSet(0);
+        BMEMajor.addAll(physicsPhysLab);
+        BMEMajor.addAll(chemLabOrAP);
+        BMEMajor.add(getCourse("030.205"));
+        BMEMajor.addAll(calcPhys);
+        BMEMajor.add(calc3);
+        RequiredCourseSet LADEPlus = new RequiredCourseSet(1);
+        LADEPlus.add(getCourse("550.291"));
+        LADEPlus.add(new GenericCourse("110.3<credits=4>"));
         RequiredCourseSet linAlgDifEq = new RequiredCourseSet(0); 
         linAlgDifEq.add(getCourse("110.201"));
         linAlgDifEq.add(getCourse("110.302"));
         RequiredCourseSet linAlgDifEq2 = new RequiredCourseSet(1);
-        linAlgDifEq2.add(LADEplus);
+        linAlgDifEq2.add(LADEPlus);
         linAlgDifEq2.add(linAlgDifEq);
-        BMEmajor.add(linAlgDifEq2);
-        BMEmajor.add(new GenericCourse("550.3<credits=3>"));
-        BMEmajor.add(new GenericCourse("000.1<tag=programming, credits=3>"));
-        BMEmajor.add(getCourse("580.111"));
-        BMEmajor.add(getCourse("580.202"));
-        BMEmajor.add(getCourse("580.221"));
-        BMEmajor.add(getCourse("580.222"));
-        BMEmajor.add(getCourse("580.223"));
-        BMEmajor.add(getCourse("580.321"));
+        BMEMajor.add(linAlgDifEq2);
+        BMEMajor.add(new GenericCourse("550.3<credits=3>"));
+        BMEMajor.add(new GenericCourse("000.1<tag=programming, credits=3>"));
+        BMEMajor.add(getCourse("580.111"));
+        BMEMajor.add(getCourse("580.202"));
+        BMEMajor.add(getCourse("580.221"));
+        BMEMajor.add(getCourse("580.222"));
+        BMEMajor.add(getCourse("580.223"));
+        BMEMajor.add(getCourse("580.321"));
 
-        BMEmajor.add(getCourse("580.421"));
-        BMEmajor.add(getCourse("580.422"));
-        BMEmajor.add(getCourse("580.423"));
-        BMEmajor.add(getCourse("580.424"));
-        BMEmajor.add(getCourse("580.429"));
-        addMaj("bme", BMEmajor);
+        BMEMajor.add(getCourse("580.421"));
+        BMEMajor.add(getCourse("580.422"));
+        BMEMajor.add(getCourse("580.423"));
+        BMEMajor.add(getCourse("580.424"));
+        BMEMajor.add(getCourse("580.429"));
+        addMaj("bme", BMEMajor);
 
         // Molecular and Cellular Bio major
         RequiredCourseSet molCelBiomajor = new RequiredCourseSet(0);
@@ -284,11 +285,26 @@ public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirab
         mathMinorRCS.add(new RequiredCourseSet(1, new GenericCourse("110.3<credits=4>"), new GenericCourse("550.3<credits=4>")));
         categoryRequiredCourseSets.put("minors/math", mathMinorRCS);
 
-        //Math major
-        RequiredCourseSet mathMajor = new RequiredCourseSet(0);
-        mathMajor.add(calcPhys);
-
-        categoryRequiredCourseSets.put("minors/math", mathMajor);
+        //Comp sci minor
+        RequiredCourseSet compSciMinorGen = new RequiredCourseSet(0);
+        compSciMinorGen.add(getCourse("600.107"));
+        compSciMinorGen.add(getCourse("600.120"));
+        compSciMinorGen.add(getCourse("600.226"));
+        
+        RequiredCourseSet CSMinorAnalysis = compSciMinorGen.duplicate();
+        CSMinorAnalysis.add(getCourse("600.271"));
+        for (int i = 0; i<3; i++) CSMinorAnalysis.add(new GenericCourse("600.3<tag=csanalysis>"));
+        addMin("minors/cs analysis", CSMinorAnalysis);
+        
+        RequiredCourseSet CSMinorSystems = compSciMinorGen.duplicate();
+        CSMinorSystems.add(getCourse("600.233"));
+        for (int i = 0; i<3; i++) CSMinorSystems.add(new GenericCourse("600.3<tag=cssystems>"));
+        addMin("minors/cs systems", CSMinorSystems);
+        
+        RequiredCourseSet CSMinorApp = compSciMinorGen.duplicate();
+        CSMinorApp.add(new RequiredCourseSet(1,getCourse("600.233"), getCourse("600.271")));
+        for (int i = 0; i<3; i++) CSMinorApp.add(new GenericCourse("600.3<tag=csapplications>"));
+        addMin("minors/cs applications", CSMinorApp);
     }
     
         
