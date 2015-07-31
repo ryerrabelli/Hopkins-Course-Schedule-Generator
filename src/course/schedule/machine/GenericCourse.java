@@ -15,7 +15,8 @@ import java.util.TreeSet;
  */
 public class GenericCourse extends Course {
 
-    int identificationNum;
+    //represents what this course will fulfill. It is to make sure two generic courses can have the same course when optimizing a schedule
+    String purpose = "";
     
     protected HashSet<String> tags = new HashSet<>();
     
@@ -42,6 +43,10 @@ public class GenericCourse extends Course {
                         case "tag":
                         case "tags":
                             tags.add(postEq.toLowerCase());
+                            break;
+                        case "for":
+                            purpose = postEq.toLowerCase();
+                            break;
                     }
                 } else {
                     if (innerPart.matches("-?\\d+(\\.\\d+)?")) credits = Float.parseFloat(innerPart);
@@ -102,6 +107,27 @@ public class GenericCourse extends Course {
         if (this.credits > genCourse.credits) return false;
         if (school > 0 && school != genCourse.school) return false;
         return true;
+    }
+    public boolean canCombineWith(GenericCourse otherCourse) { return combineWith(this, otherCourse) != null;}
+    public static Course combineWith(GenericCourse crs1, GenericCourse crs2) {
+        if (crs1.isSubsetOf(crs2)) return crs2;
+        else if (crs2.isSubsetOf(crs1)) return crs1;
+        
+        TreeSet<HopkinsCourse> possibleCourses = crs1.getPossibleHopkinsCourses();
+        possibleCourses.retainAll(crs2.getPossibleHopkinsCourses());
+        if (possibleCourses.isEmpty()) return null;
+        else if (possibleCourses.size() == 1) return possibleCourses.first();
+        
+        String newDept = "000", newCourseNum = "1";
+        if (crs1.deptNum.equals(crs2.deptNum) || crs1.deptNum.length() > crs2.deptNum.length() || crs2.deptNum.equals("000")) newDept = crs1.deptNum;
+        else if (crs2.deptNum.length() > crs1.deptNum.length() || crs1.deptNum.equals("000")) newDept = crs2.deptNum;
+        else System.out.println("Error couldn't combine because of depts");
+        if (crs1.courseNum.length() > crs2.courseNum.length() || crs2.courseNum.isEmpty() || crs1.getLevel() > crs2.getLevel()) newCourseNum = crs1.courseNum;
+        else if (crs2.courseNum.length() > crs1.courseNum.length() || crs1.courseNum.equals("000") || crs2.getLevel() > crs1.getLevel()) newCourseNum = crs2.courseNum;
+        else System.out.println("Error couldn't combine because of courseNums");
+        HashSet<String> newTags = ((HashSet<String>) crs1.tags.clone());
+        newTags.addAll(((HashSet<String>) crs2.tags.clone()));
+        return null;
     }
     
     public TreeSet<HopkinsCourse> getPossibleHopkinsCourses() {
