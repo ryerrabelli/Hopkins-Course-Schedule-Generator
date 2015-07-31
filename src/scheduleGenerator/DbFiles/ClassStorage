@@ -2,6 +2,12 @@ List of all Krieger and Whiting lower level undergraduate classes in the natural
 
 School	Class #	Title	Areas	Writing Intensive	Max Seats	Open Seats	Waitlisted	Credits	Term	Location	Day-Times	Instructor(s)	Status	Select
 START
+//Later addins
+AS.030.227 (01) Registration Restrictions	Chemical Chirality: An Introduction in Organic Chem. Lab, Techniques [+]	N	No	16	0	2	3.00	Fall 2015	Homewood Campus	T 9:00AM - 10:20AM, W 1:30PM - 6:30PM	E. Hill	Waitlist Only	
+AS.030.227 (01)	Chemical Chirality: An Introduction in Organic Chem. Lab, Techniques [+]	N	No	30	10	0	3.00	Spring 2015	Homewood Campus	T 9:00AM - 9:50AM, W 1:30PM - 6:30PM	E. Hill	Open	
+AS.030.227 (02)	Chemical Chirality: An Introduction in Organic Chem. Lab, Techniques [+]	N	No	30	0	0	3.00	Spring 2015	Homewood Campus	T 9:00AM - 9:50AM, F 1:30PM - 6:30PM	E. Hill	Waitlist Only	
+AS.030.227 (02) Registration Restrictions	Chemical Chirality: An Introduction in Organic Chem. Lab, Techniques [+]	N	No	16	0	2	3.00	Fall 2015	Homewood Campus	T 9:00AM - 10:20AM, F 1:30PM - 6:30PM	E. Hill	Waitlist Only	
+
 // LLU N Fall 2015
 Krieger School of Arts and Sciences	AS.020.103 (01)	Freshman Seminar: The Human Microbiome [+]	N	No	18	0	0	2.00	Fall 2015	Homewood Campus	T 4:30PM - 6:20PM	T. Feehery	Waitlist Only	
 Krieger School of Arts and Sciences	AS.020.103 (02)	Freshman Seminar: The Human Microbiome [+]	N	No	18	0	2	2.00	Fall 2015	Homewood Campus	Th 4:30PM - 6:20PM	T. Feehery	Waitlist Only	
@@ -30,16 +36,18 @@ Krieger School of Arts and Sciences	AS.020.243 (01) Registration Restrictions	Pr
 Krieger School of Arts and Sciences	AS.030.101 (01)	Introductory Chemistry I [+]	N	No	320	2	1	3.00	Fall 2015	Homewood Campus	MWF 9:00AM - 9:50AM	D. Goldberg	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.101 (02)	Introductory Chemistry I [+]	N	No	320	27	0	3.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM	S. Thyagarajan	Open	
 Krieger School of Arts and Sciences	AS.030.103 (01)	Applied Chemical Equilibrium and Reactivity w/lab [+]	N	No	30	0	17	4.00	Fall 2015	Homewood Campus	MWF 9:00AM - 9:50AM, M 1:30PM - 5:00PM	J. Greco, J. Roth	Waitlist Only	
+req: 030.101
 Krieger School of Arts and Sciences	AS.030.103 (02)	Applied Chemical Equilibrium and Reactivity w/lab [+]	N	No	30	0	11	4.00	Fall 2015	Homewood Campus	MWF 9:00AM - 9:50AM, T 1:30PM - 5:00PM	J. Greco, J. Roth	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.103 (03)	Applied Chemical Equilibrium and Reactivity w/lab [+]	N	No	30	1	10	4.00	Fall 2015	Homewood Campus	MWF 9:00AM - 9:50AM, Th 1:30PM - 5:00PM	J. Greco, J. Roth	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.105 (01)	Introductory Chemistry Lab I [+]	N	No	100	0	2	1.00	Fall 2015	Homewood Campus	M 1:30PM - 4:20PM	L. Pasternack	Waitlist Only	
+coreq: 030.101
 Krieger School of Arts and Sciences	AS.030.105 (02)	Introductory Chemistry Lab I [+]	N	No	100	0	10	1.00	Fall 2015	Homewood Campus	T 1:30PM - 4:20PM	L. Pasternack	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.105 (03)	Introductory Chemistry Lab I [+]	N	No	100	4	7	1.00	Fall 2015	Homewood Campus	W 1:30PM - 4:20PM	L. Pasternack	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.105 (04)	Introductory Chemistry Lab I [+]	N	No	100	0	4	1.00	Fall 2015	Homewood Campus	Th 1:30PM - 4:20PM	L. Pasternack	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.105 (05)	Introductory Chemistry Lab I [+]	N	No	100	0	2	1.00	Fall 2015	Homewood Campus	F 1:30PM - 4:20PM	L. Pasternack	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.105 (06)	Introductory Chemistry Lab I [+]	N	No	100	0	3	1.00	Fall 2015	Homewood Campus	Th 9:00AM - 11:50AM	L. Pasternack	Waitlist Only	
-Recommended Course Background: AS.030.102[+] OR AS.030.103[+] OR EN.510.101[+] OR AS.030.204[+] 
 Krieger School of Arts and Sciences	AS.030.205 (01)	Organic Chemistry I [+]	N	No	300	61	0	4.00	Fall 2015	Homewood Campus	MWF 9:00AM - 9:50AM, Th 9:00AM - 10:20AM	J. Tovar	Open	
+Recommended Course Background: AS.030.102[+] OR AS.030.103[+] OR EN.510.101[+] OR AS.030.204[+] 
 Krieger School of Arts and Sciences	AS.030.205 (02)	Organic Chemistry I [+]	N	No	300	151	0	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, Th 9:00AM - 10:20AM	C. Townsend	Open	
 Krieger School of Arts and Sciences	AS.030.205 (03)	Organic Chemistry I [+]	N	No	204	0	2	4.00	Fall 2015	Homewood Campus	MWF 9:00AM - 9:50AM, Th 9:00AM - 10:20AM	C. Falzone	Closed	
 Krieger School of Arts and Sciences	AS.030.225 (01) Registration Restrictions	Introductory Organic Chemistry Lab [+]	N	No	60	2	0	3.00	Fall 2015	Homewood Campus	T 9:00AM - 10:20AM, M 1:30PM - 6:30PM	L. D&#39;Souza	Open	
@@ -76,9 +84,9 @@ Krieger School of Arts and Sciences	AS.173.111 (20)	General Physics Laboratory I
 Krieger School of Arts and Sciences	AS.173.111 (21)	General Physics Laboratory I [+]	N	No	24	13	0	1.00	Fall 2015	Homewood Campus	W 6:00PM - 8:50PM	C. Chien	Open	
 Krieger School of Arts and Sciences	AS.173.111 (22)	General Physics Laboratory I [+]	N	No	24	5	0	1.00	Fall 2015	Homewood Campus	Th 6:00PM - 8:50PM	C. Chien	Open	
 Krieger School of Arts and Sciences	AS.173.111 (23)	General Physics Laboratory I [+]	N	No	24	15	0	1.00	Fall 2015	Homewood Campus	Th 6:00PM - 8:50PM	C. Chien	Open	
-req: 173.111
-coreq: 171.102 or 171.104
 Krieger School of Arts and Sciences	AS.173.112 (01)	General Physics Laboratory II [+]	N	No	24	0	3	1.00	Fall 2015	Homewood Campus	T 1:30PM - 4:20PM	C. Chien	Waitlist Only	
+req: 173.111
+req: 171.101 or 171.103 or 171.105
 Krieger School of Arts and Sciences	AS.173.112 (02)	General Physics Laboratory II [+]	N	No	24	0	0	1.00	Fall 2015	Homewood Campus	W 1:30PM - 4:20PM	C. Chien	Waitlist Only	
 Krieger School of Arts and Sciences	AS.173.112 (03)	General Physics Laboratory II [+]	N	No	24	0	0	1.00	Fall 2015	Homewood Campus	Th 1:30PM - 4:20PM	C. Chien	Waitlist Only	
 Krieger School of Arts and Sciences	AS.173.112 (04)	General Physics Laboratory II [+]	N	No	24	0	0	1.00	Fall 2015	Homewood Campus	T 6:00PM - 8:50PM	C. Chien	Waitlist Only	
@@ -508,6 +516,7 @@ EN.650.457 (01)	Computer Forensics [+]	E	No	30	23	0	3.00	Fall 2015	Homewood Camp
 // LLU Engineering other(Natural, Quantitative, Social) Homewood Fall 2015
 // School	Class #	Title	Areas	Writing Intensive	Max Seats	Open Seats	Waitlisted	Credits	Term	Location	Day-Times	Instructor(s)	Status	Select
 Krieger School of Arts and Sciences	AS.171.101 (01)	General Physics:Physical Science Major I [+]	EN	No	24	0	0	4.00	Fall 2015	Homewood Campus	TTh 10:30AM - 11:45AM, F 8:00AM - 8:50AM	M. Swartz	Waitlist Only	
+coreq: 110.106 or 110.108
 Krieger School of Arts and Sciences	AS.171.101 (02)	General Physics:Physical Science Major I [+]	EN	No	24	1	1	4.00	Fall 2015	Homewood Campus	TTh 10:30AM - 11:45AM, F 8:00AM - 8:50AM	M. Swartz	Waitlist Only	
 Krieger School of Arts and Sciences	AS.171.101 (03)	General Physics:Physical Science Major I [+]	EN	No	24	0	1	4.00	Fall 2015	Homewood Campus	TTh 10:30AM - 11:45AM, F 9:00AM - 9:50AM	M. Swartz	Waitlist Only	
 Krieger School of Arts and Sciences	AS.171.101 (04)	General Physics:Physical Science Major I [+]	EN	No	24	0	0	4.00	Fall 2015	Homewood Campus	TTh 10:30AM - 11:45AM, F 9:00AM - 9:50AM	M. Swartz	Waitlist Only	
@@ -521,6 +530,8 @@ Krieger School of Arts and Sciences	AS.171.101 (11)	General Physics:Physical Sci
 Krieger School of Arts and Sciences	AS.171.101 (12)	General Physics:Physical Science Major I [+]	EN	No	24	1	1	4.00	Fall 2015	Homewood Campus	TTh 10:30AM - 11:45AM, F 10:00AM - 10:50AM	M. Swartz	Waitlist Only	
 Krieger School of Arts and Sciences	AS.171.102 (01) Registration Restrictions	General Physics: Physical Science Majors II [+]	EN	No	24	3	0	4.00	Fall 2015	Homewood Campus	MWF 11:00AM - 11:50AM, Th 8:00AM - 8:50AM	P. Maksimovic	Open	
 req: 171.101
+req: 171.107 or 110.108
+coreq: 171.107 and 110.109
 Krieger School of Arts and Sciences	AS.171.102 (02) Registration Restrictions	General Physics: Physical Science Majors II [+]	EN	No	24	2	0	4.00	Fall 2015	Homewood Campus	MWF 11:00AM - 11:50AM, Th 9:00AM - 9:50AM	P. Maksimovic	Open	
 Krieger School of Arts and Sciences	AS.171.102 (03) Registration Restrictions	General Physics: Physical Science Majors II [+]	EN	No	24	2	0	4.00	Fall 2015	Homewood Campus	MWF 11:00AM - 11:50AM, Th 10:30AM - 11:20AM	P. Maksimovic	Open	
 Krieger School of Arts and Sciences	AS.171.102 (04) Registration Restrictions	General Physics: Physical Science Majors II [+]	EN	No	24	3	0	4.00	Fall 2015	Homewood Campus	MWF 11:00AM - 11:50AM, Th 10:30AM - 11:20AM	P. Maksimovic	Open	
@@ -1394,9 +1405,9 @@ Krieger School of Arts and Sciences	AS.030.102 (01)	Introductory Chemistry II [+
 req: 030.101
 Krieger School of Arts and Sciences	AS.030.102 (02)	Introductory Chemistry II [+]	N	No	290	54	0	3.00	Spring 2015	Homewood Campus	MWF 10:00AM - 10:50AM	S. Thyagarajan	Open	
 Krieger School of Arts and Sciences	AS.030.103 (01)	Applied Chemical Equilibrium and Reactivity w/lab [+]	N	No	17	1	0	4.00	Spring 2015	Homewood Campus	MWF 9:00AM - 9:50AM, M 1:30PM - 5:00PM	J. Greco	Open	
-req: 030.101
 Krieger School of Arts and Sciences	AS.030.103 (02)	Applied Chemical Equilibrium and Reactivity w/lab [+]	N	No	18	0	0	4.00	Spring 2015	Homewood Campus	MWF 9:00AM - 9:50AM, T 1:30PM - 5:00PM	J. Greco	Waitlist Only	
 Krieger School of Arts and Sciences	AS.030.106 (01)	Introductory Chemistry Laboratory II [+]	N	No	100	38	0	1.00	Spring 2015	Homewood Campus	M 1:30PM - 4:20PM	L. Pasternack	Open	
+req: 030.101
 coreq: 030.102
 Krieger School of Arts and Sciences	AS.030.106 (02)	Introductory Chemistry Laboratory II [+]	N	No	100	1	0	1.00	Spring 2015	Homewood Campus	T 1:30PM - 4:20PM	L. Pasternack	Open	
 Krieger School of Arts and Sciences	AS.030.106 (03)	Introductory Chemistry Laboratory II [+]	N	No	100	4	0	1.00	Spring 2015	Homewood Campus	W 1:30PM - 4:20PM	L. Pasternack	Open	
@@ -1685,6 +1696,7 @@ Krieger School of Arts and Sciences	AS.171.102 (08) Registration Restrictions	Ge
 Krieger School of Arts and Sciences	AS.171.102 (09) Registration Restrictions	General Physics: Physical Science Majors II [+]	EN	No	24	0	0	4.00	Spring 2015	Homewood Campus	TTh 10:30AM - 11:45AM, F 12:00PM - 12:50PM	C. Broholm	Waitlist Only	
 Krieger School of Arts and Sciences	AS.171.102 (10) Registration Restrictions	General Physics: Physical Science Majors II [+]	EN	No	24	0	0	4.00	Spring 2015	Homewood Campus	TTh 10:30AM - 11:45AM, F 12:00PM - 12:50PM	C. Broholm	Waitlist Only	
 Krieger School of Arts and Sciences	AS.171.104 (01) Registration Restrictions	General Physics/Biology Majors II [+]	EN	No	24	0	0	4.00	Spring 2015	Homewood Campus	MWF 9:00AM - 9:50AM, T 8:00AM - 8:50AM	N. Armitage	Waitlist Only	
+req: 171.101 or 171.103
 Krieger School of Arts and Sciences	AS.171.104 (02) Registration Restrictions	General Physics/Biology Majors II [+]	EN	No	24	1	0	4.00	Spring 2015	Homewood Campus	MWF 9:00AM - 9:50AM, T 9:00AM - 9:50AM	N. Armitage	Open	
 Krieger School of Arts and Sciences	AS.171.104 (03) Registration Restrictions	General Physics/Biology Majors II [+]	EN	No	24	0	0	4.00	Spring 2015	Homewood Campus	MWF 9:00AM - 9:50AM, T 9:00AM - 9:50AM	N. Armitage	Waitlist Only	
 Krieger School of Arts and Sciences	AS.171.104 (04) Registration Restrictions	General Physics/Biology Majors II [+]	EN	No	24	3	0	4.00	Spring 2015	Homewood Campus	MWF 9:00AM - 9:50AM, T 10:30AM - 11:20AM	N. Armitage	Open	
