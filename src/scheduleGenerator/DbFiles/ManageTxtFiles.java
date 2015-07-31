@@ -127,7 +127,8 @@ public class ManageTxtFiles {
                     if (forwardLookStr.isEmpty() || forwardLookStr.matches("whiti|krieg|//.*|en.*|as.*")) {
                         break forwardLooker;
                     } else {     
-                        precoReq = newLn + txtRead.readLine();
+                        precoReq = precoReq + newLn + txtRead.readLine();
+                        int i = 2;
                     }
                 } else {
                     txtRead.reset();
@@ -201,9 +202,11 @@ public class ManageTxtFiles {
             String tagName = lineParts[0].toLowerCase().trim();
             HashSet<HopkinsCourse> taggedCourses = new HashSet<>();
             for (String course : lineParts[1].split(",")) {
-                HopkinsCourse toAdd = HopkinsCourse.getCourse(course);
-                if (toAdd == null) System.out.println("Error tagged course is null");
-                else taggedCourses.add(toAdd);
+                if (!course.trim().startsWith("//")) {
+                    HopkinsCourse toAdd = HopkinsCourse.getCourse(course);
+                    if (toAdd == null) System.out.println("Note tagged course \"" + course.trim() + "\" is can't be found");
+                    else taggedCourses.add(toAdd);
+                }
             }
             HopkinsCourse.createNewTag(tagName, taggedCourses);
         }
@@ -215,8 +218,7 @@ public class ManageTxtFiles {
         category = category.replace(".", "/");
         category = category.replace(" ", "_");
         category = category.replace("or/", "ors/");
-        
-        RequiredCourseSet fromMap = RequiredCourseSet.categoryRequiredCourseSets.get(category);
+        RequiredCourseSet fromMap = RequiredCourseSet.categoryRequiredCourseSets.get(category.toLowerCase().trim().replace("_", " "));
         if (fromMap != null) return fromMap;
         
         String path = standardFilePath + category;
