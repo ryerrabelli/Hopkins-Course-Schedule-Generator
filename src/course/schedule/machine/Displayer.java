@@ -9,15 +9,15 @@ package course.schedule.machine;
 
  */
 
-public class homepageUI extends javax.swing.JFrame {
+public class Displayer extends javax.swing.JFrame {
 
     /**
 
-     * Creates new form homepageUI
+     * Creates new form Displayer
 
      */
 
-    public homepageUI() {
+    public Displayer() {
 
         initComponents();
 
@@ -1537,25 +1537,25 @@ javax.swing.UIManager.getInstalledLookAndFeels()) {
 
         } catch (ClassNotFoundException ex) {            
 
-java.util.logging.Logger.getLogger(homepageUI.class.getName()).log(java.util.loggin
+java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.loggin
 
 g.Level.SEVERE, null, ex);
 
         } catch (InstantiationException ex) {            
 
-java.util.logging.Logger.getLogger(homepageUI.class.getName()).log(java.util.loggin
+java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.loggin
 
 g.Level.SEVERE, null, ex);
 
         } catch (IllegalAccessException ex) {            
 
-java.util.logging.Logger.getLogger(homepageUI.class.getName()).log(java.util.loggin
+java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.loggin
 
 g.Level.SEVERE, null, ex);
 
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {            
 
-java.util.logging.Logger.getLogger(homepageUI.class.getName()).log(java.util.loggin
+java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.loggin
 
 g.Level.SEVERE, null, ex);
 
@@ -1569,7 +1569,7 @@ g.Level.SEVERE, null, ex);
 
             public void run() {
 
-                new homepageUI().setVisible(true);
+                new Displayer().setVisible(true);
 
             }
 
