@@ -18,7 +18,7 @@ import scheduleGenerator.DbFiles.ManageTxtFiles;
  *
  * @author ryerrabelli
  */
-public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirable {
+public class RequiredCourseSet extends HashSet<Requirable>  implements Requirable {
     protected int numRequired = 0; //0 means all courses are required, negative number means counting from the total num of reqs
     
     public static HashMap<String, RequiredCourseSet> categoryRequiredCourseSets = new HashMap<>();
@@ -30,14 +30,8 @@ public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirab
         this.numRequired = numRequired;
         this.addAll(reqCourses);        
     }
+
     
-    public RequiredCourseSet(RequiredCourseSet reqCourseSet) {
-        this.numRequired = reqCourseSet.numRequired;
-        for (Iterator<Requirable> i = reqCourseSet.iterator(); i.hasNext(); ) {
-            Requirable requirement = i.next();
-            this.add(requirement);
-        }
-    }
 
     public RequiredCourseSet(int numRequired, Object...reqs) {
         this.numRequired = numRequired;
@@ -90,6 +84,13 @@ public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirab
             else System.out.println("Could not add to RequiredCourseSet:" + req);
         }
     } 
+    
+    //Not finished, will duplicate input
+    public RequiredCourseSet(Collection<Requirable> reqCourseSet) {
+        for (Iterator<Requirable> i = reqCourseSet.iterator(); i.hasNext(); ) {
+            Requirable requirement = i.next();
+        }
+    }
         
     public static RequiredCourseSet stringToRequiredCourseSet(String input) {
         input = input.replace("[+]", "");
@@ -127,8 +128,11 @@ public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirab
         public static void addCat(String title, RequiredCourseSet rcs ) {categoryRequiredCourseSets.put("groups/" + title.toLowerCase().trim().replace(" ", "_"), rcs); }
         public static void addMaj(String title, RequiredCourseSet rcs ) {categoryRequiredCourseSets.put("majors/" + title.toLowerCase().trim().replace(" ", "_"), rcs); }
         public static void addMin(String title, RequiredCourseSet rcs ) {categoryRequiredCourseSets.put("minors/" + title.toLowerCase().trim().replace(" ", "_"), rcs); }
-        
-    public static void createCategoryRequiredCourseLists() throws IOException {
+        public RequiredCourseSet duplicate() {
+        return new RequiredCourseSet(this);
+    }
+      
+        public static void createCategoryRequiredCourseLists() throws IOException {
         ManageTxtFiles.getAllCourses();
 
         // Premed
@@ -305,8 +309,28 @@ public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirab
         CSMinorApp.add(new RequiredCourseSet(1,getCourse("600.233"), getCourse("600.271")));
         for (int i = 0; i<3; i++) CSMinorApp.add(new GenericCourse("600.3<tag=csapplications,for=csp>"));
         addMin("cs applications", CSMinorApp);
+        
+        //Computer Integrated Surgery Minor
+        RequiredCourseSet compSurgeryMinor = new RequiredCourseSet(0);
+        compSurgeryMinor.add(getCourse("600.107"));
+        compSurgeryMinor.add(getCourse("600.226"));
+        
+        RequiredCourseSet calc3PlusExtra = new RequiredCourseSet(1);
+        calc3PlusExtra.add(calc3.duplicate());
+        calc3PlusExtra.add(getCourse("110.212"));
+        
+        compSurgeryMinor.add(calc2Courses.duplicate());
+        compSurgeryMinor.add(calc3PlusExtra.duplicate());
+        
+        RequiredCourseSet higherMath = new RequiredCourseSet(1);
+        higherMath.add(getCourse("550.291"));
+        higherMath.add(getCourse("110.201"));
+        higherMath.add(getCourse("110.211"));
+        higherMath.add(getCourse("110.212"));
+        
+       compSurgeryMinor.add(higherMath.duplicate());
+       
     }
-    
         
     public static ArrayList<Integer> indOfCorresp(String input, char[] openings, char[] closings, char searchFor) {
         ArrayList<Integer> toReturn = new ArrayList<Integer>();
@@ -324,10 +348,6 @@ public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirab
             if (canCheck && input.charAt(i)==searchFor) toReturn.add(i);
         }
         return toReturn;
-    }
-    
-    public RequiredCourseSet duplicate() {
-        return new RequiredCourseSet(this);
     }
     
     public HashSet<Course> getSetOfCourses() {
