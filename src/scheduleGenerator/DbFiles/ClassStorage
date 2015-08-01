@@ -231,11 +231,13 @@ Krieger School of Arts and Sciences	AS.110.109 (08)	Calculus II [+]	Q	No	29	0	0	
 Krieger School of Arts and Sciences	AS.110.109 (09)	Calculus II [+]	Q	No	29	0	0	4.00	Fall 2015	Homewood Campus	MWF 11:00AM - 11:50AM, Th 4:30PM - 5:20PM	J. Martinez Garcia	Waitlist Only	
 Krieger School of Arts and Sciences	AS.110.113 (01)	Honors One Variable Calculus [+]	Q	No	30	15	0	4.00	Fall 2015	Homewood Campus	MW 1:30PM - 2:45PM, F 1:30PM - 2:20PM	N. Kitchloo	Open	
 Krieger School of Arts and Sciences	AS.110.201 (01)	Linear Algebra [+]	Q	No	35	2	0	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, T 1:30PM - 2:20PM	G. Di Matteo	Open	
+preReq: 110.107 or 110.109 or 110.113
 Krieger School of Arts and Sciences	AS.110.201 (02)	Linear Algebra [+]	Q	No	35	1	0	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, T 3:00PM - 3:50PM	G. Di Matteo	Open	
 Krieger School of Arts and Sciences	AS.110.201 (03)	Linear Algebra [+]	Q	No	35	11	0	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, T 4:30PM - 5:20PM	G. Di Matteo	Open	
 Krieger School of Arts and Sciences	AS.110.201 (04)	Linear Algebra [+]	Q	No	35	17	0	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, Th 1:30PM - 2:20PM	G. Di Matteo	Open	
 Krieger School of Arts and Sciences	AS.110.201 (05)	Linear Algebra [+]	Q	No	35	19	0	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, Th 3:00PM - 3:50PM	G. Di Matteo	Open	
 Krieger School of Arts and Sciences	AS.110.202 (01)	Calculus III [+]	Q	No	30	0	4	4.00	Fall 2015	Homewood Campus	MWF 11:00AM - 11:50AM, T 1:30PM - 2:20PM	J. Zhu	Waitlist Only	
+preReq: 110.107 or 110.109 or 110.113
 Krieger School of Arts and Sciences	AS.110.202 (02)	Calculus III [+]	Q	No	32	0	4	4.00	Fall 2015	Homewood Campus	MWF 11:00AM - 11:50AM, T 3:00PM - 3:50PM	J. Zhu	Waitlist Only	
 Krieger School of Arts and Sciences	AS.110.202 (03)	Calculus III [+]	Q	No	32	0	1	4.00	Fall 2015	Homewood Campus	MWF 11:00AM - 11:50AM, Th 4:30PM - 5:20PM	J. Zhu	Waitlist Only	
 Krieger School of Arts and Sciences	AS.110.202 (04)	Calculus III [+]	Q	No	32	0	0	4.00	Fall 2015	Homewood Campus	MWF 11:00AM - 11:50AM, Th 3:00PM - 3:50PM	J. Zhu	Waitlist Only	
@@ -247,13 +249,16 @@ Krieger School of Arts and Sciences	AS.110.202 (09)	Calculus III [+]	Q	No	32	0	0
 Krieger School of Arts and Sciences	AS.110.202 (10)	Calculus III [+]	Q	No	32	0	1	4.00	Fall 2015	Homewood Campus	MWF 12:00PM - 12:50PM, T 1:30PM - 2:20PM	J. Zhu	Waitlist Only	
 Krieger School of Arts and Sciences	AS.110.202 (11)	Calculus III [+]	Q	No	32	1	0	4.00	Fall 2015	Homewood Campus	MWF 12:00PM - 12:50PM, T 3:00PM - 3:50PM	J. Zhu	Open	
 Krieger School of Arts and Sciences	AS.110.211 (01)	Honors Multivariable Calculus [+]	Q	No	30	11	0	4.00	Fall 2015	Homewood Campus	MW 12:00PM - 1:15PM, F 12:00PM - 12:50PM	V. Pingali	Open	
+preReq: 110.107 or 110.109 or 110.113
 Krieger School of Arts and Sciences	AS.110.212 (01)	Honors Linear Algebra [+]	Q	No	30	15	0	4.00	Fall 2015	Homewood Campus	MW 1:30PM - 2:45PM, F 1:30PM - 2:20PM	S. Zucker	Open	
+preReq: 110.107 or 110.109 or 110.113
 Whiting School of Engineering	EN.550.171 (01)	Discrete Mathematics [+]	Q	No	35	1	0	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, Th 9:00AM - 9:50AM	B. Castello	Open	
 Whiting School of Engineering	EN.550.171 (02)	Discrete Mathematics [+]	Q	No	30	0	4	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, Th 12:00PM - 12:50PM	B. Castello	Waitlist Only	
 Whiting School of Engineering	EN.550.171 (03)	Discrete Mathematics [+]	Q	No	30	1	1	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, Th 10:30AM - 11:20AM	B. Castello	Waitlist Only	
 Whiting School of Engineering	EN.550.171 (04)	Discrete Mathematics [+]	Q	No	35	3	0	4.00	Fall 2015	Homewood Campus	MWF 10:00AM - 10:50AM, Th 4:30PM - 5:20PM	B. Castello	Open	
 //ULE
 Krieger School of Arts and Sciences	AS.110.302 (01)	Differential Equations and Applications [+]	Q	No	35	1	7	4.00	Fall 2015	Homewood Campus	MWF 12:00PM - 12:50PM, T 1:30PM - 2:20PM	R. Brown	Waitlist Only	
+preReq: 110.107 or 110.109 or 110.113
 Krieger School of Arts and Sciences	AS.110.302 (02)	Differential Equations and Applications [+]	Q	No	35	2	9	4.00	Fall 2015	Homewood Campus	MWF 12:00PM - 12:50PM, T 3:00PM - 3:50PM	R. Brown	Waitlist Only	
 Krieger School of Arts and Sciences	AS.110.302 (03)	Differential Equations and Applications [+]	Q	No	35	3	2	4.00	Fall 2015	Homewood Campus	MWF 12:00PM - 12:50PM, Th 3:00PM - 3:50PM	R. Brown	Waitlist Only	
 Krieger School of Arts and Sciences	AS.110.302 (04)	Differential Equations and Applications [+]	Q	No	35	1	1	4.00	Fall 2015	Homewood Campus	MWF 12:00PM - 12:50PM, Th 4:30PM - 5:20PM	D. Brown, R. Brown	Waitlist Only	
@@ -263,6 +268,7 @@ Krieger School of Arts and Sciences	AS.110.302 (07)	Differential Equations and A
 Krieger School of Arts and Sciences	AS.110.302 (08)	Differential Equations and Applications [+]	Q	No	35	1	0	4.00	Fall 2015	Homewood Campus	MWF 1:30PM - 2:20PM, T 3:00PM - 3:50PM	R. Brown	Open	
 Krieger School of Arts and Sciences	AS.110.302 (09)	Differential Equations and Applications [+]	Q	No	35	21	0	4.00	Fall 2015	Homewood Campus	MWF 12:00PM - 12:50PM, Th 3:00PM - 3:50PM	R. Brown	Open	
 Krieger School of Arts and Sciences	AS.110.304 (01) Registration Restrictions	Elementary Number Theory [+]	Q	No	30	16	0	4.00	Fall 2015	Homewood Campus	TTh 9:00AM - 10:15AM	J. Kong	Open	
+preReq: 110.107 or 110.109 or 110.113
 Krieger School of Arts and Sciences	AS.110.306 (01)	Honors Differential Equations [+]	Q	No	30	15	0	4.00	Fall 2015	Homewood Campus	MW 12:00PM - 1:15PM, F 12:00PM - 12:50PM	J. Gell-redman	Open	
 Krieger School of Arts and Sciences	AS.110.311 (01)	Methods of Complex Analysis [+]	Q	No	30	15	0	4.00	Fall 2015	Homewood Campus	TTh 12:00PM - 1:15PM	Staff	Open	
 Krieger School of Arts and Sciences	AS.110.328 (01)	Non-Euclidean Geometry [+]	Q	No	40	30	0	4.00	Fall 2015	Homewood Campus	TTh 1:30PM - 2:45PM	M. Merling	Open	
