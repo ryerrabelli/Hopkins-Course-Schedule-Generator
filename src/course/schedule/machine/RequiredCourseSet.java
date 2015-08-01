@@ -293,17 +293,17 @@ public  class RequiredCourseSet extends HashSet<Requirable>  implements Requirab
         
         RequiredCourseSet CSMinorAnalysis = compSciMinorGen.duplicate();
         CSMinorAnalysis.add(getCourse("600.271"));
-        for (int i = 0; i<3; i++) CSMinorAnalysis.add(new GenericCourse("600.3<tag=csanalysis>"));
+        for (int i = 0; i<3; i++) CSMinorAnalysis.add(new GenericCourse("600.3<tag=csanalysis,for=csn>"));
         addMin("cs analysis", CSMinorAnalysis);
         
         RequiredCourseSet CSMinorSystems = compSciMinorGen.duplicate();
         CSMinorSystems.add(getCourse("600.233"));
-        for (int i = 0; i<3; i++) CSMinorSystems.add(new GenericCourse("600.3<tag=cssystems>"));
+        for (int i = 0; i<3; i++) CSMinorSystems.add(new GenericCourse("600.3<tag=cssystems,for=css>"));
         addMin("cs systems", CSMinorSystems);
         
         RequiredCourseSet CSMinorApp = compSciMinorGen.duplicate();
         CSMinorApp.add(new RequiredCourseSet(1,getCourse("600.233"), getCourse("600.271")));
-        for (int i = 0; i<3; i++) CSMinorApp.add(new GenericCourse("600.3<tag=csapplications>"));
+        for (int i = 0; i<3; i++) CSMinorApp.add(new GenericCourse("600.3<tag=csapplications,for=csp>"));
         addMin("cs applications", CSMinorApp);
     }
     
