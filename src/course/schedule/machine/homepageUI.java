@@ -5,6 +5,8 @@
  */
 package course.schedule.machine;
 
+import java.util.HashSet;
+
 /**
  *
  * @author niharikamalviya
@@ -673,66 +675,6 @@ public class homepageUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ComboOne14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne14ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne14ActionPerformed
-
-    private void ComboOne1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne1ActionPerformed
-
-    private void ComboOne2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne2ActionPerformed
-
-    private void ComboOne3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne3ActionPerformed
-
-    private void ComboOne4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne4ActionPerformed
-
-    private void ComboOne6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne6ActionPerformed
-
-    private void ComboOne7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne7ActionPerformed
-
-    private void ComboOne8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne8ActionPerformed
-
-    private void ComboOne9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne9ActionPerformed
-
-    private void ComboOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOneActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOneActionPerformed
-
-    private void ComboOne10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne10ActionPerformed
-
-    private void ComboOne11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne11ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne11ActionPerformed
-
-    private void ComboOne12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne12ActionPerformed
-
-    private void ComboOne13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne13ActionPerformed
-
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
-
     private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox7ActionPerformed
@@ -748,6 +690,66 @@ public class homepageUI extends javax.swing.JFrame {
     private void jComboBox11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox11ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox11ActionPerformed
+
+    private void ComboOne13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne13ActionPerformed
+
+    private void ComboOne12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne12ActionPerformed
+
+    private void ComboOne11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne11ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne11ActionPerformed
+
+    private void ComboOne10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne10ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne10ActionPerformed
+
+    private void ComboOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOneActionPerformed
+
+    private void ComboOne9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne9ActionPerformed
+
+    private void ComboOne8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne8ActionPerformed
+
+    private void ComboOne7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne7ActionPerformed
+
+    private void ComboOne6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne6ActionPerformed
+
+    private void ComboOne4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne4ActionPerformed
+
+    private void ComboOne3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne3ActionPerformed
+
+    private void ComboOne2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne2ActionPerformed
+
+    private void ComboOne1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne1ActionPerformed
+
+    private void ComboOne14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne14ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboOne14ActionPerformed
+
+    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     /**
      * @param args the command line arguments
