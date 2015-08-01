@@ -218,8 +218,8 @@ public class ManageTxtFiles {
         category = category.replace(".", "/");
         category = category.replace(" ", "_");
         category = category.replace("or/", "ors/");
-        RequiredCourseSet fromMap = RequiredCourseSet.categoryRequiredCourseSets.get(category.toLowerCase().trim().replace("_", " "));
-        if (fromMap != null) return fromMap;
+        RequiredCourseSet fromMap = RequiredCourseSet.categoryRequiredCourseSets.get(category.toLowerCase().trim().replace(" ", "_"));
+        if (fromMap != null) return fromMap.duplicate();
         
         String path = standardFilePath + category;
         FileReader fr;
