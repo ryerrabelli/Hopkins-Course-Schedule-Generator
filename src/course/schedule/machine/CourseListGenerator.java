@@ -45,7 +45,6 @@ public class CourseListGenerator {
             HashSet<HashSet<Course>> allPossibilities = getAllCoursePossibilities(new HashSet(), reqs);
             
            TreeSet<HashSet<Course>> subTakenPossibilities = new TreeSet<>(new Comparator() {
-           //   Note: this comparator imposes orderings that are inconsistent with equals.
                 @Override
                 public int compare(Object o1, Object o2) {
                     HashSet<Course> set1 = (HashSet<Course>) o1;
@@ -55,7 +54,7 @@ public class CourseListGenerator {
                         try {
                             int toAdd = Integer.parseInt(crs1.courseNum);
                             if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
-                            if (crs1.credits > 0.2) toAdd *= crs1.credits;
+                            //if (crs1.credits > 0.2) toAdd *= crs1.credits;
                             set1Num += toAdd * crs1.credits;
                         } catch (NumberFormatException nfe) {
                             
@@ -66,8 +65,8 @@ public class CourseListGenerator {
                         try {
                             int toAdd = Integer.parseInt(crs2.courseNum);
                             if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
-                            if (crs2.credits > 0.2) toAdd *= crs2.credits; 
-                            set2Num += toAdd;
+                            //if (crs2.credits > 0.2) toAdd *= crs2.credits; 
+                            set2Num += toAdd * crs2.credits;
                         } catch (NumberFormatException nfe) {
                             
                         }
