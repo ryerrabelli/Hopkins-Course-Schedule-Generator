@@ -153,25 +153,11 @@ public class Displayer extends javax.swing.JFrame {
 
         setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select 
-
-your Major", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
-
-javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 
-
-24), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select your Major", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 24), new java.awt.Color(0, 0, 255))); // NOI18N
 
         jComboBox7.setModel(new javax.swing.DefaultComboBoxModel(new String[] { 
 
-"Biomedical Engineering", "Chemical and Biomolecular Engineering", "Civil 
-
-Engineering", "Computer Engineering", "Electrical Engineering", "Engineering 
-
-Mechanics", "Environmental Engineering", "General Engineering", "Materials 
-
-Science and Engineering", "Mechanical Engineering", "Applied Mathematics and 
-
-Statistics" }));
+"Biomedical Engineering", "Chemical and Biomolecular Engineering", "Civil Engineering", "Computer Engineering", "Electrical Engineering", "Engineering Mechanics", "Environmental Engineering", "General Engineering", "Materials Science and Engineering", "Mechanical Engineering", "Applied Mathematics and Statistics" }));
 
         javax.swing.GroupLayout jPanel1Layout = new 
 
@@ -215,13 +201,7 @@ javax.swing.GroupLayout.PREFERRED_SIZE)
 
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Choose 
-
-AP Course", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
-
-javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 
-
-24), new java.awt.Color(0, 0, 204))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Choose AP Course", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 24), new java.awt.Color(0, 0, 204))); // NOI18N
 
         jLabel7.setText("AP Biology");
 
@@ -1249,15 +1229,7 @@ javax.swing.GroupLayout.PREFERRED_SIZE))
 
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Indicate 
-
-any pre-professional track", 
-
-javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
-
-javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 
-
-24), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Indicate any pre-professional track", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 24), new java.awt.Color(0, 0, 255))); // NOI18N
 
         jCheckBox3.setText("jPre Med");
 
@@ -1323,9 +1295,7 @@ javax.swing.GroupLayout(getContentPane());
 
             .addGroup(layout.createSequentialGroup()                
 
-.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADIN
-
-G)
+.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 
                     .addGroup(layout.createSequentialGroup()
 
@@ -1333,9 +1303,7 @@ G)
 
                         
 
-.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADIN
-
-G, false)
+.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
 
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 
 
@@ -1403,9 +1371,7 @@ Short.MAX_VALUE))
 
         );
 
-        jPanel2.getAccessibleContext().setAccessibleName("Please enter your AP/IB 
-
-scores");
+        jPanel2.getAccessibleContext().setAccessibleName("Please enter your AP/IB scores");
 
         pack();
 
@@ -1505,9 +1471,7 @@ scores");
 
         /* Set the Nimbus look and feel */
 
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code 
-
-(optional) ">
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
 
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look 
 
@@ -1537,27 +1501,19 @@ javax.swing.UIManager.getInstalledLookAndFeels()) {
 
         } catch (ClassNotFoundException ex) {            
 
-java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.loggin
-
-g.Level.SEVERE, null, ex);
+java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         } catch (InstantiationException ex) {            
 
-java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.loggin
-
-g.Level.SEVERE, null, ex);
+java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         } catch (IllegalAccessException ex) {            
 
-java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.loggin
-
-g.Level.SEVERE, null, ex);
+java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {            
 
-java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.loggin
-
-g.Level.SEVERE, null, ex);
+java.util.logging.Logger.getLogger(Displayer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         }
 
