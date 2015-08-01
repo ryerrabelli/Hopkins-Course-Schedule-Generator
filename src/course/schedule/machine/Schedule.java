@@ -655,7 +655,8 @@ public class Schedule {
                                     possibleSchedule.set(4,fifth.getSchedule());
                                     possibleSchedule.set(5,sixth.getSchedule());
                                     possibleSchedule.set(6,seventh.getSchedule());
-                                    
+                                    //System.out.println(possibleSchedule);
+                                    //System.out.println("************************");
                                     schedule.set(0,first);
                                     schedule.set(1,second);
                                     schedule.set(2,third);
@@ -679,7 +680,7 @@ public class Schedule {
 }     
         }
         }
-       return null;
+       return schedule;
     }
     
      
