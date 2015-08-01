@@ -6,6 +6,7 @@ package course.schedule.machine;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,7 +37,7 @@ public class CourseListGenerator {
         if (categories == null || categories.length ==0) return new ArrayList();
         try {
             //Option 1
-            RequiredCourseSet reqs = ManageTxtFiles.getRequiredCourses(categories[0]);
+           RequiredCourseSet reqs = ManageTxtFiles.getRequiredCourses(categories[0]);
             for (int i = 1; i < categories.length; i++) {
                 reqs.addAll(ManageTxtFiles.getRequiredCourses(categories[i]));
             }
@@ -44,7 +45,6 @@ public class CourseListGenerator {
             HashSet<HashSet<Course>> allPossibilities = getAllCoursePossibilities(new HashSet(), reqs);
             
            TreeSet<HashSet<Course>> subTakenPossibilities = new TreeSet<>(new Comparator() {
-           //   Note: this comparator imposes orderings that are inconsistent with equals.
                 @Override
                 public int compare(Object o1, Object o2) {
                     HashSet<Course> set1 = (HashSet<Course>) o1;
@@ -54,7 +54,7 @@ public class CourseListGenerator {
                         try {
                             int toAdd = Integer.parseInt(crs1.courseNum);
                             if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
-                            if (crs1.credits > 0.2) toAdd *= crs1.credits;
+                            //if (crs1.credits > 0.2) toAdd *= crs1.credits;
                             set1Num += toAdd * crs1.credits;
                         } catch (NumberFormatException nfe) {
                             
@@ -65,8 +65,8 @@ public class CourseListGenerator {
                         try {
                             int toAdd = Integer.parseInt(crs2.courseNum);
                             if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
-                            if (crs2.credits > 0.2) toAdd *= crs2.credits; 
-                            set2Num += toAdd;
+                            //if (crs2.credits > 0.2) toAdd *= crs2.credits; 
+                            set2Num += toAdd * crs2.credits;
                         } catch (NumberFormatException nfe) {
                             
                         }
@@ -79,14 +79,16 @@ public class CourseListGenerator {
                 }
             });
             //HashSet<HashSet<Course>> subTakenPossibilities = new HashSet<>(); 
-            subtractCompletedCourses:
+            subtractCompletedAndCantTakeCourses:
             for (Iterator<HashSet<Course>> possibIt = allPossibilities.iterator(); possibIt.hasNext();) {
                 HashSet<Course> possibility = possibIt.next();
                 HashSet<Course> subTakenPossib = new HashSet<>();
                 for (Iterator<Course> it = possibility.iterator(); it.hasNext();) {
                     Course next = it.next();
                     if (!next.isFulfilled(coursesTaken)) {
-                        subTakenPossib.add(next);
+                        if (next instanceof HopkinsCourse) {
+                            if (((HopkinsCourse) next).canTake(coursesTaken)) subTakenPossib.add(next);
+                        } else subTakenPossib.add(next);
                     }
                 }
                // subTakenPossibilities.first().equals(subTakenPossib);
@@ -126,15 +128,42 @@ public class CourseListGenerator {
         return courses;
     } */
     
-    public static HashSet<HashSet<Course>> getAllCoursePossibilities(HashSet<Course> alreadyPossibility, RequiredCourseSet category1) {
+    public static RequiredCourseSet optimizeAdd(RequiredCourseSet[] categories) {
+        if (categories.length == 0) return new RequiredCourseSet(0);
+        RequiredCourseSet toReturn = categories[0];
+        for (int i = 1; i < categories.length; i++) {
+            RequiredCourseSet category = categories[i];
+            if (category.getTrueNumRequired() != category.size()) continue;
+            for (Requirable inner : category) {
+                if (inner instanceof GenericCourse) {
+                    
+                    for (Requirable toReturnReq : toReturn) {
+                       // if (toReturn instanceof )
+                    }
+                } else if (inner instanceof HopkinsCourse) {
+                    
+                }
+            }
+            
+        }
+        return null;
+    }
+    
+    public static HashSet<HashSet<Course>> getAllCoursePossibilities(final HashSet<Course> N_alreadyPossibility, RequiredCourseSet category1) {
         HashSet<HashSet<Course>> allPossibilities = new HashSet<>();
+        HashSet<Course> alreadyPossibility = (HashSet<Course>) N_alreadyPossibility.clone();
         //RequiredCourseSet category1 = new RequiredCourseSet(0);
         //for (RequiredCourseSet cat : categories) category1.addAll(cat);
         allPossibilities.add(alreadyPossibility);
         if (category1.getNumRequired() == 0) {
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
-                if (req1 instanceof Course) alreadyPossibility.add((Course) req1);
+                category1.getNumRequired();
+       //         if (req1 instanceof Course && ((Course) req1).deptNum.equals("110"))
+       //             System.out.println("Here");
+                
+                if (req1 instanceof Course) 
+                    alreadyPossibility.add((Course) req1);
                 else if (req1 instanceof RequiredCourseSet) {
                     //testing
                     
@@ -143,6 +172,8 @@ public class CourseListGenerator {
             }
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
+          //                      if (req1 instanceof Course && ((Course) req1).deptNum.equals("110"))
+             //       System.out.println("Here");
                 if (req1 instanceof Course) continue;
                 else if (req1 instanceof RequiredCourseSet) {
                     if (((RequiredCourseSet) req1).getNumRequired() == 1 || ((RequiredCourseSet) req1).getNumRequired() == 0) {
@@ -175,7 +206,7 @@ public class CourseListGenerator {
                          //       HashSet<Course> onePossib = new HashSet<Course>(alreadyPossibility);
                            //     onePossib.addAll(option);
                              //   allPossibilities.add(onePossib);
-                        }/* else if ( ((RequiredCourseSet) req1).getNumRequired() == 0) {
+                    }/* else if ( ((RequiredCourseSet) req1).getNumRequired() == 0) {
                             HashSet<HashSet<Course>> newPossibilities = new HashSet<>();
                             for (Iterator<HashSet<Course>> allPossibIt = allPossibilities.iterator(); allPossibIt.hasNext();) {
                                 HashSet<Course> inSetPossib = allPossibIt.next();
@@ -196,6 +227,8 @@ public class CourseListGenerator {
             //allPossibilities.remove(alreadyPossibility);
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
+             //                   if (req1 instanceof Course && ((Course) req1).deptNum.equals("110"))
+               //     System.out.println("Here");
                 if (req1 instanceof Course) {
                     HashSet<Course> newPossib = new HashSet<>(alreadyPossibility);
                     newPossib.add((Course) req1);
@@ -206,8 +239,21 @@ public class CourseListGenerator {
             }
             for (Iterator<Requirable> cat1It = category1.iterator(); cat1It.hasNext();) {
                 Requirable req1 = cat1It.next();
+                
+              //  if (req1 instanceof Course && ((Course) req1).deptNum.equals("110"))
+                //    System.out.println("Here");
                 if (req1 instanceof Course) continue;
                 else if (req1 instanceof RequiredCourseSet) {
+                    for (Requirable req : (RequiredCourseSet) req1) {
+                        
+                    }
+                    ((RequiredCourseSet) req1).getNumRequired();
+                    // [030.105, 171.103, 110.106, 110.108, 171.101, 173.112, 030.101, 030.225, 020.373, 020.306, 020.316, 020.363, 020.315, 020.305, 020.303]
+                    // [030.105, 171.101, 173.112, 030.101, 110.106, 020.316, 020.303, 020.340, 020.363, 020.305, 020.306, 020.315]
+                    
+                    //[030.101, 173.112, 171.101, 030.105, 110.108, 020.306, 020.303, 020.316, 020.315, 020.305, 020.363, 020.373] 12
+                    //[030.101, 173.112, 171.101, 030.105, 110.106, 020.306, 020.303, 020.316, 020.315, 020.305, 020.363, 030.225, 020.340] 13
+                    
                     for(HashSet<Course> hsc : getAllCoursePossibilities(alreadyPossibility, (RequiredCourseSet) req1)) {
                         HashSet<Course> newPossib = new HashSet<>(alreadyPossibility);
                         newPossib.addAll(hsc);
@@ -220,6 +266,15 @@ public class CourseListGenerator {
         return allPossibilities;
     }
     
+    
+    /*
+     * Old:
+     * [171.101, 030.105, 171.103, 030.101, 110.108, 110.106, 173.112, 020.315, 020.340, 020.363, 020.316, 020.306, 020.305, 020.303]
+     * [171.103, 110.106, 173.112, 030.105, 110.108, 171.101, 030.101, 020.363, 020.315, 020.305, 020.306, 020.340, 020.316, 020.303]
+     * 
+     * New:
+     * [030.105, 030.101, 030.225, 020.363, 020.373, 020.303, 020.305, 020.316, 020.306, 020.315]
+     */
     public static RequiredCourseSet generateLeastRequirements(HashSet<Course> coursesBeingTaken, RequiredCourseSet category1, RequiredCourseSet category2) {
         HashSet<Course> inBothCourses = category1.getSetOfCourses();
         HashSet<Course> courses2 = category2.getSetOfCourses();
@@ -381,6 +436,8 @@ public class CourseListGenerator {
         addPriorities(priorities, preReqs, 1f);
         ArrayList<HopkinsCourse> sortedCourses = new ArrayList<>();
         
+        
+        //Converts the map into an arraylist
         Iterator<HopkinsCourse> it = priorities.keySet().iterator();
         sortedCourses.add(it.next());
         for (;it.hasNext();) {
@@ -410,10 +467,58 @@ public class CourseListGenerator {
                 toAddTo.put((HopkinsCourse) preReq, previousPriority == null ? factor - 0.001f*((Course) preReq).getLevel() : previousPriority + factor - 0.001f*((Course) preReq).getLevel());
             }
         }
+        HashMap<HopkinsCourse, HashSet<String>> purposeMap = new HashMap<>();
+        HashMap<HopkinsCourse, Integer> occurrences = new HashMap<>();
         for (Course preReq : preReqs) {
             if (preReq instanceof GenericCourse) {
-                boolean added = false;
                 for (HopkinsCourse sample : ((GenericCourse) preReq).getPossibleHopkinsCourses()) {
+                    if (purposeMap.get(sample) != null && purposeMap.get(sample).contains(((GenericCourse) preReq).getPurpose())) continue;
+                    if (occurrences.get(sample) == null) occurrences.put(sample, 1);
+                    else occurrences.put(sample, occurrences.get(sample) + 1);
+                    if (purposeMap.get(sample) == null) purposeMap.put(sample, new HashSet<>(Arrays.asList(((GenericCourse) preReq).getPurpose()))) ;
+                    else purposeMap.get(sample).add(((GenericCourse) preReq).getPurpose());
+                }
+            }
+        }
+        TreeSet<Map.Entry<HopkinsCourse,Integer>> orderedOccurrences = new TreeSet<>(new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                int dif = ((Map.Entry<HopkinsCourse, Integer>) o1).getValue().compareTo( ((Map.Entry<HopkinsCourse, Integer>) o2).getValue());
+                if (dif != 0) return dif;
+                dif = ((Map.Entry<HopkinsCourse, Integer>) o1).getKey().courseNum.compareToIgnoreCase(((Map.Entry<HopkinsCourse, Integer>) o2).getKey().deptNum);
+                return dif == 0 ? o1.hashCode() - o2.hashCode() : dif;
+            }
+        });
+        orderedOccurrences.addAll(occurrences.entrySet());
+        for (Course preReq : preReqs) {
+            if (preReq instanceof GenericCourse) {
+                boolean addedTo = false;
+                for (Iterator<Map.Entry<HopkinsCourse, Integer>> oIt = orderedOccurrences.iterator();oIt.hasNext();) {
+                    HopkinsCourse oftenCourse = oIt.next().getKey();
+                    if (purposeMap.get(oftenCourse).contains(((GenericCourse) preReq).getPurpose()))
+                        purposeMap.get(oftenCourse).remove(((GenericCourse) preReq).getPurpose()); 
+                    else if (" ".equals(" ")) continue;
+                    if (((GenericCourse) preReq).isSatisfiedBy(oftenCourse)) {
+                        addedTo = true;
+                        if (toAddTo.get(oftenCourse) == null) {
+                            toAddTo.put(oftenCourse, factor - 0.001f*((Course) preReq).getLevel());
+                        } else toAddTo.put(oftenCourse, toAddTo.get(oftenCourse) + factor - 0.001f*((Course) preReq).getLevel());
+                        break;
+                    }
+                }
+                if (!addedTo) System.out.println("Error. The GenericCourse was not added");
+            } else continue;
+        }
+        if (5*10 >2) {
+            return;
+        }
+       /* for (Course preReq : preReqs) {
+            if (preReq instanceof GenericCourse) {
+                boolean added = false;
+                //adds only one possibility for the GenericCourse
+                for (HopkinsCourse sample : ((GenericCourse) preReq).getPossibleHopkinsCourses()) {
+                    if (occurrences.get(sample) == null) occurrences.put(sample, 1);
+                    else occurrences.put(sample, occurrences.get(sample) + 1);
                     if (toAddTo.get(sample) == null) {
                         toAddTo.put(sample, factor - 0.001f*((Course) preReq).getLevel());
                         added = true;
@@ -423,7 +528,7 @@ public class CourseListGenerator {
                 if (!added)
                     System.out.println("Error not of courses to create distinctive list");
             }
-        }
+        }*/
     }
     /*
     public static ArrayList<HopkinsCourse> getPriorities(RequiredCourseSet preReqs) {
