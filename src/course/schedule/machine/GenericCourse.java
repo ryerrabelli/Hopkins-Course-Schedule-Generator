@@ -16,7 +16,7 @@ import java.util.TreeSet;
 public class GenericCourse extends Course {
 
     //represents what this course will fulfill. It is to make sure two generic courses can have the same course when optimizing a schedule
-    String purpose = "";
+    String purpose = Integer.toString(this.hashCode());
     
     protected HashSet<String> tags = new HashSet<>();
     
@@ -44,6 +44,7 @@ public class GenericCourse extends Course {
                         case "tags":
                             tags.add(postEq.toLowerCase());
                             break;
+                        case "purpose":
                         case "for":
                             purpose = postEq.toLowerCase();
                             break;
@@ -155,5 +156,5 @@ public class GenericCourse extends Course {
         }
         return toReturn;
     }
-    
+    public String getPurpose() { return purpose; }
 }
