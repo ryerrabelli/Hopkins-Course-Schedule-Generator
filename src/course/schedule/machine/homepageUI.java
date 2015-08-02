@@ -1012,26 +1012,32 @@ public class homepageUI extends javax.swing.JFrame {
         ArrayList<String> categories = category();
           HashSet<HopkinsCourse> coursesTaken = merge();
         String one, two, three;
+        one = "";
+        two = "";
+        three = "";
         one = categories.get(0);
+        if (categories.size() > 1)
         two = categories.get(1);
+        
+         if (categories.size() > 2)
         three = categories.get(2);
         ArrayList<HopkinsCourse> priorityCourses;
         if (one.length() != 0)
         {
             if (two.length() != 0 && three.length() != 0)
-                priorityCourses = JavaCourseScheduleGenerator.generateBestSchedule(coursesTaken,one,two,three);
+                priorityCourses = CourseListGenerator.generateBestSchedule(coursesTaken,one,two,three);
             else if (two.length() == 0 && three.length() != 0)
             {
-                priorityCourses = JavaCourseScheduleGenerator.generateBestSchedule(coursesTaken,one,three);
+                priorityCourses = CourseListGenerator.generateBestSchedule(coursesTaken,one,three);
             }
             
             else if (two.length() != 0 && three.length() == 0)
             {
-                priorityCourses = JavaCourseScheduleGenerator.generateBestSchedule(coursesTaken,one,two);
+                priorityCourses = CourseListGenerator.generateBestSchedule(coursesTaken,one,two);
             }
             else if (two.length() == 0 && three.length() == 0)
             {
-                priorityCourses = JavaCourseScheduleGenerator.generateBestSchedule(coursesTaken,one);
+                priorityCourses = CourseListGenerator.generateBestSchedule(coursesTaken,one);
             }
         }
       
