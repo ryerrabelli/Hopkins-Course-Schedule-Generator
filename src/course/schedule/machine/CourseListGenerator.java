@@ -32,8 +32,18 @@ public class CourseListGenerator {
     public static void main(String[] args) {
         // TODO code application logic here
     }
-    
-    public static ArrayList<HopkinsCourse> generateBestSchedule(Set<HopkinsCourse> coursesTaken, String...categories) {
+    public static ArrayList<HopkinsCourse> generateBestSchedule(Set<HopkinsCourse> coursesTaken, ArrayList<String> categories) {
+        for (Iterator<String> it = categories.iterator();it.hasNext();) {
+            String next = it.next();
+            if (next.isEmpty()) it.remove();;
+        }
+        String[] toPut = new String[categories.size()];
+        for (int i = 0; i < categories.size();i++) {
+            toPut[i] = categories.get(i);
+        }
+        return generateBestSchedule(coursesTaken, toPut);
+    }
+    public static ArrayList<HopkinsCourse> generateBestSchedule(Set<HopkinsCourse> coursesTaken, String[] categories) {
         if (categories == null || categories.length ==0) return new ArrayList();
         try {
             //Option 1
