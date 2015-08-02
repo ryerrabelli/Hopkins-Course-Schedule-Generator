@@ -1067,6 +1067,7 @@ public class Displayer extends javax.swing.JFrame {
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         // TODO add your handling code here:
         addAPIB();
+        scheduleDisplayer.setText("");
         ArrayList<String> categories = category();
         if (categories == null) return;
           HashSet<HopkinsCourse> coursesTaken = merge();
