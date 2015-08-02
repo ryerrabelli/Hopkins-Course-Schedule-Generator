@@ -29,6 +29,7 @@ public class HopkinsCourse extends Course {
     public HopkinsCourse(String courseTitle, String verbalName, String area, boolean isWritingIntensive, boolean isDesign, boolean isLab, float creditsWorth, Semester semester, int year) {
         this.credits = creditsWorth;
         this.area = area.toUpperCase().trim();
+        this.verbalName = verbalName;
         String[] courseParts = courseTitle.split("\\Q.\\E", 3);
         if (courseParts.length == 3) {
             courseParts[0] = courseParts[0].trim().toUpperCase();
@@ -55,7 +56,6 @@ public class HopkinsCourse extends Course {
                 school = Integer.parseInt(deptNum) >= 500 ? 2 : 1;
             } catch (NumberFormatException ex) { System.out.println("Error: deptNum is not a number");}
         } else System.out.println("Course title does not have enough parts: " + courseTitle);
-        // MUST FINISH LATER
         
     }
     
