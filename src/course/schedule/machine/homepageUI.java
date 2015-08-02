@@ -20,7 +20,14 @@ public class homepageUI extends javax.swing.JFrame {
      * Creates new form homepageUI
      */
     public homepageUI() {
+       
         initComponents();
+        try{
+        RequiredCourseSet.createCategoryRequiredCourseLists();
+        }
+        catch(IOException a){
+            
+        }
     }
 
     /**
@@ -78,9 +85,9 @@ public class homepageUI extends javax.swing.JFrame {
         submit = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        ComboOne15 = new javax.swing.JComboBox();
+        credit = new javax.swing.JComboBox();
         jPanel5 = new javax.swing.JPanel();
-        ComboOne16 = new javax.swing.JComboBox();
+        term = new javax.swing.JComboBox();
         jPanel6 = new javax.swing.JPanel();
         minor = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
@@ -91,6 +98,8 @@ public class homepageUI extends javax.swing.JFrame {
         accepted = new javax.swing.JLabel();
         label1 = new java.awt.Label();
         errorMessageMajor = new javax.swing.JLabel();
+        schedule = new javax.swing.JPanel();
+        generatedSchedule = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("WelCome to JHOP Course Selection ");
@@ -442,10 +451,10 @@ public class homepageUI extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Approx. # of Credits Wanted This Term", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 24), new java.awt.Color(0, 0, 255))); // NOI18N
 
-        ComboOne15.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Please select one", "12", "12.5", "13", "13.5", "14", "14.5", "15", "15.5", "16", "16.5", "17", "17.5", "18", "18.5", "19", "19.5" }));
-        ComboOne15.addActionListener(new java.awt.event.ActionListener() {
+        credit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Please select one", "12", "12.5", "13", "13.5", "14", "14.5", "15", "15.5", "16", "16.5", "17", "17.5", "18", "18.5", "19", "19.5" }));
+        credit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ComboOne15ActionPerformed(evt);
+                creditActionPerformed(evt);
             }
         });
 
@@ -455,22 +464,22 @@ public class homepageUI extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ComboOne15, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(credit, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(ComboOne15, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(credit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Current Term", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 24), new java.awt.Color(0, 0, 255))); // NOI18N
 
-        ComboOne16.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Please select one", "Fall", "Intersession", "Spring", "Summer" }));
-        ComboOne16.addActionListener(new java.awt.event.ActionListener() {
+        term.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Please select one", "Fall", "Intersession", "Spring", "Summer" }));
+        term.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ComboOne16ActionPerformed(evt);
+                termActionPerformed(evt);
             }
         });
 
@@ -480,13 +489,13 @@ public class homepageUI extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ComboOne16, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(term, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(ComboOne16, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(term, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 16, Short.MAX_VALUE))
         );
 
@@ -581,6 +590,27 @@ public class homepageUI extends javax.swing.JFrame {
 
         errorMessageMajor.setForeground(new java.awt.Color(250, 0, 0));
 
+        schedule.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Your Schedule will appear below", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 24), new java.awt.Color(0, 0, 255))); // NOI18N
+
+        generatedSchedule.setText("jLabel13");
+
+        javax.swing.GroupLayout scheduleLayout = new javax.swing.GroupLayout(schedule);
+        schedule.setLayout(scheduleLayout);
+        scheduleLayout.setHorizontalGroup(
+            scheduleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scheduleLayout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(generatedSchedule)
+                .addContainerGap(1138, Short.MAX_VALUE))
+        );
+        scheduleLayout.setVerticalGroup(
+            scheduleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scheduleLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(generatedSchedule)
+                .addContainerGap(49, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -615,9 +645,15 @@ public class homepageUI extends javax.swing.JFrame {
                                         .addComponent(errorMessageMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE))))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(573, 573, 573)
-                        .addComponent(submit)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(573, 573, 573)
+                                .addComponent(submit))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(schedule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -646,7 +682,8 @@ public class homepageUI extends javax.swing.JFrame {
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(submit)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(schedule, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.getAccessibleContext().setAccessibleName("Please enter your AP/IB scores");
@@ -658,13 +695,13 @@ public class homepageUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_majorActionPerformed
 
-    private void ComboOne15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne15ActionPerformed
+    private void creditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_creditActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne15ActionPerformed
+    }//GEN-LAST:event_creditActionPerformed
 
-    private void ComboOne16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboOne16ActionPerformed
+    private void termActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_termActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ComboOne16ActionPerformed
+    }//GEN-LAST:event_termActionPerformed
 
     private void minorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minorActionPerformed
         // TODO add your handling code here:
@@ -1021,7 +1058,7 @@ public class homepageUI extends javax.swing.JFrame {
         
          if (categories.size() > 2)
         three = categories.get(2);
-        ArrayList<HopkinsCourse> priorityCourses;
+        ArrayList<HopkinsCourse> priorityCourses = new ArrayList<HopkinsCourse>();
         if (one.length() != 0)
         {
             if (two.length() != 0 && three.length() != 0)
@@ -1040,9 +1077,16 @@ public class homepageUI extends javax.swing.JFrame {
                 priorityCourses = CourseListGenerator.generateBestSchedule(coursesTaken,one);
             }
         }
+      double desiredCredits = Double.parseDouble(credit.getSelectedItem().toString());
+      String stringSemester = term.getSelectedItem().toString().toUpperCase();
+      HopkinsClass.Semester currentSemester = HopkinsClass.Semester.valueOf(stringSemester);
       
+       ArrayList<HopkinsClass> finalSchedule = Schedule.matchTimes(priorityCourses, desiredCredits, currentSemester);
+       generatedSchedule.setText(finalSchedule.toString());
     }//GEN-LAST:event_submitActionPerformed
 
+    
+    
     private void statActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_statActionPerformed
@@ -1133,8 +1177,6 @@ public class homepageUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox ComboOne15;
-    private javax.swing.JComboBox ComboOne16;
     private javax.swing.JLabel accepted;
     private java.awt.Button addTakenCourses;
     private javax.swing.JComboBox bio;
@@ -1143,9 +1185,11 @@ public class homepageUI extends javax.swing.JFrame {
     private javax.swing.JComboBox chem;
     private javax.swing.JComboBox compA;
     private javax.swing.JComboBox compAB;
+    private javax.swing.JComboBox credit;
     private javax.swing.JComboBox enviro;
     private javax.swing.JLabel errorMessage;
     private javax.swing.JLabel errorMessageMajor;
+    private javax.swing.JLabel generatedSchedule;
     private javax.swing.JComboBox ibBio;
     private javax.swing.JComboBox ibChem;
     private javax.swing.JComboBox ibComp;
@@ -1189,8 +1233,10 @@ public class homepageUI extends javax.swing.JFrame {
     private javax.swing.JComboBox physElec;
     private javax.swing.JComboBox physMech;
     private javax.swing.JCheckBox premed;
+    private javax.swing.JPanel schedule;
     private javax.swing.JComboBox stat;
     private javax.swing.JButton submit;
     private javax.swing.JTextField takenCourse;
+    private javax.swing.JComboBox term;
     // End of variables declaration//GEN-END:variables
 }
