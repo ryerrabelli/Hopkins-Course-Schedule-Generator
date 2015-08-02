@@ -1,6 +1,13 @@
 
 package course.schedule.machine;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
 
  *
@@ -18,9 +25,21 @@ public class Displayer extends javax.swing.JFrame {
      */
 
     public Displayer() {
-
         initComponents();
-
+        System.out.println("Test");
+        try {
+            RequiredCourseSet.createCategoryRequiredCourseLists();
+            System.out.println("[   1   |    2   |    3   |    4   |    5   |    6   |    7   |    8   |    9   |   10   |   11   |   12   |   13   |   14   |   15   |   16   |   17   |   18   |   19   |   20   |   21   |   22   |   23   |   24   |   25   |   26   |   27   | ");
+            //for (int i =0; i <5;i++) 
+             ArrayList c = CourseListGenerator.generateBestSchedule(new HashSet(Arrays.asList(HopkinsCourse.getCourse("030.101"))), "majors/biophysics");
+            ArrayList d =
+                CourseListGenerator.generateBestSchedule(new HashSet(), "majors/biophysics");
+            //c.removeAll(d);
+            System.out.println(c);
+        } catch (IOException ex) {
+            Logger.getLogger(Displayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       // System.exit(0);
     }
 
     /**

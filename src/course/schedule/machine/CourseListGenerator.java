@@ -52,10 +52,14 @@ public class CourseListGenerator {
                     float set1Num = 0;
                     for (Course crs1 : set1) {
                         try {
-                            int toAdd = Integer.parseInt(crs1.courseNum);
-                            if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
-                            //if (crs1.credits > 0.2) toAdd *= crs1.credits;
-                            set1Num += toAdd * crs1.credits;
+                            if (crs1.equals(HopkinsCourse.getCourse("030.100"))) 
+                                set1Num = Integer.MAX_VALUE;
+                            else {
+                                int toAdd = Integer.parseInt(crs1.courseNum);
+                                if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
+                                //if (crs1.credits > 0.2) toAdd *= crs1.credits;
+                                set1Num += toAdd * crs1.credits;
+                            }
                         } catch (NumberFormatException nfe) {
                             
                         }
@@ -63,10 +67,14 @@ public class CourseListGenerator {
                     float set2Num = 0;
                     for (Course crs2 : set2) {
                         try {
-                            int toAdd = Integer.parseInt(crs2.courseNum);
-                            if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
-                            //if (crs2.credits > 0.2) toAdd *= crs2.credits; 
-                            set2Num += toAdd * crs2.credits;
+                            if (crs2.equals(HopkinsCourse.getCourse("030.100")))
+                                set2Num = Integer.MAX_VALUE;
+                            else {
+                                int toAdd = Integer.parseInt(crs2.courseNum);
+                                if (toAdd > 0) { while (toAdd < 100) toAdd *= 10; }
+                                //if (crs2.credits > 0.2) toAdd *= crs2.credits; 
+                                set2Num += toAdd * crs2.credits;
+                            }
                         } catch (NumberFormatException nfe) {
                             
                         }
@@ -94,7 +102,7 @@ public class CourseListGenerator {
                // subTakenPossibilities.first().equals(subTakenPossib);
                 subTakenPossibilities.add(subTakenPossib);
             }
-            return getPriorities(subTakenPossibilities.first());
+            return getPriorities(coursesTaken,subTakenPossibilities.first());
         /*    //Option 2
             RequiredCourseSet leastReqs = ManageTxtFiles.getRequiredCourses(categories[0]);
             for (int i = 1; i < categories.length; i++) {
@@ -430,7 +438,7 @@ public class CourseListGenerator {
         return 0;
     }*/
    
-    public static ArrayList<HopkinsCourse> getPriorities(Collection<Course> preReqs) {
+    public static ArrayList<HopkinsCourse> getPriorities(Set<HopkinsCourse> coursesTaken,Collection<Course> preReqs) {
         // Generic Courses must be added before this step
         HashMap<HopkinsCourse, Float> priorities = new HashMap<>();
         addPriorities(priorities, preReqs, 1f);
@@ -442,6 +450,7 @@ public class CourseListGenerator {
         sortedCourses.add(it.next());
         for (;it.hasNext();) {
             HopkinsCourse currentCourse = it.next();
+            if (coursesTaken.contains(currentCourse)) continue;
             float currentPriority = priorities.get(currentCourse);
             boolean hasAdded;
             findSpot:

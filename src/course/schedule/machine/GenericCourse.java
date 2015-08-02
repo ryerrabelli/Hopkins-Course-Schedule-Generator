@@ -157,4 +157,18 @@ public class GenericCourse extends Course {
         return toReturn;
     }
     public String getPurpose() { return purpose; }
+    
+    @Override
+    public String toString() {
+        String nDeptNum = deptNum.isEmpty() ? "000" : deptNum;
+        String nPurpose = purpose;
+        String toReturn = nDeptNum + "." + courseNum + "<" + "for=" + purpose;
+        if (!area.isEmpty()) toReturn = toReturn + ", area="+area;
+        if (credits!=0) toReturn = toReturn + ", credits="+credits;
+        for (String tag : tags) {
+            toReturn = toReturn + ", tag=" + tag;
+        }
+        return toReturn + ">";
+    }
+    
 }

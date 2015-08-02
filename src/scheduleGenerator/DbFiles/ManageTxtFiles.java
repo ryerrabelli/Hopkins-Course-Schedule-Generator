@@ -40,6 +40,8 @@ public class ManageTxtFiles {
     private final static String loginPath = "/Users/ryerrabelli/Physics/src/physics/DbFiles/Logins.txt";
     private final static String helpFolder = "/Users/ryerrabelli/Physics/src/physics/DbFiles/Help/";
     
+    public static boolean hasCoursesBeenCalled = false;
+    
     private static String r = "1";
     
     //School	Class #	Title	Areas	Writing Intensive	Max Seats	Open Seats	Waitlisted	Credits	Term	Location	Day-Times	Instructor(s)	Status	Select
@@ -151,6 +153,10 @@ public class ManageTxtFiles {
         txtRead.close();
         fr.close();
 
+        //AP chem score of 4
+        HopkinsCourse.putCourse("030.100",new HopkinsCourse("030.100","AP Chem Score of 4", "N", false, false , false, 4, Semester.SPRING, 2014));
+        
+        
         addingRequirements:
         for (Iterator<String> it = precoReqSet.iterator(); it.hasNext();) {
             String[] lines = it.next().split(newLn);
@@ -176,7 +182,7 @@ public class ManageTxtFiles {
             if (coReqs != null) course.addCoReq(coReqs);
             
         }
-        
+        hasCoursesBeenCalled = true;
         addTags();
     }
     private static void addTags() throws IOException {

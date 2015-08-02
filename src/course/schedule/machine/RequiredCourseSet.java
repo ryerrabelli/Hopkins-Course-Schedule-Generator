@@ -36,6 +36,10 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
     public RequiredCourseSet(int numRequired, Object...reqs) {
         this.numRequired = numRequired;
         for (Object req : reqs) {
+            if (req == null) {
+                System.out.println("Note, a course in the RCS constructor was found to be null");
+                continue;
+            }
             if (req instanceof HopkinsCourse) this.add((HopkinsCourse) req);
             else if (req instanceof GenericCourse) this.add((GenericCourse) req);
             else if (req instanceof RequiredCourseSet) {
@@ -85,10 +89,14 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         }
     } 
     
-    //Not finished, will duplicate input
-    public RequiredCourseSet(Collection<Requirable> reqCourseSet) {
+    public RequiredCourseSet(RequiredCourseSet reqCourseSet) {
+        this.numRequired = reqCourseSet.numRequired;
         for (Iterator<Requirable> i = reqCourseSet.iterator(); i.hasNext(); ) {
-            Requirable requirement = i.next();
+            Requirable next = i.next();
+            if (next instanceof HopkinsCourse) this.add((HopkinsCourse) next);
+            else if (next instanceof GenericCourse) this.add( new GenericCourse( ((GenericCourse) next).toString()) );
+            else if (next instanceof RequiredCourseSet) this.add( ((RequiredCourseSet) next).duplicate());
+            else System.out.println("Error. Requirable is not one of the three categories");
         }
     }
         
@@ -168,7 +176,22 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         calc3.add(HopkinsCourse.getCourse("110.202"));
         calc3.add(getCourse("110.211"));
         addCat("calc 3", calc3);
-
+        
+        // Linear Algebra and Differential Equations, 2 separate courses
+        RequiredCourseSet linAlgDifEq = new RequiredCourseSet(0); 
+        linAlgDifEq.add(getCourse("110.201"));
+        linAlgDifEq.add(getCourse("110.302"));
+        addCat("lin alg dif eq", linAlgDifEq);
+        
+        //Linear Algebra and Differential Equations, other ways to fill with 2 courses
+        
+        RequiredCourseSet LADEPlus = new RequiredCourseSet(1);
+        LADEPlus.add(getCourse("550.291"));
+        LADEPlus.add(new GenericCourse("110.3<credits=4>"));
+        RequiredCourseSet linAlgDifEq2Courses = new RequiredCourseSet(1);
+        linAlgDifEq2Courses.add(LADEPlus);
+        linAlgDifEq2Courses.add(linAlgDifEq);
+        
         // physics biological science majors
         RequiredCourseSet physicsBio = new RequiredCourseSet(0);
         physicsBio.add(getCourse("171.103"));
@@ -206,21 +229,25 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         addCat("physics with lab", physics);
         
         // intro chem with lab
-        RequiredCourseSet chemLabOrAP = new RequiredCourseSet(1);
         RequiredCourseSet chemLab = new RequiredCourseSet(0);
         chemLab.add(getCourse("030.101"));
         chemLab.add(getCourse("030.102"));
         chemLab.add(getCourse("030.105"));
         chemLab.add(getCourse("030.106"));
+        RequiredCourseSet chemLabOrAP = new RequiredCourseSet(1);
         chemLabOrAP.add(chemLab);
-        chemLabOrAP.add(getCourse("030.103"));
+        chemLabOrAP.add(new RequiredCourseSet(0, getCourse("030.100"), getCourse("030.103")));
         addCat("chem with lab", chemLabOrAP);
         
         // orgo
-        RequiredCourseSet orgoLab = new RequiredCourseSet(1);
-        orgoLab.add(getCourse("030.205"));
+        RequiredCourseSet orgo = new RequiredCourseSet(0);
+        orgo.add(getCourse("030.205"));
+        orgo.add(new RequiredCourseSet(1, getCourse("030.206"), getCourse("030.212")));
+        addCat("orgo", orgo);
+        
+        //orgo lab
+        RequiredCourseSet orgoLab = orgo.duplicate();
         orgoLab.add(new RequiredCourseSet(1, getCourse("030.225"), getCourse("030.227")));
-        orgoLab.add(getCourse("030.206"));
         addCat("orgo with lab", orgoLab);
         
         // BME major without track
@@ -230,16 +257,8 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         BMEMajor.add(getCourse("030.205"));
         BMEMajor.addAll(calcPhys);
         BMEMajor.add(calc3);
-        RequiredCourseSet LADEPlus = new RequiredCourseSet(1);
-        LADEPlus.add(getCourse("550.291"));
-        LADEPlus.add(new GenericCourse("110.3<credits=4>"));
-        RequiredCourseSet linAlgDifEq = new RequiredCourseSet(0); 
-        linAlgDifEq.add(getCourse("110.201"));
-        linAlgDifEq.add(getCourse("110.302"));
-        RequiredCourseSet linAlgDifEq2 = new RequiredCourseSet(1);
-        linAlgDifEq2.add(LADEPlus);
-        linAlgDifEq2.add(linAlgDifEq);
-        BMEMajor.add(linAlgDifEq2);
+
+        BMEMajor.add(linAlgDifEq2Courses);
         BMEMajor.add(new GenericCourse("550.3<credits=3>"));
         BMEMajor.add(new GenericCourse("000.1<tag=programming, credits=3>"));
         BMEMajor.add(getCourse("580.111"));
@@ -271,6 +290,83 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         molCelBiomajor.add(physicsLab);
         addMaj("molcelbio", molCelBiomajor);
         
+        //MSE major
+        RequiredCourseSet MSEMajor = new RequiredCourseSet(0);
+        
+        MSEMajor.add(getCourse("510.311"));
+        MSEMajor.add(getCourse("510.312"));
+        MSEMajor.add(getCourse("510.313"));
+        MSEMajor.add(getCourse("510.314"));
+        MSEMajor.add(getCourse("510.315"));
+        MSEMajor.add(getCourse("510.316"));
+        MSEMajor.add(getCourse("510.428"));
+        MSEMajor.add(getCourse("510.429"));
+        MSEMajor.add(getCourse("510.433"));
+        MSEMajor.add(getCourse("510.434"));
+        for (int i = 0; i <4; i++) MSEMajor.add(new GenericCourse("510.300<credits=3,for=mse>"));
+        MSEMajor.add(physicsPhysLab);
+        MSEMajor.add(getCourse("510.101"));
+        MSEMajor.add(getCourse("030.105"));
+        MSEMajor.add(getCourse("030.106"));
+        MSEMajor.add(getCourse("030.205"));
+        MSEMajor.add(getCourse("030.225"));
+        MSEMajor.add(getCourse("510.202"));
+        MSEMajor.add(new GenericCourse("600.3<credits=3,for=mse>"));
+        MSEMajor.add(calcPhys);
+        MSEMajor.add(calc3);
+        MSEMajor.add(linAlgDifEq);
+        addMaj("mse", MSEMajor);
+        
+        
+        RequiredCourseSet biophysicsMajor = new RequiredCourseSet(0);
+        biophysicsMajor.add(chemLabOrAP);
+        biophysicsMajor.add(orgo);
+        biophysicsMajor.add(physicsLab);
+        biophysicsMajor.add(getCourse("171.310"));
+        biophysicsMajor.add(calcPhys);
+        biophysicsMajor.add(calc3);
+        biophysicsMajor.add(new RequiredCourseSet(1, getCourse("110.201"),getCourse("110.212"),getCourse("550.291")));
+        biophysicsMajor.add(getCourse("250.205"));
+        biophysicsMajor.add(getCourse("250.253"));
+        biophysicsMajor.add(getCourse("250.315"));
+        biophysicsMajor.add(getCourse("250.316"));
+        biophysicsMajor.add(getCourse("250.345"));
+        biophysicsMajor.add(getCourse("250.372"));
+        biophysicsMajor.add(getCourse("250.381"));
+        biophysicsMajor.add(getCourse("250.383"));
+        for (int i=0;i<2;i++) biophysicsMajor.add(new GenericCourse("000.2<tag=biophysics,for=bph>"));
+        for (int i=0;i<2;i++) biophysicsMajor.add(new GenericCourse("000.2<tag=biophysics,for=bph>"));
+        addMaj("biophysics", biophysicsMajor);
+       /* // Biophysics
+        RequiredCourseSet biophysicsMajor = new RequiredCourseSet(0);
+        biophysicsMajor.add(getCourse("250.265"));
+        biophysicsMajor.add(getCourse("250.322"));
+        biophysicsMajor.add(getCourse("250.351"));
+        biophysicsMajor.add(getCourse("250.353"));
+        biophysicsMajor.add(getCourse("250.391"));
+        biophysicsMajor.add(getCourse("250.410"));
+        biophysicsMajor.add(getCourse("250.519"));
+        biophysicsMajor.add(getCourse("250.689"));
+        biophysicsMajor.add(getCourse("250.690"));
+        
+        biophysicsMajor.add(getCourse("030.301"));
+        biophysicsMajor.add(getCourse("030.302"));
+        biophysicsMajor.add(getCourse("030.423"));
+        biophysicsMajor.add((getCourse("030.425")));
+        
+        biophysicsMajor.add(getCourse("171.204"));
+        biophysicsMajor.add(getCourse("171.301"));
+        biophysicsMajor.add(getCourse("171.312"));
+        biophysicsMajor.add(getCourse("171.411"));
+        
+        biophysicsMajor.add(getCourse("020.330"));
+        biophysicsMajor.add(getCourse("020.346"));
+        biophysicsMajor.add(getCourse("020.363"));
+        biophysicsMajor.add(getCourse("020.380"));
+        
+        biophysicsMajor.add(getCourse("600.226"));
+        biophysicsMajor.add(getCourse("600.271")); */
+        
         //premed
         RequiredCourseSet premed = new RequiredCourseSet(0);
         premed.add(introCalc);
@@ -278,7 +374,7 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         premed.add(orgoLab);
         premed.add(physicsLab);
         premed.add(new RequiredCourseSet(1, getCourse("220.105"), getCourse("060.113"), getCourse("060.114"))); //English requirement
-        addCat("premed", molCelBiomajor);
+        addCat("premed", premed);
         
         //Math minor
         RequiredCourseSet mathMinorRCS = new RequiredCourseSet(0);
@@ -329,7 +425,6 @@ public class RequiredCourseSet extends HashSet<Requirable>  implements Requirabl
         higherMath.add(getCourse("110.212"));
         
        compSurgeryMinor.add(higherMath.duplicate());
-       
     }
         
     public static ArrayList<Integer> indOfCorresp(String input, char[] openings, char[] closings, char searchFor) {
